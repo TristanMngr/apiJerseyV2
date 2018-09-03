@@ -1,31 +1,34 @@
 package com.showtime.rest;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
+import com.sun.jersey.core.util.StringIgnoreCaseKeyComparator;
 
 //import javax.xml.bind.annotation.XmlRootElement;
 
 //@XmlRootElement
 public class Event {
-	private String name;
+	private String nombre;
 	private String fecha;
 	private String hora;
 
 	public Event(String nombre, String fecha, String hora) {
-		this.name = nombre;
+		this.nombre = nombre;
 		this.fecha = fecha;
 		this.hora = hora;
-		//System.out.println("Se creó el evento " + nombre);
+		// System.out.println("Se creó el evento " + nombre);
 	}
 
-	public String getName() {
-		return name;
+	public String getNombre() {
+		return nombre;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 
 	public String getFecha() {
@@ -42,6 +45,10 @@ public class Event {
 
 	public void setHora(String hora) {
 		this.hora = hora;
+	}
+
+	public Boolean seLlama(String nombre) {
+		return this.nombre.contentEquals(nombre);
 	}
 
 	
