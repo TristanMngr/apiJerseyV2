@@ -1,1 +1,8 @@
+com\tutorialacademy\rest\User.class
+com\tutorialacademy\rest\HelloWorldJSON.class
+com\tutorialacademy\rest\EventsHandler.class
+com\tutorialacademy\rest\Admin.class
+com\tutorialacademy\rest\UsersHandler.class
+com\tutorialacademy\rest\WorldState.class
+com\tutorialacademy\rest\TelegramInterface.class
 com\tutorialacademy\rest\RESTfulHelloWorld.class
