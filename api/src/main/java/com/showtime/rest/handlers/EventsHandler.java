@@ -22,7 +22,7 @@ public class EventsHandler {
 
 	public static List<String> testListEvents = Arrays.asList("evento 1", "evento 2", "evento 3");
 	public static List<Event> MaestroEventos = new ArrayList<Event>();
-	public static List<EventsList> listasEventos = new ArrayList<EventsList>();
+	public static List<EventsList> MaestroListasEventos = new ArrayList<EventsList>();
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -62,6 +62,7 @@ public class EventsHandler {
 
 	/**
 	 * Busca eventos por nombre completo
+	 * 
 	 * @param nombre
 	 * @return lista de eventos
 	 */
@@ -71,7 +72,7 @@ public class EventsHandler {
 	public Response buscarEvento(@PathParam("nombreEvento") String nombre) {
 		return Response.status(201).entity(this.buscarEventosPorNombre(nombre)).build();
 	}
-	
+
 	/**
 	 * 
 	 * @param nombre nombre de la lista de eventos
@@ -82,45 +83,74 @@ public class EventsHandler {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response crearListaEventos(@PathParam("nombreLista") String nombre) {
 
-		listasEventos.add(new EventsList(nombre));
+		MaestroListasEventos.add(new EventsList(nombre));
 		// System.out.println("Se creó el evento " + listaEventos.get(0).getFecha());
-		return Response.status(201).entity(listasEventos).build();
+		return Response.status(201).entity(MaestroListasEventos).build();
 	}
 
-	
+	/**
+	 * agrega un evento a una lista existente
+	 * @param nombreLista
+	 * @param nombreEvento
+	 * @return 
+	 */
+	@Path("/agregarEventosLista/{nombreLista}/{nombreEvento}")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response agregarEventosLista(@PathParam("nombreLista") String nombreLista,
+			@PathParam("nombreEvento") String nombreEvento) {
+		List<EventsList> coleccionListas = this.buscarListaEventosPorNombre(nombreLista);
+		
+		for (EventsList lista: coleccionListas) {
+			lista.agregarEvento(this.buscarEventosPorNombre(nombreEvento));
+		}
+		
+		
+
+		// System.out.println("Se creó el evento " + evento);
+		return Response.status(201).entity(MaestroListasEventos).build();
+
+	}
 
 	/*
-	 * @Path("/agregarEventosLista/{nombreLista}/{nombreEvento}")
-	 * 
-	 * @GET
-	 * 
-	 * @Produces({ MediaType.APPLICATION_JSON }) public Response
-	 * agregarEventosLista(@PathParam("nombreLista") String
-	 * lista,@PathParam("nombreEvento") String evento) {
-	 * 
-	 * //listasEventos.get(lista).add(new EventsList(nombre));
-	 * System.out.println("Se creó el evento " + evento); return
-	 * Response.status(201).entity(listasEventos.get(lista)).build();
-	 * 
-	 * }
+	 * *************************** métodos auxiliares
+	 * ***********************************
 	 */
-	
-	
-	/* *************************** métodos auxiliares *********************************** */
-	private List<Event> buscarEventosPorNombre(String nombre){
-		List<Event> result = new ArrayList<>();
+	private List<Event> buscarEventosPorNombre(String nombre) {
+		List<Event> result = new ArrayList<Event>();
 		for (Event evento : MaestroEventos) {
 			if (evento.seLlama(nombre)) {
 				result.add(evento);
 			}
 		}
 		return result;
-		
-		/*
+
+		/*	//no me funciona el filter
 		 * List<Event> eventoBuscado = MaestroEventos.stream().filter(evento ->
 		 * evento.seLlama(nombre)) .collect(Collectors.<Event> toList());
 		 * //System.out.println(eventoBuscado); return
 		 * Response.status(201).entity(eventoBuscado).build();
 		 */
+	}
+
+	/**
+	 * busca una lista de eventos por nombre
+	 * 
+	 * @param nombre
+	 * @return
+	 */
+	private List<EventsList> buscarListaEventosPorNombre(String nombre) {
+		List<EventsList> result = new ArrayList<EventsList>();
+		for (EventsList lista : MaestroListasEventos) {
+			if (lista.seLlama(nombre)) {
+				result.add(lista);
+			}
+		}
+		/*MaestroListasEventos.forEach(lista -> {
+			if (lista.seLlama(nombre)) {
+				//result.add(lista);
+			}
+		});*/
+		return result;
 	}
 }
