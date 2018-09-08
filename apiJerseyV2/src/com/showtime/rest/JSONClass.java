@@ -11,6 +11,12 @@ public class JSONClass {
 	private int intElement;
 	private List<String> listElement;
 	
+	public JSONClass() {
+		setStringElement("");
+		setIntElement(0);
+		setListElement(null);
+	}
+	
 	public JSONClass(String string, int i, List<String> asList) {
 		setStringElement(string);
 		setIntElement(i);

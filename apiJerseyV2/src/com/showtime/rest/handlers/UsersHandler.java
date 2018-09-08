@@ -1,11 +1,11 @@
 package com.showtime.rest.handlers;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -27,6 +27,7 @@ public class UsersHandler {
 	 @GET
 	 @Produces({MediaType.APPLICATION_JSON})
 	 public Response get() {
+		 System.out.println("Get");
 		if(testListUsers.size() == 0) {
 			testListUsers.add("cristhian");
 			testListUsers.add("francisco");
@@ -37,6 +38,16 @@ public class UsersHandler {
 		 List<String> result = testListUsers;
 		 return Response.status(201).entity(result).build();
 	 }
+	 
+	 @OPTIONS
+	 public Response getOptions() {
+		 System.out.println("getOptions");
+		 return Response.ok()
+				 .header("Access-Control-Allow-Origin", "*")
+				 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+				 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
+	 }
+
 
 	 @Path("{userID}")
 	 @GET
@@ -55,14 +66,17 @@ public class UsersHandler {
 	 @PUT
 	 @Consumes(MediaType.APPLICATION_JSON)
 	 public Response createUserInJSON(User user) {
+		 System.out.println("Hice un PUT");
 		 String result = "Track saved : " + user;
 		 testListUsers.add(user.getName());
 		 return Response.status(201).entity(result).build();		
 	}
+	
 	 
 	 @POST
 	 @Consumes(MediaType.APPLICATION_JSON)
 	 public Response postUserInJSON(User user) {
+		 System.out.println("Hice un POST");
 		 String result = "Track saved : " + user;
 		 testListUsers.add("*"+user.getName()+"*");
 		 return Response.status(201).entity(result).build();		

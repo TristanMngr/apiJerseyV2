@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
 import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.filter.LoggingFilter;
 
 import com.showtime.rest.User;
 
@@ -22,6 +23,7 @@ public class Tester {
 
 	      ClientConfig config = new ClientConfig();
 	      Client client = ClientBuilder.newClient(config);
+	      client.register(new LoggingFilter());
 	      WebTarget service = client.target(getBaseURI());
 
 	      User user; 
@@ -32,6 +34,7 @@ public class Tester {
 	    	  Response response = service.path("rest").path("users").request().put(Entity.entity(user,MediaType.APPLICATION_JSON),Response.class);
 	    	  System.out.println(response.getStatus());
 	    	  user = new User("ariel");
+	    	  Entity<User> json = Entity.entity(user,MediaType.APPLICATION_JSON);
 	    	  response = service.path("rest").path("users").request().post(Entity.entity(user,MediaType.APPLICATION_JSON),Response.class);
 
 	    	  
