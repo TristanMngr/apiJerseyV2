@@ -2,3 +2,5 @@
 *.jar
 *.war
 apiJerseyV2/target/
+UserClient/target/
+apiJerseyV2/.settings/
