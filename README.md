@@ -16,6 +16,7 @@ mvn archetype:generate -DgroupId=apiJerseyV2 -DartifactId=apiJerseyV2 -Darchetyp
 mvn clean install
 
 4. Correr utilizando jetty.
+
 mvn jetty:run
 
 // En un navegador, abrir el archivo test.html
