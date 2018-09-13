@@ -19,6 +19,38 @@ import javax.ws.rs.core.Response;
 
 @Path("/events")
 public class EventsHandler {
+	
+	public static String formatString(String text){
+
+	    StringBuilder json = new StringBuilder();
+	    String indentString = "";
+
+	    for (int i = 0; i < text.length(); i++) {
+	        char letter = text.charAt(i);
+	        switch (letter) {
+	            case '{':
+	            case '[':
+	                json.append("\n" + indentString + letter + "\n");
+	                indentString = indentString + "\t";
+	                json.append(indentString);
+	                break;
+	            case '}':
+	            case ']':
+	                indentString = indentString.replaceFirst("\t", "");
+	                json.append("\n" + indentString + letter);
+	                break;
+	            case ',':
+	                json.append(letter + "\n" + indentString);
+	                break;
+
+	            default:
+	                json.append(letter);
+	                break;
+	        }
+	    }
+
+	    return json.toString();
+	}
 
 	public static List<String> testListEvents = Arrays.asList("evento 1", "evento 2", "evento 3");
 	public static List<Event> MaestroEventos = new ArrayList<Event>();
@@ -33,11 +65,15 @@ public class EventsHandler {
 	@Path("{eventID}")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response produceJSON(@PathParam("eventID") int id) {
-		if (testListEvents.contains(String.valueOf(id))) {
-			return Response.status(201).entity("Event: " + String.valueOf(id) + " was found!").build();
+	public Response produceJSON(@PathParam("eventID") String id) {
+		if (testListEvents.contains(id)) {
+			return Response.status(201).entity("Event: " + id + " was found!").build();
 		} else {
-			return Response.status(201).entity("Event: " + String.valueOf(id) + " not found!").build();
+			System.out.println("ID = " + id);
+			if(id.equals("17920884849"))
+				return Response.status(201).entity(formatString(EventbriteApi.getEvent(id))).build();
+			
+			return Response.status(201).entity("Event: " + id + " not found!").build();
 		}
 	}
 
