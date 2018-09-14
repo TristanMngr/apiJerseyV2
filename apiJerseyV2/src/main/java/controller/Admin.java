@@ -1,4 +1,4 @@
-package main.java.com.showtime.rest;
+package main.java.controller;
 
 import java.util.Arrays;
 import java.util.List;

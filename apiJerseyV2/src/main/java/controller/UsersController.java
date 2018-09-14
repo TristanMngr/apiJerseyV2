@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 import main.java.model.User;
 
 @Path("/users")
-public class UsersHandler {
+public class UsersController {
 	
 	//public List<String> testListUsers = Arrays.asList("cristhian", "francisco", "guillermo", "juan");
 	

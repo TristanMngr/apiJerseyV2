@@ -1,4 +1,4 @@
-package main.java.com.showtime.rest.handlers;
+package main.java.helpers;
 
 import java.net.URI;
 

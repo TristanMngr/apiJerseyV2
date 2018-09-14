@@ -1,4 +1,4 @@
-package main.java.com.showtime.rest;
+package main.java.controller;
 
 import java.util.Arrays;
 
@@ -6,6 +6,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import main.java.helpers.JSONClass;
 
 // http://localhost:8080/api/rest/otherJSON
 // Probar en Chrome
