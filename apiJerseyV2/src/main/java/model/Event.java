@@ -1,4 +1,4 @@
-package main.java.com.showtime.rest;
+package main.java.model;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -12,6 +12,7 @@ import java.util.List;
 
 //@XmlRootElement
 public class Event {
+	private Long id;
 	private String nombre;
 	private String fecha;
 	private String hora;
@@ -21,6 +22,14 @@ public class Event {
 		this.fecha = fecha;
 		this.hora = hora;
 		// System.out.println("Se creó el evento " + nombre);
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getNombre() {
@@ -50,7 +59,5 @@ public class Event {
 	public Boolean seLlama(String nombre) {
 		return this.nombre.contentEquals(nombre);
 	}
-
-	
 
 }

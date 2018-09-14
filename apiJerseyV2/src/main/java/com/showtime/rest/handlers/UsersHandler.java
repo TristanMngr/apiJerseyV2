@@ -14,7 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import main.java.com.showtime.rest.User;
+import main.java.model.User;
 
 @Path("/users")
 public class UsersHandler {

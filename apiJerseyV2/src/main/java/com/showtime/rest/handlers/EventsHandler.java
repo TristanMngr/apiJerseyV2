@@ -1,7 +1,7 @@
 package main.java.com.showtime.rest.handlers;
 
-import main.java.com.showtime.rest.Event;
-import main.java.com.showtime.rest.EventsList;
+import main.java.model.Event;
+import main.java.model.EventsList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -115,7 +116,7 @@ public class EventsHandler {
 	 * @return imprime en pantalla el json de lassss listassss de eventos
 	 */
 	@Path("/crearListaEventos/{nombreLista}")
-	@GET
+	@POST
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response crearListaEventos(@PathParam("nombreLista") String nombre) {
 

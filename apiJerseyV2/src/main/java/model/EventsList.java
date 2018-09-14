@@ -1,4 +1,4 @@
-package main.java.com.showtime.rest;
+package main.java.model;
 
 import java.sql.Time;
 import java.util.ArrayList;
