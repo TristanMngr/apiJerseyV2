@@ -1,6 +1,7 @@
 *.class
 *.jar
 *.war
-apiJerseyV2/target/
-UserClient/target/
-apiJerseyV2/.settings/
+*/target/
+*/.settings/
+*/.classpath
+*/.project
