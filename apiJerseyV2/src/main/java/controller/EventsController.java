@@ -1,11 +1,16 @@
 package main.java.controller;
+
 import main.java.model.Event;
 import main.java.model.EventsList;
+
+import main.java.service.EventbriteApi;
+import main.java.service.EventsService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.ToLongFunction;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 
@@ -17,66 +22,75 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import main.java.helpers.EventbriteApi;
+import main.java.service.EventsService;
 
 @Path("/events")
-public class EventsController{
-	
-	public static String formatString(String text){
+public class EventsController {
 
-	    StringBuilder json = new StringBuilder();
-	    String indentString = "";
+	static final long idEventBrite = 17920884849L;
 
-	    for (int i = 0; i < text.length(); i++) {
-	        char letter = text.charAt(i);
-	        switch (letter) {
-	            case '{':
-	            case '[':
-	                json.append("\n" + indentString + letter + "\n");
-	                indentString = indentString + "\t";
-	                json.append(indentString);
-	                break;
-	            case '}':
-	            case ']':
-	                indentString = indentString.replaceFirst("\t", "");
-	                json.append("\n" + indentString + letter);
-	                break;
-	            case ',':
-	                json.append(letter + "\n" + indentString);
-	                break;
+	private EventsService eventsService = new EventsService();
 
-	            default:
-	                json.append(letter);
-	                break;
-	        }
-	    }
+	public static String formatString(String text) {
 
-	    return json.toString();
+		StringBuilder json = new StringBuilder();
+		String indentString = "";
+
+		for (int i = 0; i < text.length(); i++) {
+			char letter = text.charAt(i);
+			switch (letter) {
+			case '{':
+			case '[':
+				json.append("\n" + indentString + letter + "\n");
+				indentString = indentString + "\t";
+				json.append(indentString);
+				break;
+			case '}':
+			case ']':
+				indentString = indentString.replaceFirst("\t", "");
+				json.append("\n" + indentString + letter);
+				break;
+			case ',':
+				json.append(letter + "\n" + indentString);
+				break;
+
+			default:
+				json.append(letter);
+				break;
+			}
+		}
+
+		return json.toString();
 	}
 
-	public static List<String> testListEvents = Arrays.asList("evento 1", "evento 2", "evento 3");
 	public static List<Event> MaestroEventos = new ArrayList<Event>();
 	public static List<EventsList> MaestroListasEventos = new ArrayList<EventsList>();
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response get() {
-		return Response.status(201).entity(testListEvents).build();
+		return Response.status(201).entity(this.eventsService.allEvents()).build();
 	}
 
-	@Path("{eventID}")
+	@Path("/{eventID}")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response produceJSON(@PathParam("eventID") String id) {
-		if (testListEvents.contains(id)) {
-			return Response.status(201).entity("Event: " + id + " was found!").build();
+	public Response produceJSON(@PathParam("eventID") Long id) {
+		if (id == idEventBrite) {
+			return Response.status(201).entity(formatString(EventbriteApi.getEvent(id.toString()))).build();
 		} else {
-			System.out.println("ID = " + id);
-			if(id.equals("17920884849"))
-				return Response.status(201).entity(formatString(EventbriteApi.getEvent(id))).build();
-			
-			return Response.status(201).entity("Event: " + id + " not found!").build();
+			Event evento = this.eventsService.getEventById(id);
+			return Response.status(201).entity(evento).build();
 		}
+//		if (this.eventsService.getEventById(id).contains(id)) {
+//			return Response.status(201).entity(this.eventsService.getEventById(id)).build();
+//		} else {
+//			System.out.println("ID = " + id);
+//			if (id.equals("17920884849"))
+//				return Response.status(201).entity(formatString(EventbriteApi.getEvent(id.toString()))).build();
+//
+//			return Response.status(201).entity("Event: " + id + " not found!").build();
+//		}
 	}
 
 	@Path("/cantidad")
@@ -128,9 +142,10 @@ public class EventsController{
 
 	/**
 	 * agrega un evento a una lista existente
+	 * 
 	 * @param nombreLista
 	 * @param nombreEvento
-	 * @return 
+	 * @return
 	 */
 	@Path("/agregarEventosLista/{nombreLista}/{nombreEvento}")
 	@GET
@@ -138,12 +153,10 @@ public class EventsController{
 	public Response agregarEventosLista(@PathParam("nombreLista") String nombreLista,
 			@PathParam("nombreEvento") String nombreEvento) {
 		List<EventsList> coleccionListas = this.buscarListaEventosPorNombre(nombreLista);
-		
-		for (EventsList lista: coleccionListas) {
+
+		for (EventsList lista : coleccionListas) {
 			lista.agregarEvento(this.buscarEventosPorNombre(nombreEvento));
 		}
-		
-		
 
 		// System.out.println("Se creó el evento " + evento);
 		return Response.status(201).entity(MaestroListasEventos).build();
@@ -154,6 +167,7 @@ public class EventsController{
 	 * *************************** métodos auxiliares
 	 * ***********************************
 	 */
+
 	private List<Event> buscarEventosPorNombre(String nombre) {
 		List<Event> result = new ArrayList<Event>();
 		for (Event evento : MaestroEventos) {
@@ -163,11 +177,11 @@ public class EventsController{
 		}
 		return result;
 
-		/*	//no me funciona el filter
-		 * List<Event> eventoBuscado = MaestroEventos.stream().filter(evento ->
-		 * evento.seLlama(nombre)) .collect(Collectors.<Event> toList());
-		 * //System.out.println(eventoBuscado); return
-		 * Response.status(201).entity(eventoBuscado).build();
+		/*
+		 * //no me funciona el filter List<Event> eventoBuscado =
+		 * MaestroEventos.stream().filter(evento -> evento.seLlama(nombre))
+		 * .collect(Collectors.<Event> toList()); //System.out.println(eventoBuscado);
+		 * return Response.status(201).entity(eventoBuscado).build();
 		 */
 	}
 
@@ -184,11 +198,10 @@ public class EventsController{
 				result.add(lista);
 			}
 		}
-		/*MaestroListasEventos.forEach(lista -> {
-			if (lista.seLlama(nombre)) {
-				//result.add(lista);
-			}
-		});*/
+		/*
+		 * MaestroListasEventos.forEach(lista -> { if (lista.seLlama(nombre)) {
+		 * //result.add(lista); } });
+		 */
 		return result;
 	}
 }

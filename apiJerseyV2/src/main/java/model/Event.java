@@ -24,6 +24,14 @@ public class Event {
 		// System.out.println("Se creó el evento " + nombre);
 	}
 
+	public Event(Long id, String nombre, String fecha, String hora) {
+		this.id = id;
+		this.nombre = nombre;
+		this.fecha = fecha;
+		this.hora = hora;
+		// System.out.println("Se creó el evento " + nombre);
+	}
+
 	public Long getId() {
 		return id;
 	}

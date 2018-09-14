@@ -11,15 +11,14 @@ public class EventDAO {
 
 	// Dummy database. Initialize with some dummy values.
 	private static List<Event> eventos;
-
-	public void EventDAO() {
+	{
 		eventos = new ArrayList<Event>();
-		/*eventos.add(new Event(counter.incrementAndGet(), "Evento 1", "24/10/2018", "21:00"));
-		eventos.add(new Event(counter.incrementAndGet(), "Evento 2", "12/10/2018", "21:00"));
-		eventos.add(new Event(counter.incrementAndGet(), "Evento 3", "10/10/2018", "21:00"));
-		eventos.add(new Event(counter.incrementAndGet(), "Evento 1", "25/10/2018", "21:00"));
-		eventos.add(new Event(counter.incrementAndGet(), "Evento 4", "10/11/2018", "21:00"));
-		eventos.add(new Event(counter.incrementAndGet(), "Evento 4", "30/10/2018", "21:00"));*/
+		this.eventos.add(new Event(counter.incrementAndGet(), "Evento 1", "24/10/2018", "21:00"));
+		this.eventos.add(new Event(counter.incrementAndGet(), "Evento 2", "12/10/2018", "21:00"));
+		this.eventos.add(new Event(counter.incrementAndGet(), "Evento 3", "10/10/2018", "21:00"));
+		this.eventos.add(new Event(counter.incrementAndGet(), "Evento 1", "25/10/2018", "21:00"));
+		this.eventos.add(new Event(counter.incrementAndGet(), "Evento 4", "10/11/2018", "21:00"));
+		this.eventos.add(new Event(counter.incrementAndGet(), "Evento 4", "30/10/2018", "21:00"));
 	}
 
 	/**

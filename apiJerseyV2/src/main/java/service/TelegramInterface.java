@@ -1,4 +1,4 @@
-package main.java.helpers;
+package main.java.service;
 
 public class TelegramInterface {
 	

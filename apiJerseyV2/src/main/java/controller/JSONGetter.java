@@ -7,7 +7,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import main.java.helpers.JSONClass;
+import main.java.service.JSONClass;
 
 // http://localhost:8080/api/rest/otherJSON
 // Probar en Chrome
