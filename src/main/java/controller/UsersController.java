@@ -1,4 +1,4 @@
-package main.java.controller;
+package controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,14 +14,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import main.java.model.User;
+import model.User;
+
 
 @Path("/users")
 public class UsersController {
 	
 	//public List<String> testListUsers = Arrays.asList("cristhian", "francisco", "guillermo", "juan");
 	
-	public static List<String> testListUsers = new ArrayList<>();
+	public static List<String> testListUsers = new ArrayList<String>();
 
 	
 	 @GET

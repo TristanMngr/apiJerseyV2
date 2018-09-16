@@ -1,10 +1,10 @@
-package main.java.dao;
+package dao;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-import main.java.model.Event;
+import model.Event;
 
 public class EventDAO {
 	private final AtomicLong counter = new AtomicLong();

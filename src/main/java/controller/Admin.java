@@ -1,4 +1,4 @@
-package main.java.controller;
+package controller;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,7 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import main.java.model.User;
+import model.User;
 
 @Path("/admin")
 public class Admin {

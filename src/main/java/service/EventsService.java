@@ -1,9 +1,10 @@
-package main.java.service;
+package service;
 
 import java.util.List;
 
-import main.java.dao.EventDAO;
-import main.java.model.Event;
+import dao.EventDAO;
+import model.Event;
+
 
 public class EventsService {
 

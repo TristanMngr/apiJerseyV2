@@ -1,4 +1,4 @@
-package main.java.eventbrite;
+package eventbrite;
 
 
 import java.util.HashMap;

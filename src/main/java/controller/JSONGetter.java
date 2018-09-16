@@ -1,4 +1,4 @@
-package main.java.controller;
+package controller;
 
 import java.util.Arrays;
 
@@ -7,7 +7,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import main.java.service.JSONClass;
+import service.JSONClass;
 
 // http://localhost:8080/api/rest/otherJSON
 // Probar en Chrome
