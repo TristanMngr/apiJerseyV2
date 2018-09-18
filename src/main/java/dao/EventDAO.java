@@ -22,16 +22,16 @@ public class EventDAO {
 	}
 
 	/**
-	 * Returns list of customers from dummy database.
+	 * Returns list of events from dummy database.
 	 * 
-	 * @return list of customers
+	 * @return list of events
 	 */
 	public List<Event> list() {
 		return eventos;
 	}
 
 	/**
-	 * Return customer object for given id from dummy database. If customer is not
+	 * Return event object for given id from dummy database. If customer is not
 	 * found for id, returns null.
 	 * 
 	 * @param id customer id
@@ -45,6 +45,19 @@ public class EventDAO {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * 
+	 */
+	public List<Event> getByIdAndNombre(Long id, String nombre) {
+		List<Event> results = new ArrayList<Event>();
+		for (Event e : eventos) {
+			if (e.getId().equals(id) && e.getNombre().equals(nombre)) {
+				results.add(e);
+			}
+		}
+		return results;
 	}
 
 	/**

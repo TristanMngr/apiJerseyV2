@@ -1,8 +1,14 @@
 package controller;
 
-
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+//import java.util.Properties;
+//import java.util.stream.Collector;
+
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -11,11 +17,16 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.glassfish.jersey.server.mvc.Viewable;
+
 import model.Event;
 import model.EventsList;
 import service.EventbriteApi;
 import service.EventsService;
 
+import com.google.gson.*;
+
+import eventbrite.EventBrite;
 
 @Path("/events")
 public class EventsController {
@@ -23,6 +34,8 @@ public class EventsController {
 	static final long idEventBrite = 17920884849L;
 
 	private EventsService eventsService = new EventsService();
+	private EventBrite eventBrite = new EventBrite();
+	final Gson gson = new Gson();
 
 	public static String formatString(String text) {
 
@@ -65,25 +78,46 @@ public class EventsController {
 		return Response.status(201).entity(this.eventsService.allEvents()).build();
 	}
 
-	@Path("/{eventID}")
-	@GET
-	@Produces({ MediaType.APPLICATION_JSON })
-	public Response produceJSON(@PathParam("eventID") Long id) {
+	/**
+	 * buscar un evento por ID,
+	 * 
+	 * @param params
+	 * @return
+	 */
+	@Path("/buscarEvento")
+	@POST
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.TEXT_HTML)
+	public Viewable buscarEvento(String param) {
+		Long id = 0L;
+		Map<String, String> model = new HashMap<String, String>();
+		model.put("codigo", "");
+		model.put("nombre", "");
+		model.put("fecha", "");
+		model.put("hora", "");
+
+		List<String> parametros = Arrays.asList(param.split("=", -1));
+		id = Long.valueOf(parametros.get(1));
+
 		if (id == idEventBrite) {
-			return Response.status(201).entity(formatString(EventbriteApi.getEvent(id.toString()))).build();
+			eventBrite = gson.fromJson(EventbriteApi.getEvent(id.toString()), EventBrite.class);
+			System.out.println("algo del json" + eventBrite.getSubcategoryId());
+//			return Response.status(201).entity(formatString(EventbriteApi.getEvent(id.toString()))).build();
+//			model.put("nombre", "Hello");
+//			model.put("descripcion", "World! I'm index.jsp");
+//			model.put("start",);
+//			model.put("finish");
 		} else {
 			Event evento = this.eventsService.getEventById(id);
-			return Response.status(201).entity(evento).build();
+			if (evento != null) {
+				model.put("codigo", evento.getId().toString());
+				model.put("nombre", evento.getNombre());
+				model.put("fecha", evento.getFecha());
+				model.put("hora", evento.getHora());
+			}
+			
 		}
-//		if (this.eventsService.getEventById(id).contains(id)) {
-//			return Response.status(201).entity(this.eventsService.getEventById(id)).build();
-//		} else {
-//			System.out.println("ID = " + id);
-//			if (id.equals("17920884849"))
-//				return Response.status(201).entity(formatString(EventbriteApi.getEvent(id.toString()))).build();
-//
-//			return Response.status(201).entity("Event: " + id + " not found!").build();
-//		}
+		return new Viewable("/eventos/evento", model);
 	}
 
 	@Path("/cantidad")
@@ -106,16 +140,46 @@ public class EventsController {
 	}
 
 	/**
-	 * Busca eventos por nombre completo
+	 * Busca eventos por varios parametros
 	 * 
 	 * @param nombre
 	 * @return lista de eventos
 	 */
-	@Path("/buscarEvento/{nombreEvento}")
-	@GET
-	@Produces({ MediaType.APPLICATION_JSON })
-	public Response buscarEvento(@PathParam("nombreEvento") String nombre) {
-		return Response.status(201).entity(this.buscarEventosPorNombre(nombre)).build();
+	@Path("/buscarEventos")
+	@POST
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.TEXT_HTML)
+	public Viewable buscarEventos(String params) {
+		Long id = 0L;
+//		String nombre = "";
+		Map<String, String> model = new HashMap<String, String>();
+
+		List<String> parametros = Arrays.asList(params.split("&", -1));
+//		List<String> valores=parametros.stream().map(p->p.split("=",1)).collect(Collector.toList());
+		List<List<String>> valores = new ArrayList<List<String>>();
+		for (String p : parametros) {
+			valores.add(Arrays.asList(p.split("=", -1)));
+		}
+		id = Long.valueOf(valores.get(0).get(1));
+//		nombre = valores.get(1).get(1);
+
+		if (id == idEventBrite) {
+			eventBrite = gson.fromJson(EventbriteApi.getEvent(id.toString()), EventBrite.class);
+			System.out.println("algo del json" + eventBrite.getSubcategoryId());
+			return new Viewable("/index", model);
+//			return Response.status(201).entity(formatString(EventbriteApi.getEvent(id.toString()))).build();
+//			model.put("nombre", "Hello");
+//			model.put("descripcion", "World! I'm index.jsp");
+//			model.put("start",);
+//			model.put("finish");
+		} else {
+			Event evento = this.eventsService.getEventById(id);
+			model.put("codigo", evento.getId().toString());
+			model.put("nombre", evento.getNombre());
+			model.put("fecha", evento.getFecha());
+			model.put("hora", evento.getHora());
+			return new Viewable("/eventos/evento", model);
+		}
 	}
 
 	/**
