@@ -1,40 +1,90 @@
 package controller;
 
+import java.io.IOException;
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
+
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
+import org.glassfish.jersey.servlet.ServletContainer;
 
 /**
  * This class launches the web application in an embedded Jetty container. This is the entry point to your application. The Java
  * command that is used for launching should fire this main method.
  */
 public class Main {
+	
+    public static void main(String[] args) throws Exception {
+    
+    	ResourceConfig config = new ResourceConfig();
+        config.packages("controller");
+        config.property(JspMvcFeature.TEMPLATES_BASE_PATH, "/WEB-INF/jsp");
+        config.register(JspMvcFeature.class);
+        
+        ServletContainer servletContainer = new ServletContainer(config);
+        ServletHolder jerseyServlet = new ServletHolder(servletContainer);
 
-    public static void main(String[] args) throws Exception{
-        // The port that we should run on can be set into an environment variable
-        // Look for that variable and default to 8080 if it isn't there.
-        String webPort = System.getenv("PORT");
-        if (webPort == null || webPort.isEmpty()) {
-            webPort = "8080";
-        }
-
-        final Server server = new Server(Integer.valueOf(webPort));
         final WebAppContext root = new WebAppContext();
-
-        root.setContextPath("/");
-        // Parent loader priority is a class loader setting that Jetty accepts.
-        // By default Jetty will behave like most web containers in that it will
-        // allow your application to replace non-server libraries that are part of the
-        // container. Setting parent loader priority to true changes this behavior.
-        // Read more here: http://wiki.eclipse.org/Jetty/Reference/Jetty_Classloading
-        root.setParentLoaderPriority(true);
-
-        final String webappDirLocation = "src/main/webapp/";
-        root.setDescriptor(webappDirLocation + "/WEB-INF/web.xml");
-        root.setResourceBase(webappDirLocation);
-
-        server.setHandler(root);
-
+        
+        Server server = new Server(8080);
+        ServletContextHandler context = new ServletContextHandler(server, "/");
+        //context.addFilter(jerseyServlet, "/*",EnumSet.of(DispatcherType.REQUEST));
+        //context.addFilter(null, "/*", EnumSet.of(DispatcherType.REQUEST));
+        context.addServlet(jerseyServlet, "/*");
         server.start();
         server.join();
     }
+
 }
+//
+//
+//public class JettyFilter {
+//
+//	  public static void main(final String[] args) throws Exception {
+//	    Server server = new Server(8080);
+//
+//	    ServletHandler handler = new ServletHandler();
+//	    server.setHandler(handler);
+//
+//	    handler.addServletWithMapping(HelloServlet.class, "/*");
+//	    handler.addFilterWithMapping(HelloPrintingFilter.class, "/*",
+//	        EnumSet.of(DispatcherType.REQUEST));
+//
+//	    server.start();
+//	    server.join();
+//	  }
+//
+//	  public static class HelloServlet extends HttpServlet {
+//	    private static final long serialVersionUID = 1L;
+//
+//	    @Override
+//	    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+//	        throws ServletException, IOException {
+//	      response.setContentType("text/html");
+//	      response.setStatus(HttpServletResponse.SC_OK);
+//	      response.getWriter().println("<h1>Hello SimpleServlet</h1>");
+//	    }
+//	  }
+//
+//	  public static class HelloPrintingFilter implements Filter {
+//	    @Override
+//	    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+//	        throws IOException, ServletException {
+//	      System.out.print("hello from filter");
+//	    }
+//
+//	    @Override
+//	    public void init(FilterConfig arg0) throws ServletException {
+//
+//	    }
+//
+//	    @Override
+//	    public void destroy() {}
+//	  }
+//	}

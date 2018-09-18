@@ -26,7 +26,28 @@
         <dependency>
       		<groupId>org.glassfish.jersey.ext</groupId>
       		<artifactId>jersey-mvc-jsp</artifactId>
-    	</dependency>
+      		<exclusions>
+      			<exclusion>
+      				<groupId>org.glassfish.hk2.external</groupId>
+      				<artifactId>javax.inject</artifactId>
+      			</exclusion>
+      			<exclusion>
+      				<groupId>org.glassfish.jersey.containers</groupId>
+      				<artifactId>
+      					jersey-container-servlet-core
+      				</artifactId>
+      			</exclusion>
+      			<!-- Need for AppConfig -->
+<!--       			<exclusion>
+      				<groupId>javax.ws.rs</groupId>
+      				<artifactId>javax.ws.rs-api</artifactId>
+      			</exclusion> -->
+      			<exclusion>
+      				<groupId>javax.servlet</groupId>
+      				<artifactId>servlet-api</artifactId>
+      			</exclusion>
+      		</exclusions>
+        </dependency>
 	    
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
