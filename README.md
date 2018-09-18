@@ -26,3 +26,4 @@ https://apieventos-g5.herokuapp.com/myresource
 
 https://apieventos-g5.herokuapp.com/otherHTML
 
+en caso que tengan que instalar gson: https://medium.com/programmers-blockchain/importing-gson-into-eclipse-ec8cf678ad52
