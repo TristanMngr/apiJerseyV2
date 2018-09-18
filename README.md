@@ -17,8 +17,9 @@ mvn clean install
 
 mvn jetty:run
 
-// En un navegador, abrir el archivo test.html
-Eg: http://localhost:8080/
+// En un navegador
+
+http://localhost:8080/
 
 // Usando Heroku
 
