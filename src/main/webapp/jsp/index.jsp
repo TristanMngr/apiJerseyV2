@@ -1,9 +1,10 @@
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type"
 	content="text/html; charset=windows-1252">
 <title>JSP Page</title>
-<link href="css/styles.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/css/styles.css" rel="stylesheet">
 <style type="text/css">
 .contEvento {
 	float: left;
@@ -25,6 +26,7 @@ label,button {
 </head>
 <body>
 	<%--         <h1>${it.hello} ${it.world}</h1> --%>
+		
 	<h1>Administrador de eventos</h1>
 	<div class="contEvento">
 		<h3>Telegram</h3>

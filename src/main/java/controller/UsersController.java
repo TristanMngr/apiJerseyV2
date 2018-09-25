@@ -28,7 +28,6 @@ public class UsersController {
 	 @GET
 	 @Produces({MediaType.APPLICATION_JSON})
 	 public Response get() {
-		 System.out.println("Get");
 		if(testListUsers.size() == 0) {
 			testListUsers.add("cristhian");
 			testListUsers.add("francisco");

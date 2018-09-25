@@ -5,8 +5,10 @@ import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.server.mvc.Viewable;
 
@@ -20,7 +22,7 @@ public class MainController {
 		Map<String, String> model = new HashMap<String, String>();
         model.put("hello", "Hello");
         model.put("world", "World! I'm index.jsp");
-        return new Viewable("/index", model);
+        return new Viewable("/jsp/index", model);
     }
  
 }
