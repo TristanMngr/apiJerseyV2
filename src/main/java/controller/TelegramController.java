@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -34,6 +35,12 @@ public class TelegramController {
 	
 	private static final String HTTP_API_PART_1 = "676397012";
 	private static final String HTTP_API_PART_2 = "AAHtOXRAimIFfVy_C0Ut_US70Ls-tC5uBKI";
+	
+	 @OPTIONS
+	 public Response getOptions() {
+		 System.out.println("getOptions");
+		 return Response.ok().header("Access-Control-Allow-Methods", "POST, GET, OPTIONS").build();
+	 }
 	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
