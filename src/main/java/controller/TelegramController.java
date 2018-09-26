@@ -29,21 +29,10 @@ import org.telegram.telegrambots.meta.logging.BotLogger;
 @Path("/telegram")
 public class TelegramController {
 	
-	private final ConcurrentHashMap<String, WebhookBot> callbacks = new ConcurrentHashMap<>();
-	
 	// TODO: Archivo configuracion o Variable Entorno
 	
 	private static final String HTTP_API_PART_1 = "676397012";
 	private static final String HTTP_API_PART_2 = "AAHtOXRAimIFfVy_C0Ut_US70Ls-tC5uBKI";
-	
-	 @OPTIONS
-	 public Response getOptions() {
-		 System.out.println("getOptions");
-		 return Response.ok()
-				 .header("Access-Control-Allow-Origin", "*")
-				 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-				 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
-	 }
 	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
@@ -84,30 +73,30 @@ public class TelegramController {
     public Response updateReceived(Update update) {
         System.out.println("***** Receive updated ***** ");
         System.out.println(update);
-        return Response.status(Response.Status.NOT_FOUND).build();
+        return Response.ok().build();
     }
 	
-    @POST
-    @Path("/{botPath}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateReceived(@PathParam("botPath") String botPath, Update update) {
-        System.out.println("***** Receive updated ***** ");
-    	if (callbacks.containsKey(botPath)) {
-            try {
-                BotApiMethod<?> response = callbacks.get(botPath).onWebhookUpdateReceived(update);
-                if (response != null) {
-                    response.validate();
-                }
-                return Response.ok(response).build();
-            } catch (TelegramApiValidationException e) {
-                BotLogger.severe("RESTAPI", e);
-                return Response.serverError().build();
-            }
-        }
-
-        return Response.status(Response.Status.NOT_FOUND).build();
-    }
+//    @POST
+//    @Path("/{botPath}")
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response updateReceived(@PathParam("botPath") String botPath, Update update) {
+//        System.out.println("***** Receive updated ***** ");
+//    	if (callbacks.containsKey(botPath)) {
+//            try {
+//                BotApiMethod<?> response = callbacks.get(botPath).onWebhookUpdateReceived(update);
+//                if (response != null) {
+//                    response.validate();
+//                }
+//                return Response.ok(response).build();
+//            } catch (TelegramApiValidationException e) {
+//                BotLogger.severe("RESTAPI", e);
+//                return Response.serverError().build();
+//            }
+//        }
+//
+//        return Response.status(Response.Status.NOT_FOUND).build();
+//    }
 	
 //	@Path("callback")
 //	public class RestApi {
