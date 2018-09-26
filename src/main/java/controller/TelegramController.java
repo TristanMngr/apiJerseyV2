@@ -39,7 +39,10 @@ public class TelegramController {
 	 @OPTIONS
 	 public Response getOptions() {
 		 System.out.println("getOptions");
-		 return Response.ok().header("Access-Control-Allow-Methods", "POST, GET, OPTIONS").build();
+		 return Response.ok()
+				 .header("Access-Control-Allow-Origin", "*")
+				 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+				 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
 	 }
 	
 	@GET
@@ -73,6 +76,16 @@ public class TelegramController {
 	private static URI getBaseURI() {
 	    return UriBuilder.fromUri("https://api.telegram.org/bot" + HTTP_API_PART_1 + ":" + HTTP_API_PART_2 + "/").build();
 	}
+	
+	
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateReceived(Update update) {
+        System.out.println("***** Receive updated ***** ");
+        System.out.println(update);
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
 	
     @POST
     @Path("/{botPath}")
