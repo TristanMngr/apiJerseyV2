@@ -28,12 +28,13 @@ import org.telegram.telegrambots.meta.logging.BotLogger;
 @Path("/telegram")
 public class TelegramController {
 	
-	private final ConcurrentHashMap<String, WebhookBot> callbacks = new ConcurrentHashMap<String, WebhookBot>();
-	
 	// TODO: Archivo configuracion o Variable Entorno
 	
 	private static final String HTTP_API_PART_1 = "676397012";
 	private static final String HTTP_API_PART_2 = "AAHtOXRAimIFfVy_C0Ut_US70Ls-tC5uBKI";
+	
+	
+	
 	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
@@ -67,26 +68,55 @@ public class TelegramController {
 	    return UriBuilder.fromUri("https://api.telegram.org/bot" + HTTP_API_PART_1 + ":" + HTTP_API_PART_2 + "/").build();
 	}
 	
-    @POST
-    @Path("/{botPath}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateReceived(@PathParam("botPath") String botPath, Update update) {
-        System.out.println("***** Receive updated ***** ");
-    	if (callbacks.containsKey(botPath)) {
-            try {
-                BotApiMethod<?> response = callbacks.get(botPath).onWebhookUpdateReceived(update);
-                if (response != null) {
-                    response.validate();
-                }
-                return Response.ok(response).build();
-            } catch (TelegramApiValidationException e) {
-                BotLogger.severe("RESTAPI", e);
-                return Response.serverError().build();
-            }
-        }
+	@Path("callback")
+	public class RestApi {
 
-        return Response.status(Response.Status.NOT_FOUND).build();
-    }
+	    private final ConcurrentHashMap<String, WebhookBot> callbacks = new ConcurrentHashMap<>();
+
+	    public RestApi() {
+	    }
+
+	    public void registerCallback(WebhookBot callback) {
+	        if (!callbacks.containsKey(callback.getBotPath())) {
+	            callbacks.put(callback.getBotPath(), callback);
+	        }
+	    }
+
+	    @POST
+	    @Path("/{botPath}")
+	    @Consumes(MediaType.APPLICATION_JSON)
+	    @Produces(MediaType.APPLICATION_JSON)
+	    public Response updateReceived(@PathParam("botPath") String botPath, Update update) {
+	        System.out.println("***** Receive updated ***** ");
+	    	if (callbacks.containsKey(botPath)) {
+	            try {
+	                BotApiMethod<?> response = callbacks.get(botPath).onWebhookUpdateReceived(update);
+	                if (response != null) {
+	                    response.validate();
+	                }
+	                return Response.ok(response).build();
+	            } catch (TelegramApiValidationException e) {
+	                BotLogger.severe("RESTAPI", e);
+	                return Response.serverError().build();
+	            }
+	        }
+
+	        return Response.status(Response.Status.NOT_FOUND).build();
+	    }
+
+	    @GET
+	    @Path("/{botPath}")
+	    @Produces(MediaType.APPLICATION_JSON)
+	    public String testReceived(@PathParam("botPath") String botPath) {
+	        if (callbacks.containsKey(botPath)) {
+	            return "Hi there " + botPath + "!";
+	        } else {
+	            return "Callback not found for " + botPath;
+	        }
+	    }
+	}
+	
+	
+
 
 }
