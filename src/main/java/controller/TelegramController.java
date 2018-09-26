@@ -1,9 +1,13 @@
 package controller;
 
 import java.net.URI;
+import java.util.concurrent.ConcurrentHashMap;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.Produces;
 import javax.ws.rs.client.Client;
@@ -15,9 +19,16 @@ import javax.ws.rs.core.UriBuilder;
 
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.filter.LoggingFilter;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.generics.WebhookBot;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiValidationException;
+import org.telegram.telegrambots.meta.logging.BotLogger;
 
 @Path("/telegram")
 public class TelegramController {
+	
+	private final ConcurrentHashMap<String, WebhookBot> callbacks = new ConcurrentHashMap<String, WebhookBot>();
 	
 	// TODO: Archivo configuracion o Variable Entorno
 	
@@ -55,5 +66,27 @@ public class TelegramController {
 	private static URI getBaseURI() {
 	    return UriBuilder.fromUri("https://api.telegram.org/bot" + HTTP_API_PART_1 + ":" + HTTP_API_PART_2 + "/").build();
 	}
+	
+    @POST
+    @Path("/{botPath}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateReceived(@PathParam("botPath") String botPath, Update update) {
+        System.out.println("***** Receive updated ***** ");
+    	if (callbacks.containsKey(botPath)) {
+            try {
+                BotApiMethod<?> response = callbacks.get(botPath).onWebhookUpdateReceived(update);
+                if (response != null) {
+                    response.validate();
+                }
+                return Response.ok(response).build();
+            } catch (TelegramApiValidationException e) {
+                BotLogger.severe("RESTAPI", e);
+                return Response.serverError().build();
+            }
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
 
 }

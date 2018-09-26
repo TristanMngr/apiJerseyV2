@@ -21,11 +21,19 @@
    
    <dependencies>
    
-   		<!-- Jersey Dependencies -->		
+	<!-- Jersey Dependencies -->		
    
       <dependency>
          <groupId>org.glassfish.jersey.ext</groupId>
          <artifactId>jersey-mvc-jsp</artifactId>
+      </dependency>
+    
+    <!-- Telegram Dependencies -->
+      
+      <dependency>
+        <groupId>org.telegram</groupId>
+        <artifactId>telegrambots</artifactId>
+        <version>4.1</version>
       </dependency>
             
       <!-- Test Dependencies -->
@@ -61,8 +69,8 @@
             <version>2.5.1</version>
             <inherited>true</inherited>
             <configuration>
-               <source>1.6</source>
-               <target>1.6</target>
+               <source>1.7</source>
+               <target>1.7</target>
             </configuration>
          </plugin>
          <plugin>
