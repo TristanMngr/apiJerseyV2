@@ -1,30 +1,33 @@
 # apiJerseyV2
-Project: apiJerseyV2
 
-Version: 1.0.1
+## Installacion
 
-How to run using maven?
+### Desde linea de comandos [ Ubuntu ]
 
-1. Clonar esta branch
+```sh
+$ git clone https://github.com/ccantero/apiJerseyV2.git
+$ mvn clean install
+$ export EVENTBRITE_KEY=TACSYYYY2CGRUPO#
+$ mvn jetty:run
+```
 
-git clone https://github.com/ccantero/apiJerseyV2.git
+### Open your web browser:
 
-2. Compilar
+[Login Page](http://localhost:8080/ "link title")
 
-mvn clean install
 
-3. Correr utilizando jetty.
+### Run on eclipse
 
-mvn jetty:run
+Run using Maven Build
 
-// En un navegador
+Colocar como goal: **jetty:run**
 
-http://localhost:8080/
+![](https://image.ibb.co/bvu29K/jetty_run_1.jpg)
 
-// Usando Heroku
+Setear la variable de entorno  **EVENTBRITE_KEY**
 
-https://apieventos-g5.herokuapp.com/myresource
+![](https://image.ibb.co/jc5W3e/jetty_run_2.jpg)
 
-https://apieventos-g5.herokuapp.com/otherHTML
+## Heroku UAT Version
 
-en caso que tengan que instalar gson: https://medium.com/programmers-blockchain/importing-gson-into-eclipse-ec8cf678ad52
+[Login Page](https://apieventos-g5.herokuapp.com/ "link title")
