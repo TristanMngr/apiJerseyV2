@@ -13,7 +13,7 @@ import javax.ws.rs.core.Response;
 import model.User;
 
 @Path("/admin")
-public class Admin {
+public class AdminController {
 	
 	// TODO: Not yet implemented
 	private String name;
