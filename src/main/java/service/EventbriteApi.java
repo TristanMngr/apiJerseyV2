@@ -25,7 +25,7 @@ import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.filter.LoggingFilter;
 
 public class EventbriteApi {
-	public static String getEvent(String eventID) {
+	public static String getEventByID(String eventID) {
 
 		ClientConfig config = new ClientConfig();
 		Client client = ClientBuilder.newClient(config);
@@ -36,6 +36,31 @@ public class EventbriteApi {
 
 		try {
 			Response response = service.path(eventID).queryParam("token", getAppKey())
+					.request(MediaType.APPLICATION_JSON).get();
+			output = response.readEntity(String.class);
+
+		} catch (ProcessingException exception) {
+			System.out.println("Explote!");
+			System.out.println(exception.getMessage());
+			exception.printStackTrace();
+		}
+		return output;
+
+	}
+	
+	public static String getEventByName(String pattern) {
+
+		ClientConfig config = new ClientConfig();
+		Client client = ClientBuilder.newClient(config);
+		client.register(new LoggingFilter());
+		WebTarget service = client.target(getBaseURI());
+
+		String output = "";
+
+		try {
+			Response response = service.path("search").
+										queryParam("q", pattern).
+										queryParam("token", getAppKey())
 					.request(MediaType.APPLICATION_JSON).get();
 			output = response.readEntity(String.class);
 

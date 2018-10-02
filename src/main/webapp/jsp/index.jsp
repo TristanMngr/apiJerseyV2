@@ -44,9 +44,12 @@ label,button {
 	<div class="contEvento">
 		<h3>Buscar evento</h3>
 		<form method="post" action="http://localhost:8080/events/buscarEvento">
-			<label>Código del evento</label> <input type="number" name="eventId" />
-<!-- 			<label>Nombre del evento</label> <input type="text" -->
-<!-- 				name="eventNombre" required /> -->
+			<label>Código del evento</label> 
+			<input type="number" name="eventId" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required/>
+			<button type="submit">Buscar</button>
+		</form>
+		<form method="post" action="http://localhost:8080/events/buscarEvento">
+ 			<label>Nombre del evento</label> <input type="text"	name="eventNombre" required/>
 			<button type="submit">Buscar</button>
 		</form>
 	</div>
