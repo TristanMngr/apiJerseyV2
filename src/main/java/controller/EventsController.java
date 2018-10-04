@@ -79,7 +79,6 @@ public class EventsController {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response get() {
-		System.out.println(" * " + this.eventsService.allEvents().size());
 		return Response.status(201).entity(this.eventsService.allEvents()).build();
 	}
 

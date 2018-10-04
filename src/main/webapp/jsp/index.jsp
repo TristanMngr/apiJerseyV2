@@ -26,6 +26,21 @@ label,button {
 </head>
 <body>
 	<%--         <h1>${it.hello} ${it.world}</h1> --%>
+	<%@ page contentType="text/html; charset=iso-8859-1" language="java"  %>
+	<%
+ 		String hostName=request.getServerName();
+	%>
+	
+	<h2>JSP URI, URL, Context</h2>
+
+Request Context Path: <%= request.getContextPath() %> <br>
+Request URI:          <%= request.getRequestURI() %> <br>
+Request URL:          <%= request.getRequestURL() %> <br>
+Request ServletPath:  <%= request.getServletPath() %> <br>
+Request ServerName:  <%= request.getServerName() %> <br>
+Request LocalPort:  <%= request.getLocalPort() %> <br>
+
+Host Name of server <%=hostName%>
 		
 	<h1>Administrador de eventos</h1>
 	<div class="contEvento">
@@ -53,6 +68,7 @@ label,button {
 			<button type="submit">Buscar</button>
 		</form>
 	</div>
+
 
 
 </body>
