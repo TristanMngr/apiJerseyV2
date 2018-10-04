@@ -18,11 +18,11 @@ public class MainController {
      
 	@GET
     @Produces(MediaType.TEXT_HTML)
-    public Viewable index() {
+    public Response index() {
 		Map<String, String> model = new HashMap<String, String>();
         model.put("hello", "Hello");
         model.put("world", "World! I'm index.jsp");
-        return new Viewable("/jsp/index", model);
+        return Response.ok(new Viewable("/jsp/index", model)).build();
     }
  
 }

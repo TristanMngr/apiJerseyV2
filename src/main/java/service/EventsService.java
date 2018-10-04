@@ -3,6 +3,7 @@ package service;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +37,8 @@ public class EventsService {
 	
 	public List<Event> getFromPagination(String jsonString)
 	{
+		
+		List<Event> listado = new ArrayList<Event>();
 		JSONObject jsonObject = new JSONObject(jsonString);
 		JSONArray jsonArray = (JSONArray) jsonObject.get("events");
 		
@@ -64,16 +67,15 @@ public class EventsService {
 						fechaEvento, 
 						horaEvento);
 
-				this.eventDAO.create(event);
+				listado.add(event);
 				
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			
-			
-			
+						
 		}
-		return null;
+
+		return listado;
 	}
 
 }

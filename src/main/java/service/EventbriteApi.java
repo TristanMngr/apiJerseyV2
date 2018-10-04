@@ -95,10 +95,8 @@ public class EventbriteApi {
 			key = Arrays.copyOf(key, 16);
 			secretKey = new SecretKeySpec(key, "AES");
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -111,16 +109,12 @@ public class EventbriteApi {
 			cipher.init(Cipher.DECRYPT_MODE, secretKey);
 			decryptedString = new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt)));
 		} catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalBlockSizeException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadPaddingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

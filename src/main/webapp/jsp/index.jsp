@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type"
 	content="text/html; charset=windows-1252">
 <title>JSP Page</title>
-<link href="${pageContext.request.contextPath}/css/styles.css" rel="stylesheet">
+<link href="/css/styles.css" rel="stylesheet">
 <style type="text/css">
 .contEvento {
 	float: left;

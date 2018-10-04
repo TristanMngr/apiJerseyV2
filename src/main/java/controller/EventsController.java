@@ -90,8 +90,9 @@ public class EventsController {
 	@Path("/buscarEvento")
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@Produces(MediaType.TEXT_HTML)
-	public Viewable buscarEvento(String param) {
+	@Produces({ MediaType.TEXT_HTML, MediaType.APPLICATION_JSON })
+	public Response buscarEvento(String param) {
+	//public Viewable buscarEvento(String param) {
 		Long id = 0L;
 		String searchPattern = "";
 		Map<String, String> model = new HashMap<String, String>();
@@ -135,8 +136,10 @@ public class EventsController {
 		else if ( !searchPattern.equals(""))
 		{
 			// TODO: No pude hacer andar el Viewable con un listado.
-			EventbriteApi.getEventByName(searchPattern);
-			return new Viewable("/jsp/test", model);
+			String results = EventbriteApi.getEventByName(searchPattern);
+			List<Event> listado = eventsService.getFromPagination(results);
+			//return new Viewable("/jsp/test", model);
+			return Response.status(201).entity(listado).build();
 		}
 		else {
 			Event evento = this.eventsService.getEventById(id);
@@ -148,7 +151,8 @@ public class EventsController {
 			}
 			
 		}
-		return new Viewable("/jsp/eventos/evento", model);
+		//return new Viewable("/jsp/eventos/evento", model);
+		return Response.ok(new Viewable("/jsp/eventos/evento", model)).build();
 	}
 
 	@Path("/cantidad")
