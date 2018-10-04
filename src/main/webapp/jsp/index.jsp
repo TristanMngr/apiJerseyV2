@@ -28,42 +28,39 @@ label,button {
 	<%--         <h1>${it.hello} ${it.world}</h1> --%>
 	<%@ page contentType="text/html; charset=iso-8859-1" language="java"  %>
 	<%
- 		String hostName=request.getServerName();
+ 		String ServerName=request.getServerName();
+		String URL = "";
+		if( ServerName != null && !ServerName.equals("localhost") ) {
+	       URL = ServerName;
+	   	}
+		else
+		{
+			URL = ServerName + ":" + request.getLocalPort();
+		}
 	%>
-	
-	<h2>JSP URI, URL, Context</h2>
-
-Request Context Path: <%= request.getContextPath() %> <br>
-Request URI:          <%= request.getRequestURI() %> <br>
-Request URL:          <%= request.getRequestURL() %> <br>
-Request ServletPath:  <%= request.getServletPath() %> <br>
-Request ServerName:  <%= request.getServerName() %> <br>
-Request LocalPort:  <%= request.getLocalPort() %> <br>
-
-Host Name of server <%=hostName%>
 		
 	<h1>Administrador de eventos</h1>
 	<div class="contEvento">
 		<h3>Telegram</h3>
-		<a href="http://localhost:8080/telegram" target="_blank">http://localhost:8080/telegram</a>
+		<a href="http://<%=URL%>/telegram" target="_blank">http://<%=URL%>/telegram</a>
 	</div>
 	<div class="contEvento">
 		<h3>Ver usuarios</h3>
-		<a href="http://localhost:8080/users" target="_blank">http://localhost:8080/users</a>
+		<a href="http://<%=URL%>/users" target="_blank">http://<%=URL%>/users</a>
 	</div>
 	<div class="contEvento">
 		<h3>Ver eventos disponibles</h3>
-		<a href="http://localhost:8080/events" target="_blank">http://localhost:8080/events</a><br>
+		<a href="http://<%=URL%>/events" target="_blank">http://<%=URL%>/events</a>
 		<br> <br>
 	</div>
 	<div class="contEvento">
 		<h3>Buscar evento</h3>
-		<form method="post" action="http://localhost:8080/events/buscarEvento">
+		<form method="post" action="http://<%=URL%>/events/buscarEvento">
 			<label>Código del evento</label> 
 			<input type="number" name="eventId" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required/>
 			<button type="submit">Buscar</button>
 		</form>
-		<form method="post" action="http://localhost:8080/events/buscarEvento">
+		<form method="post" action="http://<%=URL%>/events/buscarEvento">
  			<label>Nombre del evento</label> <input type="text"	name="eventNombre" required/>
 			<button type="submit">Buscar</button>
 		</form>

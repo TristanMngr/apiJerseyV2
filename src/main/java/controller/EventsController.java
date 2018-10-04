@@ -23,14 +23,13 @@ import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.server.mvc.Viewable;
 
+import com.google.gson.*;
+
+import eventbrite.EventBrite;
 import model.Event;
 import model.EventsList;
 import service.EventbriteApi;
 import service.EventsService;
-
-import com.google.gson.*;
-
-import eventbrite.EventBrite;
 
 @Path("/events")
 public class EventsController {
