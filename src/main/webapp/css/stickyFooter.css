@@ -1,0 +1,30 @@
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 95px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: #eee;
+  /*padding-bottom: 5px;*/
+}
+
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+.container img.text-muted {
+  margin: 10px 0 10px 0;
+}
+.container p.text-muted {
+  margin: 15px 0 15px 0;
+  text-align: center;
+}
