@@ -5,3 +5,4 @@
 .classpath
 .project
 target/
+nb-configuration.xml
