@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+    
     <head>
         <%@ page contentType="text/html; charset=iso-8859-1" language="java"  %>
         <!--<meta charset="utf-8">-->
@@ -39,7 +40,6 @@
                         <a class="nav-link dropdown-toggle" href="#" id="dropdownEventos" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Eventos</a>
                         <div class="dropdown-menu" aria-labelledby="dropdownEventos">
                             <a class="dropdown-item" href="<%=URL%>/events">Eventos Disponibles</a>
-                            <a class="dropdown-item" href="#">Buscar Evento</a>
                         </div>
                     </li>
                     <li class="nav-item">

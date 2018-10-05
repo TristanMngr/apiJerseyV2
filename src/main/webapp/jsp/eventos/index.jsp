@@ -1,17 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <%@ page contentType="text/html; charset=iso-8859-1" language="java"  %>
-        <!--<meta charset="utf-8">-->
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="">
-        <meta name="author" content="">
+        <%@ page contentType="text/html; charset=utf-8" language="java"  %>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <meta name="description" content=""/>
+        <meta name="author" content=""/>
         <!--<link rel="icon" href="../../../../favicon.ico">-->
         <title>Administrador de Eventos TACS</title>
         <!-- Bootstrap core CSS -->
-        <link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet">
-        <link href="/css/styles.css" rel="stylesheet">
-        <link href="/css/stickyFooter.css" rel="stylesheet">
+        <link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
+        <link href="/css/styles.css" rel="stylesheet"/>
+        <link href="/css/stickyFooter.css" rel="stylesheet"/>
         <style type="text/css">
             body {
                 padding-top: 3.5rem;
@@ -39,7 +38,6 @@
                         <a class="nav-link dropdown-toggle" href="#" id="dropdownEventos" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Eventos</a>
                         <div class="dropdown-menu" aria-labelledby="dropdownEventos">
                             <a class="dropdown-item" href="<%=URL%>/events">Eventos Disponibles</a>
-                            <a class="dropdown-item" href="#">Buscar Evento</a>
                         </div>
                     </li>
                     <li class="nav-item">
@@ -48,7 +46,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="dropdownTelegram" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Telegram</a>
                         <div class="dropdown-menu" aria-labelledby="dropdownTelegram">
-                            <a class="dropdown-item" href="<%=URL%>/telegram">P�gina Principal</a>
+                            <a class="dropdown-item" href="<%=URL%>/telegram">Página Principal</a>
 
                         </div>
                     </li>
@@ -63,37 +61,54 @@
                     <!--<p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>-->
                 </div>
             </div>
+            <form class="col-12" method="post" action="<%=URL%>/events/buscarEvento">
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        <h4 class="text-center">Buscar Evento</h4>
+                        <div class="form-group row">
+                            <label for="codigo" class="col-md-2 col-form-label">Código</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="codigo" name="codigo" >
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="nombre" class="col-md-2 col-form-label">Nombre</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="descripcion" class="col-md-2 col-form-label">Descripción</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="desde" class="col-md-2 col-form-label">Desde</label>
+                            <div class="col-md-8">
+                                <input type="date" class="form-control" id="desde" name="desde" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="hasta" class="col-md-2 col-form-label">Hasta</label>
+                            <div class="col-md-8">
+                                <input type="date" class="form-control" id="hasta" name="hasta" placeholder="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <button type="submit" id="btnSubmit" class="btn btn-info">Buscar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </main>
-
-
-
-
-
-
-
-
-
-
-
-        <div class="contEvento">
-            <h3>Buscar evento</h3>
-            <form method="post" action="http://<%=URL%>/events/buscarEvento">
-                <label>C�digo del evento</label> 
-                <input type="number" name="eventId" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required/>
-                <button type="submit">Buscar</button>
-            </form>
-            <form method="post" action="http://<%=URL%>/events/buscarEvento">
-                <label>Nombre del evento</label> <input type="text"	name="eventNombre" required/>
-                <button type="submit">Buscar</button>
-            </form>
-        </div>
-
-
 
         <!-- footer begin -->
         <footer class="footer">
             <div class="container">
-                <p class="text-muted">Sistema de administraci�n de eventos - &copy; Grupo 5 TACS UTNBA</p>
+                <p class="text-muted">Sistema de administración de eventos - &copy; Grupo 5 TACS UTNBA</p>
             </div>
         </footer>
         <!-- footer close -->
@@ -101,7 +116,8 @@
         <!-- Bootstrap core JavaScript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="/js/jquery-3.3.1.slim.min.js"></script>
+        <script src="/js/jquery-3.3.1.min.js"></script>
         <script src="/js/bootstrap/bootstrap.min.js"></script>
+        <script src="/js/eventos/index.js"></script>
     </body>
 </html>

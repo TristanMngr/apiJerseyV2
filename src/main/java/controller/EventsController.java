@@ -30,12 +30,14 @@ import model.Event;
 import model.EventsList;
 import service.EventbriteApi;
 import service.EventsService;
+import service.ManagementService;
 
 @Path("/events")
 public class EventsController {
 
     static final long idEventBrite = 17920884849L;
 
+    private ManagementService managementService = new ManagementService();
     private EventsService eventsService = new EventsService();
     private EventBrite eventBrite = new EventBrite();
     final Gson gson = new Gson();
@@ -81,6 +83,7 @@ public class EventsController {
 //        return Response.status(201).entity(this.eventsService.allEvents()).build();
 //    }
     @GET
+    @Produces({MediaType.TEXT_HTML})
     public Viewable mainEventos() {
         return new Viewable("/jsp/eventos/index");
     }
@@ -94,9 +97,10 @@ public class EventsController {
     @Path("/buscarEvento")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces({MediaType.TEXT_HTML, MediaType.APPLICATION_JSON})
-    public Response buscarEvento(String param) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response buscarEvento(String params) {
         //public Viewable buscarEvento(String param) {
+        
         Long id = 0L;
         String searchPattern = "";
         Map<String, String> model = new HashMap<String, String>();
@@ -104,57 +108,58 @@ public class EventsController {
         model.put("nombre", "");
         model.put("fecha", "");
         model.put("hora", "");
-
-        List<String> parametros = Arrays.asList(param.split("=", -1));
-
-        if (parametros.get(1).matches("\\d+")) {
-            id = Long.valueOf(parametros.get(1));
-        } else {
-            searchPattern = parametros.get(1);
-        }
-
-        Date date = new Date();
-
-        // TODO: Cristhian: Solo por testing.
-        if (id == idEventBrite) {
-            eventBrite = gson.fromJson(EventbriteApi.getEventByID(id.toString()), EventBrite.class);
-            model.put("codigo", eventBrite.getId().toString());
-            model.put("nombre", eventBrite.getName().getText());
-
-            try {
-                DateFormat iso8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-                date = iso8601.parse(eventBrite.getStart().getLocal());
-
-                SimpleDateFormat simpleDateFormat_Date = new SimpleDateFormat("yyyy-MM-dd");
-                String fechaEvento = simpleDateFormat_Date.format(date);
-
-                SimpleDateFormat simpleDateFormat_Time = new SimpleDateFormat("HH:mm:ss");
-                String horaEvento = simpleDateFormat_Time.format(date);
-                model.put("fecha", fechaEvento);
-                model.put("hora", horaEvento);
-
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-        } else if (!searchPattern.equals("")) {
-            // TODO: No pude hacer andar el Viewable con un listado.
-            String results = EventbriteApi.getEventByName(searchPattern);
-            List<Event> listado = eventsService.getFromPagination(results);
-            //return new Viewable("/jsp/test", model);
-            return Response.status(201).entity(listado).build();
-        } else {
-            Event evento = this.eventsService.getEventById(id);
-            if (evento != null) {
-                model.put("codigo", evento.getId().toString());
-                model.put("nombre", evento.getNombre());
-                model.put("fecha", evento.getFecha());
-                model.put("hora", evento.getHora());
-            }
-
-        }
-        //return new Viewable("/jsp/eventos/evento", model);
-        return Response.ok(new Viewable("/jsp/eventos/evento", model)).build();
+        
+        managementService.getPostParams(params);
+        
+return Response.ok("hola").build();
+//        if (parametros.get(1).matches("\\d+")) {
+//            id = Long.valueOf(parametros.get(1));
+//        } else {
+//            searchPattern = parametros.get(1);
+//        }
+//
+//        Date date = new Date();
+//
+//        // TODO: Cristhian: Solo por testing.
+//        if (id == idEventBrite) {
+//            eventBrite = gson.fromJson(EventbriteApi.getEventByID(id.toString()), EventBrite.class);
+//            model.put("codigo", eventBrite.getId().toString());
+//            model.put("nombre", eventBrite.getName().getText());
+//            try {
+//                DateFormat iso8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+//                date = iso8601.parse(eventBrite.getStart().getLocal());
+//
+//                SimpleDateFormat simpleDateFormat_Date = new SimpleDateFormat("yyyy-MM-dd");
+//                String fechaEvento = simpleDateFormat_Date.format(date);
+//
+//                SimpleDateFormat simpleDateFormat_Time = new SimpleDateFormat("HH:mm:ss");
+//                String horaEvento = simpleDateFormat_Time.format(date);
+//                model.put("fecha", fechaEvento);
+//                model.put("hora", horaEvento);
+//
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//
+//        } else if (!searchPattern.equals("")) {
+//            // TODO: No pude hacer andar el Viewable con un listado.
+//            String results = EventbriteApi.getEventByName(searchPattern);
+//            List<Event> listado = eventsService.getFromPagination(results);
+//            //return new Viewable("/jsp/test", model);
+//            System.out.println("listado");
+//            return Response.status(201).entity(listado).build();
+//        } else {
+//            Event evento = this.eventsService.getEventById(id);
+//            if (evento != null) {
+//                model.put("codigo", evento.getId().toString());
+//                model.put("nombre", evento.getNombre());
+//                model.put("fecha", evento.getFecha());
+//                model.put("hora", evento.getHora());
+//            }
+//
+//        }
+//        //return new Viewable("/jsp/eventos/evento", model);
+//        return Response.ok(new Viewable("/jsp/eventos/evento", model)).build();
     }
 
     @Path("/cantidad")
