@@ -12,11 +12,11 @@ public class ManagementService {
     public List<String> getPostParams(String params) {
         List<String> listaAux = Arrays.asList(params.split("&", -1));
 
-        for (String s : listaAux) {
-            System.out.println(getNValueFromSplit(s, "=", 0) + ": " + getNValueFromSplit(s, "=", 1));
+        List<String> parametros = listaAux.stream().map(elem -> this.getNValueFromSplit(elem, "=", 1)).collect(Collectors.toList());
+        for (String s : parametros) {
+//            System.out.println(getNValueFromSplit(s, "=", 0) + ": " + getNValueFromSplit(s, "=", 1));
+            System.out.println(s);
         }
-//        List<String> parametros = listaAux.stream().map(elem -> this.getNValueFromSplit(elem, "=", 1)).collect(Collectors.toList());
-
 //        System.out.println(parametros);
 //
 //        System.out.println(parametros.get(0));
