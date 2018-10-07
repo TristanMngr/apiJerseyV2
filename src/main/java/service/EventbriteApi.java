@@ -7,6 +7,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -24,14 +26,21 @@ import javax.ws.rs.core.UriBuilder;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.filter.LoggingFilter;
 
+//EVENTBRITE KEY: Q2U3MHJELN4VOBCARDUQ - NO BORRAR QUE LA NECESITO PARA BUSCAR DESDE LA WEB DE EVENTBRITE (GUILLE)
 public class EventbriteApi {
+
+    public static String getCategories() {
+        WebTarget service = getWebTargetService("categories");
+        Response response = service.queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
+        return response.readEntity(String.class);
+    }
 
     public static String getEventByID(String eventID) {
 
         ClientConfig config = new ClientConfig();
         Client client = ClientBuilder.newClient(config);
         client.register(new LoggingFilter());
-        WebTarget service = client.target(getBaseURI());
+        WebTarget service = client.target(getBaseURI("events"));
 
         String output = "";
 
@@ -52,7 +61,7 @@ public class EventbriteApi {
         ClientConfig config = new ClientConfig();
         Client client = ClientBuilder.newClient(config);
         client.register(new LoggingFilter());
-        WebTarget service = client.target(getBaseURI());
+        WebTarget service = client.target(getBaseURI("events"));
 
         String output = "";
 
@@ -69,8 +78,20 @@ public class EventbriteApi {
 
     }
 
-    private static URI getBaseURI() {
-        return UriBuilder.fromUri("https://www.eventbriteapi.com/v3/events/").build();
+    private static WebTarget getWebTargetService(String baseElement) {
+        ClientConfig config = new ClientConfig();
+        Client client = ClientBuilder.newClient(config);
+        client.register(new LoggingFilter());
+        WebTarget service = client.target(getBaseURI(baseElement));
+        return service;
+    }
+
+//    private static void buildEventBriteApiUri(String baseElement){
+//        WebTarget service = getWebTargetService("categories");
+//        
+//    }
+    private static URI getBaseURI(String baseElement) {
+        return UriBuilder.fromUri("https://www.eventbriteapi.com/v3/" + baseElement + "/").build();
     }
 
 //	  private static String getAppKey() {

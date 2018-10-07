@@ -1,6 +1,11 @@
-$(document).ready(function() {
-   
-   
+$(document).ready(function () {
+    
+//    alert($("#categoriesJson").html());
+    var categs = $.parseJSON($("#categoriesJson").html());
+    $.each(categs.categories, function (key, valor) {
+        var linea = '<option value="' + valor.id + '" >' + valor.name + '</option>';
+        $('select#categorias').append(linea);
+    });
 //   $('#btnSubmit').click(function () {
 //        var codigo = $("#codigo").val();
 //        var nombre = $("#nombre").val();
@@ -24,5 +29,5 @@ $(document).ready(function() {
 //        });
 //        return false
 //    });
-    
+
 });

@@ -1,7 +1,9 @@
 package service;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -9,22 +11,11 @@ import java.util.stream.Collectors;
  */
 public class ManagementService {
 
-    public List<String> getPostParams(String params) {
+    public HashMap<String, String> getPostParams(String params) {
         List<String> listaAux = Arrays.asList(params.split("&", -1));
-
-        List<String> parametros = listaAux.stream().map(elem -> this.getNValueFromSplit(elem, "=", 1)).collect(Collectors.toList());
-        for (String s : parametros) {
-//            System.out.println(getNValueFromSplit(s, "=", 0) + ": " + getNValueFromSplit(s, "=", 1));
-            System.out.println(s);
-        }
-//        System.out.println(parametros);
-//
-//        System.out.println(parametros.get(0));
-//        System.out.println(parametros.get(1));
-//        System.out.println(parametros.get(2));
-//        System.out.println(parametros.get(3));
-//        System.out.println(parametros.get(4));
-        return listaAux;
+        HashMap<String, String> parametros = new HashMap<String, String>();
+        listaAux.stream().map(elem -> parametros.put(this.getNValueFromSplit(elem, "=", 0), this.getNValueFromSplit(elem, "=", 1))).collect(Collectors.toList());
+        return parametros;
     }
 
     public String getNValueFromSplit(String sentencia, String separador, Integer posicion) {

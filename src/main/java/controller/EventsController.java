@@ -83,9 +83,14 @@ public class EventsController {
 //        return Response.status(201).entity(this.eventsService.allEvents()).build();
 //    }
     @GET
-    @Produces({MediaType.TEXT_HTML})
+    @Produces({MediaType.TEXT_HTML, MediaType.APPLICATION_JSON})
     public Viewable mainEventos() {
-        return new Viewable("/jsp/eventos/index");
+        Map<String, String> model = new HashMap<String, String>();
+        String categories = EventbriteApi.getCategories();
+//        System.out.println(categories);
+        model.put("categories", categories);
+//                return Response.ok(new Viewable("/jsp/eventos/index", model)).build();
+        return new Viewable("/jsp/eventos/index", model);
     }
 
     /**
@@ -100,7 +105,7 @@ public class EventsController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response buscarEvento(String params) {
         //public Viewable buscarEvento(String param) {
-        
+
         Long id = 0L;
         String searchPattern = "";
         Map<String, String> model = new HashMap<String, String>();
@@ -108,19 +113,16 @@ public class EventsController {
         model.put("nombre", "");
         model.put("fecha", "");
         model.put("hora", "");
-        
-        managementService.getPostParams(params);
-        
-return Response.ok("hola").build();
-//        if (parametros.get(1).matches("\\d+")) {
-//            id = Long.valueOf(parametros.get(1));
-//        } else {
-//            searchPattern = parametros.get(1);
-//        }
-//
+
+        HashMap<String, String> parametros = managementService.getPostParams(params);
+
+        id = Long.valueOf(parametros.get("codigo"));
+
+        return Response.ok("nombre: " + parametros.get("nombre") + ", desde: " + parametros.get("desde")).build();
+
 //        Date date = new Date();
 //
-//        // TODO: Cristhian: Solo por testing.
+////        // TODO: Cristhian: Solo por testing.
 //        if (id == idEventBrite) {
 //            eventBrite = gson.fromJson(EventbriteApi.getEventByID(id.toString()), EventBrite.class);
 //            model.put("codigo", eventBrite.getId().toString());

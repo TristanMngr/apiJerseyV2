@@ -1,9 +1,10 @@
 <jsp:include page="/jsp/shared/header.jsp" flush="true" /> 
+<div hidden id="categoriesJson">${it.categories}</div>
 <h1 class="display-3 text-center">Eventos</h1>
 <hr/>
 <form class="col-12" method="post" action="/events/buscarEvento">
     <div class="row">
-        <div class="col-md-6 offset-md-3">
+        <div class="col-md-6">
             <div class="form-group row">
                 <label for="codigo" class="col-md-2 col-form-label">Código</label>
                 <div class="col-md-10">
@@ -20,6 +21,14 @@
                 <label for="descripcion" class="col-md-2 col-form-label">Descripción</label>
                 <div class="col-md-10">
                     <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="categorias" class="col-md-2 col-form-label">Categoría</label>
+                <div class="col-md-10">
+                    <select class="form-control" id="categorias" name="categorias">
+                        <option value="">Todas</option>
+                    </select>
                 </div>
             </div>
             <div class="form-group row">
@@ -42,4 +51,7 @@
         </div>
     </div>
 </form>
+
+<script src="/js/eventos/index.js"></script>
+
 <jsp:include page="/jsp/shared/footer.jsp" flush="true" /> 
