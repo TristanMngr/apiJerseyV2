@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<HTML>
+
+<script>
+
+function login() {
+	console.log("Arrancamos");
+    var baseRestURL = "http://localhost:8080";
+
+    oForm = document.forms[0]
+    var username = oForm.elements["j_username"].value;
+    var password = oForm.elements["j_password"].value;
+
+    var APIPath = "/login";
+    var completeRestURL = baseRestURL + APIPath;
+    console.log("REST API URL: " + completeRestURL);
+
+    var method = "POST";
+    var postData = {}
+    postData.name = username;
+    postData.password = password;
+    var url = completeRestURL;
+    var async = true;
+    var request = new XMLHttpRequest();
+    console.log("method = " + method);
+    console.log("url = " + url);
+    var json = JSON.stringify(postData)
+    console.log("postData = " + json);
+    
+    request.open(method, url, async);
+    request.setRequestHeader("Content-Type", "application/json");
+    /*     request.onload = function() {
+        console.log("ONLOAD");
+        if(request.readyState == 4)
+        {
+            console.log("Listo");
+        }
+        else
+        {
+            console.log("Fallo");
+        }
+
+    } */
+    
+    request.send(json);
+    console.log(request);
+}
+</script>
+
+
+<body>
+
+<H1>FORM Authentication demo</H1>
+<form method=post>
+<table border="0" cellspacing="2" cellpadding="1">
+<tr>
+  <td>Username:</td>
+  <td><input size="12" value="" name="j_username" maxlength="25" type="text"></td>
+</tr>
+<tr>
+  <td>Password:</td>
+  <td><input size="12" value="" name="j_password" maxlength="25" type="password"></td>
+</tr>
+<tr>
+  <td colspan="2" align="center">
+    <input name="submit" type="submit" value="Login"  onclick="login()">
+  </td>
+</tr>
+</table>
+</form>
+</body>
+</HTML>

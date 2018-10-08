@@ -84,6 +84,12 @@
                   <webInfIncludeJarPattern>.*/.*jersey-[^/]\.jar$</webInfIncludeJarPattern>
                </webApp>
                <war>${project.build.directory}/${project.build.finalName}.war</war>
+               <loginServices>
+            		<loginService implementation="org.eclipse.jetty.security.HashLoginService">
+              		<name>MySecurityRealm</name>
+              		<config>${basedir}/src/resources/realm.properties</config>
+            		</loginService>
+          		</loginServices>
             </configuration>
          </plugin>
          <!-- Necessary pluggin for Heroku Deploy -->
