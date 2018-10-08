@@ -1,5 +1,23 @@
 # apiJerseyV2
 
+How to test
+
+Go to: [logon_V1](http://localhost:8080/jsp/logon_V1.jsp "link title")
+
+
+Test with usuario:password
+
+**Issues**
+
+* No pide authenticacion luego del primer login ( Queda en la cookie )
+* No se puede forzar Authentication Header 
+* [Logon.html](http://localhost:8080/jsp/logon.html "link title") No funciona el js
+* Passwords guardadas como plain / text src/resources/
+* Siempre hay que borrar las cookies para que deje de mandar el Authentication Header
+
+
+------------------------------------------------------------------
+
 ## Installacion
 
 ### Desde linea de comandos [ Ubuntu ]
