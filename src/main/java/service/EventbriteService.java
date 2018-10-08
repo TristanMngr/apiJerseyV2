@@ -36,7 +36,7 @@ public class EventbriteService {
         String eventosEncontrados;
         //TODO: patrón strategy pendiente
         if (!paramsEventBrite.get("codigo").equals("")) {
-            eventosEncontrados = formatJsonEventos(getEventByID(paramsEventBrite.get("codigo")));
+            eventosEncontrados = formatJsonEventoSimple(getEventByID(paramsEventBrite.get("codigo")));
         } else {
             eventosEncontrados = getEventsByParams(paramsEventBrite);
         }
@@ -81,7 +81,7 @@ public class EventbriteService {
      * @param eventos
      * @return eventosFormateado
      */
-    private static String formatJsonEventos(String eventos) {
+    private static String formatJsonEventoSimple(String eventos) {
         return "{\"pagination\": {\"object_count\": 1,\"page_number\": 1,\"page_size\": 50,\"page_count\": 1,\"has_more_items\":false}, \"events\":[" + eventos + "]}";
     }
 
