@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
  */
 public class ManagementService {
 
-    public HashMap<String, String> getPostParams(String params) {
+    public Map<String, String> getPostParams(String params) {
         List<String> listaAux = Arrays.asList(params.split("&", -1));
-        HashMap<String, String> parametros = new HashMap<String, String>();
+        Map<String, String> parametros = new HashMap<String, String>();
         listaAux.stream().map(elem -> parametros.put(this.getNValueFromSplit(elem, "=", 0), this.getNValueFromSplit(elem, "=", 1))).collect(Collectors.toList());
         return parametros;
     }
@@ -23,4 +23,5 @@ public class ManagementService {
         return lista.get(posicion);
     }
 
+    
 }

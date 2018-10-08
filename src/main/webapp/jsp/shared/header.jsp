@@ -41,6 +41,7 @@
                         <a class="nav-link dropdown-toggle" href="#" id="dropdownEventos" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Eventos</a>
                         <div class="dropdown-menu" aria-labelledby="dropdownEventos">
                             <a class="dropdown-item" href="/events">Eventos Disponibles</a>
+                            <a class="dropdown-item" href="/eventsLists">Mis Listas</a>
                         </div>
                     </li>
                     <li class="nav-item">

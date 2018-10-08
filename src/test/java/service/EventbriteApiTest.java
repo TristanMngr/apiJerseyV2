@@ -14,7 +14,7 @@ public class EventbriteApiTest extends JerseyTest {
 
 	@Override
 	protected Application configure() {
-		return new ResourceConfig(EventbriteApi.class);
+		return new ResourceConfig(EventbriteService.class);
 	}
 
 	

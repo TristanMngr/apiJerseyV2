@@ -28,7 +28,7 @@ import com.google.gson.*;
 import eventbrite.EventBrite;
 import model.Event;
 import model.EventsList;
-import service.EventbriteApi;
+import service.EventbriteService;
 import service.EventsService;
 import service.ManagementService;
 
@@ -86,7 +86,7 @@ public class EventsController {
     @Produces({MediaType.TEXT_HTML, MediaType.APPLICATION_JSON})
     public Viewable mainEventos() {
         Map<String, String> model = new HashMap<String, String>();
-        String categories = EventbriteApi.getCategories();
+        String categories = EventbriteService.getCategories();
 //        System.out.println(categories);
         model.put("categories", categories);
 //                return Response.ok(new Viewable("/jsp/eventos/index", model)).build();
@@ -105,26 +105,32 @@ public class EventsController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response buscarEvento(String params) {
         //public Viewable buscarEvento(String param) {
+        String eventosEncontrados = "";
+        Map<String, String> paramsEventBrite = new HashMap<String, String>();
+        Map<String, String> parametros = managementService.getPostParams(params);
 
-        Long id = 0L;
-        String searchPattern = "";
-        Map<String, String> model = new HashMap<String, String>();
-        model.put("codigo", "");
-        model.put("nombre", "");
-        model.put("fecha", "");
-        model.put("hora", "");
+        //TODO: patrón strategy pendiente
+        if (!parametros.get("codigo").equals("")) {
+            paramsEventBrite.put("codigo", parametros.get("codigo"));
+            eventosEncontrados = parametros.get("codigo");
+            //            eventBrite = gson.fromJson(EventbriteService.getEventByID(id.toString()), EventBrite.class);
+        } else {
+            paramsEventBrite.put("nombre", parametros.get("nombre"));
+//        paramsEventBrite.put("descripcion", parametros.get("descripcion"));
+            paramsEventBrite.put("categoryId", parametros.get("categoryId"));
+            paramsEventBrite.put("fechaDesde", parametros.get("desde"));
+            paramsEventBrite.put("fechaHasta", parametros.get("hasta"));
+            eventosEncontrados = EventbriteService.searchEvents(paramsEventBrite);
+        }
 
-        HashMap<String, String> parametros = managementService.getPostParams(params);
-
-        id = Long.valueOf(parametros.get("codigo"));
-
-        return Response.ok("nombre: " + parametros.get("nombre") + ", desde: " + parametros.get("desde")).build();
+//        return Response.ok("nombre: " + parametros.get("nombre") + ", desde: " + parametros.get("desde")).build();
+        return Response.ok(eventosEncontrados).build();
 
 //        Date date = new Date();
 //
 ////        // TODO: Cristhian: Solo por testing.
 //        if (id == idEventBrite) {
-//            eventBrite = gson.fromJson(EventbriteApi.getEventByID(id.toString()), EventBrite.class);
+//            eventBrite = gson.fromJson(EventbriteService.getEventByID(id.toString()), EventBrite.class);
 //            model.put("codigo", eventBrite.getId().toString());
 //            model.put("nombre", eventBrite.getName().getText());
 //            try {
@@ -145,7 +151,7 @@ public class EventsController {
 //
 //        } else if (!searchPattern.equals("")) {
 //            // TODO: No pude hacer andar el Viewable con un listado.
-//            String results = EventbriteApi.getEventByName(searchPattern);
+//            String results = EventbriteService.getEventByName(searchPattern);
 //            List<Event> listado = eventsService.getFromPagination(results);
 //            //return new Viewable("/jsp/test", model);
 //            System.out.println("listado");
@@ -208,10 +214,10 @@ public class EventsController {
 //		nombre = valores.get(1).get(1);
 
         if (id == idEventBrite) {
-            eventBrite = gson.fromJson(EventbriteApi.getEventByID(id.toString()), EventBrite.class);
+            eventBrite = gson.fromJson(EventbriteService.getEventByID(id.toString()), EventBrite.class);
             System.out.println("algo del json" + eventBrite.getSubcategoryId());
             return new Viewable("/index", model);
-//			return Response.status(201).entity(formatString(EventbriteApi.getEvent(id.toString()))).build();
+//			return Response.status(201).entity(formatString(EventbriteService.getEvent(id.toString()))).build();
 //			model.put("nombre", "Hello");
 //			model.put("descripcion", "World! I'm index.jsp");
 //			model.put("start",);

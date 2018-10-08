@@ -7,8 +7,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -27,12 +27,19 @@ import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.filter.LoggingFilter;
 
 //EVENTBRITE KEY: Q2U3MHJELN4VOBCARDUQ - NO BORRAR QUE LA NECESITO PARA BUSCAR DESDE LA WEB DE EVENTBRITE (GUILLE)
-public class EventbriteApi {
+public class EventbriteService {
 
-    public static String getCategories() {
-        WebTarget service = getWebTargetService("categories");
-        Response response = service.queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
+    public static String searchEvents(Map<String, String> paramsEventBrite) {
+        WebTarget service = getWebTargetService("events/search");
+//        addParamsToQuery(paramsEventBrite)
+        Response response = service
+                .queryParam("q", paramsEventBrite.get("nombre"))
+                .queryParam("categories", paramsEventBrite.get("categoryId"))
+                .queryParam("start_date.range_start", completeStringDatetime(paramsEventBrite.get("fechaDesde")))
+                .queryParam("start_date.range_end", completeStringDatetime(paramsEventBrite.get("fechaHasta")))
+                .queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
         return response.readEntity(String.class);
+
     }
 
     public static String getEventByID(String eventID) {
@@ -78,6 +85,14 @@ public class EventbriteApi {
 
     }
 
+    /* ****************** Categorías ************************* */
+    public static String getCategories() {
+        WebTarget service = getWebTargetService("categories");
+        Response response = service.queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
+        return response.readEntity(String.class);
+    }
+
+    /* *********************** métodos auxiliares ********************** */
     private static WebTarget getWebTargetService(String baseElement) {
         ClientConfig config = new ClientConfig();
         Client client = ClientBuilder.newClient(config);
@@ -86,9 +101,8 @@ public class EventbriteApi {
         return service;
     }
 
-//    private static void buildEventBriteApiUri(String baseElement){
-//        WebTarget service = getWebTargetService("categories");
-//        
+//    private static addParamsToQuery(Map<String, String> parametros){
+//        return queryParam("token", getAppKey());
 //    }
     private static URI getBaseURI(String baseElement) {
         return UriBuilder.fromUri("https://www.eventbriteapi.com/v3/" + baseElement + "/").build();
@@ -136,4 +150,12 @@ public class EventbriteApi {
         return decryptedString;
     }
 
+    private static String completeStringDatetime(String date) {
+        if (!date.equals("")) {
+            return date + "T00:00:00";
+        } else {
+            return "";
+        }
+
+    }
 }
