@@ -10,6 +10,7 @@
         <title>Administrador de Eventos TACS</title>
         <!-- Bootstrap core CSS -->
         <link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+        <link href="/css/bootstrap/bootstrap-theme.min.css" rel="stylesheet">
         <link href="/css/styles.css" rel="stylesheet">
         <link href="/css/stickyFooter.css" rel="stylesheet">
         <style type="text/css">
@@ -19,6 +20,7 @@
         </style>
         <script src="/js/jquery-3.3.1.min.js"></script>
         <script src="/js/bootstrap/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     </head>
     <%--         <h1>${it.hello} ${it.world}</h1> --%>
     <%
@@ -51,7 +53,6 @@
                         <a class="nav-link dropdown-toggle" href="#" id="dropdownTelegram" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Telegram</a>
                         <div class="dropdown-menu" aria-labelledby="dropdownTelegram">
                             <a class="dropdown-item" href="/telegram">Página Principal</a>
-
                         </div>
                     </li>
                 </ul>

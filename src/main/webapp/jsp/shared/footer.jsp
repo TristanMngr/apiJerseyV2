@@ -6,6 +6,7 @@
     </div>
 </footer>
 <!-- footer close -->
+<script src="/js/varios.js"></script>
 
 
 </body>

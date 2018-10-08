@@ -39,16 +39,16 @@ $(document).ready(function () {
                     linea += '<td>' + valor.name.text + '</td>';
                     linea += '<td>' + formatEventBriteDate(valor.start.local) + '</td>';
                     linea += '<td>' + formatEventBriteDate(valor.end.local) + '</td>';
+                    linea += '<td><div data-toggle="modal" data-target="#addEventToList" data-whatever="' + valor + '"><button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="Agregar a una lista" ><i class="fas fa-save" style="font-size: 20px;"></i></button></div></td>';
                     linea += '</tr>';
                     cuerpoTabla.append(linea);
                 });
+                $('[data-toggle="tooltip"]').tooltip();
                 $(".imgLoader").addClass('displayNone');
             }
         });
         return false
-    }
-    );
-
+    });
 });
 
 function keyUpInputCodigo() {

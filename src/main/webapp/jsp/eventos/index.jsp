@@ -58,6 +58,7 @@
                         <th>Nombre</th>
                         <th>Inicio</th>
                         <th>Fin</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -69,3 +70,32 @@
 </form>
 <script src="/js/eventos/index.js"></script>
 <jsp:include page="/jsp/shared/footer.jsp" flush="true" /> 
+
+
+<div class="modal fade" id="addEventToList" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar evento a una lista</h5>
+            </div>
+            <div class="modal-body">
+                <form class="col-12" method="post">
+                    <div class="form-group row notCodigo">
+                        <label for="lista" class="col-md-3 col-form-label">Lista</label>
+                        <div class="col-md-9">
+                            <select class="form-control" id="lista" name="lista">
+                                 <option value="1">Lista 1</option>
+                            <option value="1">Lista 2</option>
+                            <option value="1">Lista 3</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
