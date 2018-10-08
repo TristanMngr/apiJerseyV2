@@ -10,6 +10,9 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
+//import com.google.gson.*;
+import eventbrite.EventBrite;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -30,8 +33,18 @@ import org.glassfish.jersey.filter.LoggingFilter;
 public class EventbriteService {
 
     public static String searchEvents(Map<String, String> paramsEventBrite) {
+        String eventosEncontrados;
+        //TODO: patrón strategy pendiente
+        if (!paramsEventBrite.get("codigo").equals("")) {
+            eventosEncontrados = formatJsonEventos(getEventByID(paramsEventBrite.get("codigo")));
+        } else {
+            eventosEncontrados = getEventsByParams(paramsEventBrite);
+        }
+        return eventosEncontrados;
+    }
+
+    public static String getEventsByParams(Map<String, String> paramsEventBrite) {
         WebTarget service = getWebTargetService("events/search");
-//        addParamsToQuery(paramsEventBrite)
         Response response = service
                 .queryParam("q", paramsEventBrite.get("nombre"))
                 .queryParam("categories", paramsEventBrite.get("categoryId"))
@@ -39,50 +52,16 @@ public class EventbriteService {
                 .queryParam("start_date.range_end", completeStringDatetime(paramsEventBrite.get("fechaHasta")))
                 .queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
         return response.readEntity(String.class);
-
     }
 
     public static String getEventByID(String eventID) {
-
-        ClientConfig config = new ClientConfig();
-        Client client = ClientBuilder.newClient(config);
-        client.register(new LoggingFilter());
-        WebTarget service = client.target(getBaseURI("events"));
-
-        String output = "";
-
-        try {
-            Response response = service.path(eventID).queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
-            output = response.readEntity(String.class);
-        } catch (ProcessingException exception) {
-            System.out.println("Explote!");
-            System.out.println(exception.getMessage());
-            exception.printStackTrace();
+        WebTarget service = getWebTargetService("events");
+        Response response = service.path(eventID).queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
+        if (response.getStatus() != 404) {
+            return response.readEntity(String.class);
+        } else {
+            return "";
         }
-        return output;
-
-    }
-
-    public static String getEventByName(String pattern) {
-
-        ClientConfig config = new ClientConfig();
-        Client client = ClientBuilder.newClient(config);
-        client.register(new LoggingFilter());
-        WebTarget service = client.target(getBaseURI("events"));
-
-        String output = "";
-
-        try {
-            Response response = service.path("search").queryParam("q", pattern).queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
-            output = response.readEntity(String.class);
-        } catch (ProcessingException exception) {
-            System.out.println("Explote!");
-            System.out.println(exception.getMessage());
-            exception.printStackTrace();
-        }
-//        System.out.println(output);
-        return output;
-
     }
 
     /* ****************** Categorías ************************* */
@@ -93,6 +72,19 @@ public class EventbriteService {
     }
 
     /* *********************** métodos auxiliares ********************** */
+    /**
+     * formatea el json agregando: {"pagination": {"object_count": 18,
+     * "page_number": 1, "page_size": 50, "page_count": 1, "has_more_items":
+     * false}, "events": []}; sirve para mantener el mismo formato que cuando se
+     * busca por otros parámetros
+     *
+     * @param eventos
+     * @return eventosFormateado
+     */
+    private static String formatJsonEventos(String eventos) {
+        return "{\"pagination\": {\"object_count\": 1,\"page_number\": 1,\"page_size\": 50,\"page_count\": 1,\"has_more_items\":false}, \"events\":[" + eventos + "]}";
+    }
+
     private static WebTarget getWebTargetService(String baseElement) {
         ClientConfig config = new ClientConfig();
         Client client = ClientBuilder.newClient(config);
@@ -101,9 +93,6 @@ public class EventbriteService {
         return service;
     }
 
-//    private static addParamsToQuery(Map<String, String> parametros){
-//        return queryParam("token", getAppKey());
-//    }
     private static URI getBaseURI(String baseElement) {
         return UriBuilder.fromUri("https://www.eventbriteapi.com/v3/" + baseElement + "/").build();
     }

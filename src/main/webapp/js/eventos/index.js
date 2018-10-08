@@ -1,10 +1,14 @@
 $(document).ready(function () {
 
-//    alert($("#categoriesJson").html());
     var categs = $.parseJSON($("#categoriesJson").html());
     $.each(categs.categories, function (key, valor) {
         var linea = '<option value="' + valor.id + '" >' + valor.name + '</option>';
         $('select#categorias').append(linea);
+    });
+
+    $('input#codigo').keyup(function () {
+        keyUpInputCodigo();
+        return false;
     });
 
     $("#btnSubmit").click(function () {
@@ -46,6 +50,14 @@ $(document).ready(function () {
     );
 
 });
+
+function keyUpInputCodigo() {
+    if ($("input#codigo").val() != "")
+        $('div.notCodigo').addClass("displayNone");
+    else
+        $('div.notCodigo').removeClass("displayNone");
+    return false;
+}
 
 function formatEventBriteDate(date) {
     var options = {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', };

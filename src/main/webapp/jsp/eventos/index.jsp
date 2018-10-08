@@ -12,7 +12,7 @@
                     <input type="text" class="form-control" id="codigo" name="codigo" >
                 </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row notCodigo">
                 <label for="nombre" class="col-md-3 col-form-label">Nombre</label>
                 <div class="col-md-9">
                     <input type="text" class="form-control" id="nombre" name="nombre" placeholder="">
@@ -24,7 +24,7 @@
                                 <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="">
                             </div>
                         </div>-->
-            <div class="form-group row">
+            <div class="form-group row notCodigo">
                 <label for="categorias" class="col-md-3 col-form-label">Categoría</label>
                 <div class="col-md-9">
                     <select class="form-control" id="categorias" name="categorias">
@@ -32,13 +32,13 @@
                     </select>
                 </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row notCodigo">
                 <label for="desde" class="col-md-3 col-form-label">Desde</label>
                 <div class="col-md-9">
                     <input type="date" class="form-control" id="desde" name="desde" placeholder="">
                 </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row notCodigo">
                 <label for="hasta" class="col-md-3 col-form-label">Hasta</label>
                 <div class="col-md-9">
                     <input type="date" class="form-control" id="hasta" name="hasta" placeholder="">
