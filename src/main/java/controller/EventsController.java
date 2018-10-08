@@ -23,8 +23,6 @@ import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.server.mvc.Viewable;
 
-import com.google.gson.*;
-
 import eventbrite.EventBrite;
 import model.Event;
 import model.EventsList;
@@ -40,48 +38,7 @@ public class EventsController {
     private ManagementService managementService = new ManagementService();
     private EventsService eventsService = new EventsService();
     private EventBrite eventBrite = new EventBrite();
-    final Gson gson = new Gson();
 
-    public static String formatString(String text) {
-
-        StringBuilder json = new StringBuilder();
-        String indentString = "";
-
-        for (int i = 0; i < text.length(); i++) {
-            char letter = text.charAt(i);
-            switch (letter) {
-                case '{':
-                case '[':
-                    json.append("\n" + indentString + letter + "\n");
-                    indentString = indentString + "\t";
-                    json.append(indentString);
-                    break;
-                case '}':
-                case ']':
-                    indentString = indentString.replaceFirst("\t", "");
-                    json.append("\n" + indentString + letter);
-                    break;
-                case ',':
-                    json.append(letter + "\n" + indentString);
-                    break;
-
-                default:
-                    json.append(letter);
-                    break;
-            }
-        }
-
-        return json.toString();
-    }
-
-    public static List<Event> MaestroEventos = new ArrayList<Event>();
-    public static List<EventsList> MaestroListasEventos = new ArrayList<EventsList>();
-
-//    @GET
-//    @Produces({MediaType.APPLICATION_JSON})
-//    public Response get() {
-//        return Response.status(201).entity(this.eventsService.allEvents()).build();
-//    }
     @GET
     @Produces({MediaType.TEXT_HTML, MediaType.APPLICATION_JSON})
     public Viewable mainEventos() {
@@ -92,16 +49,16 @@ public class EventsController {
     }
 
     /**
-     * buscar un evento por ID,
+     * Busca eventos por varios parametros
      *
      * @param params
-     * @return
+     * @return lista de eventos
      */
-    @Path("/buscarEvento")
+    @Path("/buscarEventos")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response buscarEvento(String params) {
+    public Response buscarEventos(String params) {
         String eventosEncontrados = "";
         Map<String, String> paramsEventBrite = new HashMap<String, String>();
         Map<String, String> parametros = managementService.getPostParams(params);
@@ -115,143 +72,4 @@ public class EventsController {
         return Response.ok(eventosEncontrados).build();
     }
 
-    @Path("/cantidad")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response getAmountEvents() {
-        return Response.status(201).entity("Hay " + MaestroEventos.size() + " eventos").build();
-    }
-
-    @Path("/crearEvento/{nombre}/{fecha}/{hora}")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response crearEvento(@PathParam("nombre") String nombre, @PathParam("fecha") String fecha,
-            @PathParam("hora") String hora) {
-
-        Event nuevoEvento = new Event(nombre, fecha, hora);
-        MaestroEventos.add(nuevoEvento);
-        // System.out.println("Se creó el evento " + listaEventos.get(0).getFecha());
-        return Response.status(201).entity(MaestroEventos).build();
-    }
-
-    /**
-     * Busca eventos por varios parametros
-     *
-     * @param params
-     * @return lista de eventos
-     */
-    @Path("/buscarEventos")
-    @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces(MediaType.TEXT_HTML)
-    public Viewable buscarEventos(String params) {
-        Long id = 0L;
-//		String nombre = "";
-        Map<String, String> model = new HashMap<String, String>();
-
-        List<String> parametros = Arrays.asList(params.split("&", -1));
-//		List<String> valores=parametros.stream().map(p->p.split("=",1)).collect(Collector.toList());
-        List<List<String>> valores = new ArrayList<List<String>>();
-        for (String p : parametros) {
-            valores.add(Arrays.asList(p.split("=", -1)));
-        }
-        id = Long.valueOf(valores.get(0).get(1));
-//		nombre = valores.get(1).get(1);
-
-        if (id == idEventBrite) {
-            eventBrite = gson.fromJson(EventbriteService.getEventByID(id.toString()), EventBrite.class);
-            System.out.println("algo del json" + eventBrite.getSubcategoryId());
-            return new Viewable("/index", model);
-//			return Response.status(201).entity(formatString(EventbriteService.getEvent(id.toString()))).build();
-//			model.put("nombre", "Hello");
-//			model.put("descripcion", "World! I'm index.jsp");
-//			model.put("start",);
-//			model.put("finish");
-        } else {
-            Event evento = this.eventsService.getEventById(id);
-            model.put("codigo", evento.getId().toString());
-            model.put("nombre", evento.getNombre());
-            model.put("fecha", evento.getFecha());
-            model.put("hora", evento.getHora());
-            return new Viewable("/eventos/evento", model);
-        }
-    }
-
-    /**
-     *
-     * @param nombre nombre de la lista de eventos
-     * @return imprime en pantalla el json de lassss listassss de eventos
-     */
-    @Path("/crearListaEventos/{nombreLista}")
-    @POST
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response crearListaEventos(@PathParam("nombreLista") String nombre) {
-
-        MaestroListasEventos.add(new EventsList(nombre));
-        // System.out.println("Se creó el evento " + listaEventos.get(0).getFecha());
-        return Response.status(201).entity(MaestroListasEventos).build();
-    }
-
-    /**
-     * agrega un evento a una lista existente
-     *
-     * @param nombreLista
-     * @param nombreEvento
-     * @return
-     */
-    @Path("/agregarEventosLista/{nombreLista}/{nombreEvento}")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response agregarEventosLista(@PathParam("nombreLista") String nombreLista, @PathParam("nombreEvento") String nombreEvento) {
-        List<EventsList> coleccionListas = this.buscarListaEventosPorNombre(nombreLista);
-
-        for (EventsList lista : coleccionListas) {
-            lista.agregarEvento(this.buscarEventosPorNombre(nombreEvento));
-        }
-
-        // System.out.println("Se creó el evento " + evento);
-        return Response.status(201).entity(MaestroListasEventos).build();
-
-    }
-
-    /*
-	 * *************************** métodos auxiliares
-	 * ***********************************
-     */
-    private List<Event> buscarEventosPorNombre(String nombre) {
-        List<Event> result = new ArrayList<Event>();
-        for (Event evento : MaestroEventos) {
-            if (evento.seLlama(nombre)) {
-                result.add(evento);
-            }
-        }
-        return result;
-
-        /*
-		 * //no me funciona el filter List<Event> eventoBuscado =
-		 * MaestroEventos.stream().filter(evento -> evento.seLlama(nombre))
-		 * .collect(Collectors.<Event> toList()); //System.out.println(eventoBuscado);
-		 * return Response.status(201).entity(eventoBuscado).build();
-         */
-    }
-
-    /**
-     * busca una lista de eventos por nombre
-     *
-     * @param nombre
-     * @return
-     */
-    private List<EventsList> buscarListaEventosPorNombre(String nombre) {
-        List<EventsList> result = new ArrayList<EventsList>();
-        for (EventsList lista : MaestroListasEventos) {
-            if (lista.seLlama(nombre)) {
-                result.add(lista);
-            }
-        }
-        /*
-		 * MaestroListasEventos.forEach(lista -> { if (lista.seLlama(nombre)) {
-		 * //result.add(lista); } });
-         */
-        return result;
-    }
 }
