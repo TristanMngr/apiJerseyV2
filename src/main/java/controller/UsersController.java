@@ -24,7 +24,6 @@ public class UsersController {
 	
 	public static List<String> testListUsers = new ArrayList<String>();
 
-	
 	 @GET
 	 @Produces({MediaType.APPLICATION_JSON})
 	 public Response get() {
