@@ -1,5 +1,6 @@
 package controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,23 +29,23 @@ import model.Event;
 import model.EventsList;
 import service.EventbriteService;
 import service.EventsService;
+import service.EventslistsService;
 import service.ManagementService;
 
 @Path("/events")
 public class EventsController {
 
-    static final long idEventBrite = 17920884849L;
-
     private ManagementService managementService = new ManagementService();
     private EventsService eventsService = new EventsService();
+    private EventslistsService eventslistsService = new EventslistsService();
     private EventBrite eventBrite = new EventBrite();
 
     @GET
     @Produces({MediaType.TEXT_HTML, MediaType.APPLICATION_JSON})
-    public Viewable mainEventos() {
+    public Viewable mainEventos() throws JsonProcessingException {
         Map<String, String> model = new HashMap<String, String>();
-        String categories = EventbriteService.getCategories();
-        model.put("categories", categories);
+        model.put("categories", EventbriteService.getCategories());
+        model.put("listasEventos", eventslistsService.getByUserId(1L));
         return new Viewable("/jsp/eventos/index", model);
     }
 

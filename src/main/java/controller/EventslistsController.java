@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.GET;
@@ -15,15 +11,55 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import model.EventsList;
+import service.EventslistsService;
+import service.ManagementService;
 
-/**
- *
- * @author Guille
- */
+@Path("/eventsLists")
 public class EventslistsController {
 
     public static List<EventsList> MaestroListasEventos = new ArrayList<EventsList>();
 
+    private ManagementService managementService = new ManagementService();
+    private EventslistsService eventslistsService = new EventslistsService();
+
+    @Path("/all")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getAllLists() throws JsonProcessingException {
+        return Response.status(201).entity(eventslistsService.getAllLists()).build();
+    }
+    
+    @Path("/getFromUser/{userId}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getByUserId(@PathParam("userId") Long userId) throws JsonProcessingException {
+        return Response.status(201).entity(eventslistsService.getByUserId(userId)).build();
+    }
+
+    /**
+     * ***************************************************************************************
+     */
+    /**
+     * ***************************************************************************************
+     */
+    /**
+     * ***************************************************************************************
+     */
+    /**
+     * ***************************************************************************************
+     */
+    /**
+     * ***************************************************************************************
+     */
+    /**
+     * ***************************************************************************************
+     */
+    /**
+     * ***************************************************************************************
+     */
+    /**
+     * ***************************************************************************************
+     */
     /**
      *
      * @param nombre nombre de la lista de eventos

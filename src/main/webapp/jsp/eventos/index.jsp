@@ -1,6 +1,7 @@
 <jsp:include page="/jsp/shared/header.jsp" flush="true" /> 
 <img src="/images/loading.gif" class="imgLoader displayNone" />
 <div hidden id="categoriesJson">${it.categories}</div>
+<div hidden id="listasEventos">${it.listasEventos}</div>
 <h1 class="display-3 text-center">Eventos</h1>
 <hr/>
 <form class="col-12" method="post" action="/events/buscarEvento">
@@ -79,18 +80,39 @@
                 <h5 class="modal-title" id="exampleModalLabel">Agregar evento a una lista</h5>
             </div>
             <div class="modal-body">
-                <form class="col-12" method="post">
-                    <div class="form-group row notCodigo">
-                        <label for="lista" class="col-md-3 col-form-label">Lista</label>
-                        <div class="col-md-9">
-                            <select class="form-control" id="lista" name="lista">
-                                 <option value="1">Lista 1</option>
-                            <option value="1">Lista 2</option>
-                            <option value="1">Lista 3</option>
-                            </select>
+                <div class="row">
+                    <form class="col-12" method="post">
+                        <div class="form-group row">
+                            <label for="lista" class="col-md-3 col-form-label">Lista</label>
+                            <div class="col-md-9 input-group mb-3">
+                                <select class="form-control" id="selectListas" name="selectListas">
+                                </select>
+                                <div class="input-group-append">
+                                    <!--<span class="input-group-text" id="basic-addon2"><i class="fas fa-plus"></i></span>-->
+                                    <button type="button" class="btn btn-warning input-group-text" title="Crear lista nueva" id="btnCrearLista"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
+                <hr class="seccionCrearLista displayNone">
+                <div class="seccionCrearLista row displayNone">
+                    <form class="col-12" method="post">
+                        <h5>Crear nueva lista</h5>
+                        <div class="form-group row">
+                            <label for="lista" class="col-md-3 col-form-label">Nombre</label>
+                            <div class="col-md-9 input-group mb-3">
+                                <input class="form-control" id="nombreLista" name="nombreLista" />
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-success input-group-text" title="Guardar" id="btnSubmitCrearLista"><i class="fas fa-save"></i></button>
+                                </div>
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-danger input-group-text" title="Ocultar" id="btnEsconderCrearLista"><i class="far fa-eye-slash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success">Guardar</button>

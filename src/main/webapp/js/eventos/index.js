@@ -6,6 +6,8 @@ $(document).ready(function () {
         $('select#categorias').append(linea);
     });
 
+    armarSelectListasEventos();
+
     $('input#codigo').keyup(function () {
         keyUpInputCodigo();
         return false;
@@ -20,7 +22,7 @@ $(document).ready(function () {
         var categoryId = $("#categorias option:selected").val();
         var desde = $("#desde").val();
         var hasta = $("#hasta").val();
-        $.ajax("/events/buscarEvento", {
+        $.ajax("/events/buscarEventos", {
             type: "POST",
             data: {
                 'codigo': codigo,
@@ -39,11 +41,43 @@ $(document).ready(function () {
                     linea += '<td>' + valor.name.text + '</td>';
                     linea += '<td>' + formatEventBriteDate(valor.start.local) + '</td>';
                     linea += '<td>' + formatEventBriteDate(valor.end.local) + '</td>';
-                    linea += '<td><div data-toggle="modal" data-target="#addEventToList" data-whatever="' + valor + '"><button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="Agregar a una lista" ><i class="fas fa-save" style="font-size: 20px;"></i></button></div></td>';
+                    linea += '<td><div data-toggle="modal" data-target="#addEventToList" data-whatever="' + valor + '"><button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="Agregar a una lista" ><i class="fas fa-file-download" style="font-size: 20px;"></i></button></div></td>';
                     linea += '</tr>';
                     cuerpoTabla.append(linea);
                 });
-                $('[data-toggle="tooltip"]').tooltip();
+                $(".imgLoader").addClass('displayNone');
+            }
+        });
+        return false
+    });
+
+    $("#btnCrearLista").click(function () {
+        $(".seccionCrearLista").removeClass("displayNone");
+    });
+
+    $("#btnEsconderCrearLista").click(function () {
+        $(".seccionCrearLista").addClass("displayNone");
+    });
+    
+    $("#btnSubmitCrearLista").click(function () {
+        $(".imgLoader").removeClass('displayNone');
+        var nombreLista = $("#nombreLista").val();
+        $.ajax("/events/crearLista", {
+            type: "POST",
+            data: {
+                'nombreLista': nombreLista,
+            },
+            asynchronous: false,
+            complete: function (response) {
+                var dataRecibida = $.parseJSON(response.responseText);
+                if (dataRecibida != "error") {
+                    //regenerar el select con la nueva lista de valores recibidos
+                    var i = 1;
+                    $("select#selectListas").html('');
+                    $.each(dataRecibida.events, function (key, valor) {
+                        $("select#selectListas").append('<option value="' + valor.value + '">' + valor.texto + '</option>');
+                    });
+                }
                 $(".imgLoader").addClass('displayNone');
             }
         });
@@ -63,4 +97,12 @@ function formatEventBriteDate(date) {
     var options = {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', };
     var fecha = new Date(date).toLocaleDateString("es-ES", options)
     return fecha;
+}
+
+function armarSelectListasEventos() {
+    $("#listasEventos")
+    var data = $.parseJSON($("#listasEventos").html());
+    $.each(data, function (key, valor) {
+        $("select#selectListas").append('<option value="' + valor.id + '">' + valor.nombre + '</option>');
+    });
 }

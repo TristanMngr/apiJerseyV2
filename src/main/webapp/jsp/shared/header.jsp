@@ -10,7 +10,7 @@
         <title>Administrador de Eventos TACS</title>
         <!-- Bootstrap core CSS -->
         <link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet">
-        <link href="/css/bootstrap/bootstrap-theme.min.css" rel="stylesheet">
+        <!--<link href="/css/bootstrap/bootstrap-theme.min.css" rel="stylesheet">-->
         <link href="/css/styles.css" rel="stylesheet">
         <link href="/css/stickyFooter.css" rel="stylesheet">
         <style type="text/css">
@@ -43,7 +43,9 @@
                         <a class="nav-link dropdown-toggle" href="#" id="dropdownEventos" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Eventos</a>
                         <div class="dropdown-menu" aria-labelledby="dropdownEventos">
                             <a class="dropdown-item" href="/events">Eventos Disponibles</a>
-                            <a class="dropdown-item" href="/eventsLists">Mis Listas</a>
+                            <a class="dropdown-item" href="/eventsLists/all">Listas</a>
+                            <a class="dropdown-item" href="/eventsLists/getFromUser/1">Listas del usuario 1</a>
+                            <a class="dropdown-item" href="/eventsLists/getFromUser/2">Listas del usuario 2</a>
                         </div>
                     </li>
                     <li class="nav-item">
