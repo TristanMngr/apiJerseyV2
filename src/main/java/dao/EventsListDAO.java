@@ -13,15 +13,16 @@ public class EventsListDAO {
     private final AtomicLong counter = new AtomicLong();
 
     // Dummy database. Initialize with some dummy values.
-    private static List<EventsList> listas;
+    private List<EventsList> listas;
 
     {
+//        System.out.println("arma la lista de listas");
         listas = new ArrayList<EventsList>();
-        this.listas.add(new EventsList(counter.incrementAndGet(), 1L, "Lista 1"));
-        this.listas.add(new EventsList(counter.incrementAndGet(), 1L, "Lista 2"));
-        this.listas.add(new EventsList(counter.incrementAndGet(), 2L, "Lista 3"));
-        this.listas.add(new EventsList(counter.incrementAndGet(), 2L, "Lista 4"));
-        this.listas.add(new EventsList(counter.incrementAndGet(), 1L, "Lista 5"));
+        this.listas.add(new EventsList(counter.incrementAndGet(), 1, "Lista 1"));
+        this.listas.add(new EventsList(counter.incrementAndGet(), 1, "Lista 2"));
+        this.listas.add(new EventsList(counter.incrementAndGet(), 2, "Lista 3"));
+        this.listas.add(new EventsList(counter.incrementAndGet(), 2, "Lista 4"));
+        this.listas.add(new EventsList(counter.incrementAndGet(), 1, "Lista 5"));
     }
 
     /**
@@ -34,18 +35,33 @@ public class EventsListDAO {
     }
 
     /**
-     * 
+     *
      * @param id
      * @return
      */
-    public List<EventsList> getByUserId(Long userId) {
+    public List<EventsList> getByUserId(Integer userId) {
         List<EventsList> results = new ArrayList<EventsList>();
-        results= listas.stream().filter(elem->elem.getUserId()==userId).collect(Collectors.toList());
-       
+        results = listas.stream().filter(elem -> elem.getUserId() == userId).collect(Collectors.toList());
+
 //        for (EventsList e : results) {
 //            System.out.println(e.getNombre()+" - ");
 //        }
         return results;
+    }
+
+    public Boolean addEventToList(EventsList lista, Long eventoId) {
+        return lista.getEventos().add(eventoId);
+    }
+
+    /**
+     * Create new EventsList in dummy database. Updates the id and insert new
+     * EventsList in list.
+     *
+     * @param lista EventsList object
+     * @return lista object with updated id
+     */
+    public boolean create(String nombre, Integer userId) {
+        return listas.add(new EventsList(counter.incrementAndGet(), userId, nombre));
     }
 
     /**
@@ -56,40 +72,7 @@ public class EventsListDAO {
      * @return EventsList object for given id
      */
     public EventsList get(Long id) {
-
-        for (EventsList e : listas) {
-            if (e.getId().equals(id)) {
-                return e;
-            }
-        }
-        return null;
-    }
-
-    /**
-     *
-     */
-    public List<EventsList> getByIdAndNombre(Long id, String nombre) {
-        List<EventsList> results = new ArrayList<EventsList>();
-        for (EventsList e : listas) {
-            if (e.getId().equals(id) && e.getNombre().equals(nombre)) {
-                results.add(e);
-            }
-        }
-        return results;
-    }
-
-    /**
-     * Create new EventsList in dummy database. Updates the id and insert new
-     * EventsList in list.
-     *
-     * @param lista EventsList object
-     * @return lista object with updated id
-     */
-    public EventsList create(EventsList lista) {
-        // lista.setId(System.currentTimeMillis());
-        lista.setId(counter.incrementAndGet());
-        listas.add(lista);
-        return lista;
+        return listas.stream().filter(elem -> elem.getId().equals(id)).collect(Collectors.toList()).get(0);
     }
 
     /**
@@ -131,11 +114,6 @@ public class EventsListDAO {
         }
 
         return null;
-    }
-
-    public Boolean addEventToList(EventsList lista, Long eventoId) {
-
-        return true;
     }
 
 }

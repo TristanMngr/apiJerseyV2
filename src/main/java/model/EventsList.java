@@ -11,11 +11,11 @@ import java.util.List;
 public class EventsList {
 
     private Long id;
-    private Long userId;
+    private Integer userId;
     private String nombre;
-    private List<Event> eventos = new ArrayList<Event>();
+    private List<Long> eventos = new ArrayList<Long>();     //códigos de los eventos
 
-    public EventsList(Long id, Long userId, String nombre) {
+    public EventsList(Long id, Integer userId, String nombre) {
         this.id = id;
         this.userId = userId;
         this.nombre = nombre;
@@ -29,11 +29,11 @@ public class EventsList {
         this.id = id;
     }
 
-    public Long getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -45,11 +45,11 @@ public class EventsList {
         this.nombre = nombre;
     }
 
-    public List<Event> getEventos() {
+    public List<Long> getEventos() {
         return eventos;
     }
 
-    public void setEventos(List<Event> eventos) {
+    public void setEventos(List<Long> eventos) {
         this.eventos = eventos;
     }
 

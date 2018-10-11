@@ -6,9 +6,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.server.mvc.Viewable;
+import service.ManagementService;
 
 @Path("/")
 public class MainController {
+
+
+    public MainController() {
+        ManagementService.createDAOs();
+    }
 
     @GET
     @Produces(MediaType.TEXT_HTML)

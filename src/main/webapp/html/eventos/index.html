@@ -2,7 +2,7 @@
     <img src="/images/loading.gif" class="imgLoader displayNone" />
     <h1 class="display-3 text-center">Eventos</h1>
     <hr/>
-    <form class="col-12" method="post" action="#">
+    <div class="col-12">
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group row">
@@ -39,7 +39,7 @@
                 </div>
                 <div class="row">
                     <div class="col-12 text-center">
-                        <button type="button" id="btnSubmit" class="btn btn-info">Buscar</button>
+                        <button type="button" id="btnSubmitBuscarEventos" class="btn btn-info">Buscar</button>
                     </div>
                 </div>
             </div>
@@ -60,22 +60,23 @@
                 </table>
             </div>
         </div>
-    </form>
+    </div>
 
 
-    <div class="modal fade" id="addEventToList" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addEventToList" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Agregar evento a una lista</h5>
+                    <h5 class="modal-title" id="modalLabel"></h5>
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <form class="col-12" method="post">
+                        <div class="col-12">
                             <div class="form-group row">
                                 <label for="lista" class="col-md-3 col-form-label">Lista</label>
                                 <div class="col-md-9 input-group mb-3">
-                                    <select class="form-control" id="selectListas" name="selectListas">
+                                    <input hidden type="text" id="modalCodigoEvento"/>
+                                    <select class="form-control" id="modalSelectListas">
                                     </select>
                                     <div class="input-group-append">
                                         <!--<span class="input-group-text" id="basic-addon2"><i class="fas fa-plus"></i></span>-->
@@ -83,11 +84,11 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                     <hr class="seccionCrearLista displayNone">
                     <div class="seccionCrearLista row displayNone">
-                        <form class="col-12" method="post">
+                        <div class="col-12">
                             <h5>Crear nueva lista</h5>
                             <div class="form-group row">
                                 <label for="lista" class="col-md-3 col-form-label">Nombre</label>
@@ -101,12 +102,12 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success">Guardar</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-success" id="btnSubmitAgregarEvento">Guardar</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnModalDismiss">Cerrar</button>
                 </div>
             </div>
         </div>
