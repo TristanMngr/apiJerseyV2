@@ -1,16 +1,11 @@
 $(document).ready(function () {
 
-    var categs = $.parseJSON($("#categoriesJson").html());
-    $.each(categs.categories, function (key, valor) {
-        var linea = '<option value="' + valor.id + '" >' + valor.name + '</option>';
-        $('select#categorias').append(linea);
-    });
+    armarSelectCategorias();
 
     armarSelectListasEventos();
 
     $('input#codigo').keyup(function () {
         keyUpInputCodigo();
-        return false;
     });
 
     $("#btnSubmit").click(function () {
@@ -23,7 +18,7 @@ $(document).ready(function () {
         var desde = $("#desde").val();
         var hasta = $("#hasta").val();
         $.ajax("/events/buscarEventos", {
-            type: "POST",
+            type: "GET",
             data: {
                 'codigo': codigo,
                 'nombre': nombre,
@@ -58,7 +53,7 @@ $(document).ready(function () {
     $("#btnEsconderCrearLista").click(function () {
         $(".seccionCrearLista").addClass("displayNone");
     });
-    
+
     $("#btnSubmitCrearLista").click(function () {
         $(".imgLoader").removeClass('displayNone');
         var nombreLista = $("#nombreLista").val();
@@ -81,10 +76,24 @@ $(document).ready(function () {
                 $(".imgLoader").addClass('displayNone');
             }
         });
-        return false
+        return false;
     });
 });
 
+function armarSelectCategorias() {
+    $.ajax("/events/categories", {
+        type: "GET",
+        asynchronous: false,
+        complete: function (response) {
+            var dataRecibida = $.parseJSON(response.responseText);
+            $.each(dataRecibida.categories, function (key, valor) {
+                var linea = '<option value="' + valor.id + '" >' + valor.name + '</option>';
+                $('select#categorias').append(linea);
+            });
+        }
+    });
+    return false;
+}
 function keyUpInputCodigo() {
     if ($("input#codigo").val() != "")
         $('div.notCodigo').addClass("displayNone");
@@ -94,15 +103,24 @@ function keyUpInputCodigo() {
 }
 
 function formatEventBriteDate(date) {
-    var options = {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', };
-    var fecha = new Date(date).toLocaleDateString("es-ES", options)
+    var options = {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+    var fecha = new Date(date).toLocaleDateString("es-ES", options);
     return fecha;
 }
 
 function armarSelectListasEventos() {
-    $("#listasEventos")
-    var data = $.parseJSON($("#listasEventos").html());
-    $.each(data, function (key, valor) {
-        $("select#selectListas").append('<option value="' + valor.id + '">' + valor.nombre + '</option>');
+    $.ajax("/events/eventsLists", {
+        type: "GET",
+        data: {
+            userId: 1,
+        },
+        asynchronous: false,
+        complete: function (response) {
+            var dataRecibida = $.parseJSON(response.responseText);
+            $.each(dataRecibida, function (key, valor) {
+                $("select#selectListas").append('<option value="' + valor.id + '">' + valor.nombre + '</option>');
+            });
+        }
     });
+    return false;
 }

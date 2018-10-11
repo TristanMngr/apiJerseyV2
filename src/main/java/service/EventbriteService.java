@@ -65,7 +65,7 @@ public class EventbriteService {
     }
 
     /* ****************** Categorías ************************* */
-    public static String getCategories() {
+    public static String getAllCategories() {
         WebTarget service = getWebTargetService("categories");
         Response response = service.queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
         return response.readEntity(String.class);

@@ -39,14 +39,13 @@ public class EventsListDAO {
      * @return
      */
     public List<EventsList> getByUserId(Long userId) {
-//        List<EventsList> results = new ArrayList<EventsList>();
-        return listas.stream().filter(elem->elem.getUserId()==userId).collect(Collectors.toList());
-//        for (EventsList e : listas) {
-//            if (e.getUserId().equals(userId) ) {
-//                results.add(e);
-//            }
+        List<EventsList> results = new ArrayList<EventsList>();
+        results= listas.stream().filter(elem->elem.getUserId()==userId).collect(Collectors.toList());
+       
+//        for (EventsList e : results) {
+//            System.out.println(e.getNombre()+" - ");
 //        }
-//        return results;
+        return results;
     }
 
     /**

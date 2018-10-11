@@ -24,7 +24,7 @@
         	</init-param>
     		<init-param>
       			<param-name>jersey.config.servlet.filter.staticContentRegex</param-name>
-				<param-value>/(((images|css|js|jsp)/.*))</param-value>		
+				<param-value>/(((images|css|js|jsp|html)/.*))</param-value>		
     		</init-param>
 
 		</filter>

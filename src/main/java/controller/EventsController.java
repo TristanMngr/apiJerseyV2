@@ -1,19 +1,9 @@
 package controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-//import java.util.Properties;
-//import java.util.stream.Collector;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -22,11 +12,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.glassfish.jersey.server.mvc.Viewable;
-
 import eventbrite.EventBrite;
-import model.Event;
-import model.EventsList;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
 import service.EventbriteService;
 import service.EventsService;
 import service.EventslistsService;
@@ -40,13 +28,24 @@ public class EventsController {
     private EventslistsService eventslistsService = new EventslistsService();
     private EventBrite eventBrite = new EventBrite();
 
+    /**
+     * Busca todas las categorías de eventos de EventBrite
+     *
+     * @return json
+     */
+    @Path("/categories")
     @GET
-    @Produces({MediaType.TEXT_HTML, MediaType.APPLICATION_JSON})
-    public Viewable mainEventos() throws JsonProcessingException {
-        Map<String, String> model = new HashMap<String, String>();
-        model.put("categories", EventbriteService.getCategories());
-        model.put("listasEventos", eventslistsService.getByUserId(1L));
-        return new Viewable("/jsp/eventos/index", model);
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllCategories() {
+        return Response.ok(EventbriteService.getAllCategories()).build();
+    }
+
+    @Path("/eventsLists")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getEventsListsByUser(@Context UriInfo uriDetails) throws JsonProcessingException {
+        Long userId = Long.parseLong(uriDetails.getQueryParameters().get("userId").get(0));
+        return Response.ok(eventslistsService.getByUserId(userId)).build();
     }
 
     /**
@@ -56,21 +55,16 @@ public class EventsController {
      * @return lista de eventos
      */
     @Path("/buscarEventos")
-    @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response buscarEventos(String params) {
-        String eventosEncontrados = "";
+    public Response buscarEventos(@Context UriInfo uriDetails) {
         Map<String, String> paramsEventBrite = new HashMap<String, String>();
-        Map<String, String> parametros = managementService.getPostParams(params);
-
-        paramsEventBrite.put("codigo", parametros.get("codigo"));
-        paramsEventBrite.put("nombre", parametros.get("nombre"));
-        paramsEventBrite.put("categoryId", parametros.get("categoryId"));
-        paramsEventBrite.put("fechaDesde", parametros.get("desde"));
-        paramsEventBrite.put("fechaHasta", parametros.get("hasta"));
-        eventosEncontrados = EventbriteService.searchEvents(paramsEventBrite);
-        return Response.ok(eventosEncontrados).build();
+        paramsEventBrite.put("codigo", uriDetails.getQueryParameters().get("codigo").get(0));
+        paramsEventBrite.put("nombre", uriDetails.getQueryParameters().get("nombre").get(0));
+        paramsEventBrite.put("categoryId", uriDetails.getQueryParameters().get("categoryId").get(0));
+        paramsEventBrite.put("fechaDesde", uriDetails.getQueryParameters().get("desde").get(0));
+        paramsEventBrite.put("fechaHasta", uriDetails.getQueryParameters().get("hasta").get(0));
+        return Response.ok(EventbriteService.searchEvents(paramsEventBrite)).build();
     }
 
 }

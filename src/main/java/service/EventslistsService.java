@@ -19,9 +19,7 @@ public class EventslistsService {
     }
     
     public String getByUserId(Long userId) throws JsonProcessingException {
-//        List<EventsList> listas = eventsListDAO.getAllLists();
         return mapper.writeValueAsString(eventsListDAO.getByUserId(userId));
-//        return jsonInString;
     }
 
     public Boolean seLlama(EventsList lista, String nombre) {
