@@ -1,9 +1,20 @@
 package model;
 
-import org.mongodb.morphia.annotations.Entity;
+public class Alarma {
+    private String name;
 
-@Entity
-public class Alarma extends BaseMongoDO {
     public Alarma() {
+    }
+
+    public Alarma(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -1,20 +1,25 @@
 package model;
 
 
+import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Reference;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
-@Entity
+@Entity("users")
 public class User extends BaseMongoDO{
 	private String name;
-	private List<Evento> eventos;
+
+	@Reference
+	private List<EventsList> eventsLists;
+
+	@Embedded
 	private List<Alarma> alarmas;
+
 	private String password;
 	private Date lastLogin;
 
@@ -31,25 +36,28 @@ public class User extends BaseMongoDO{
 	// TODO change list alarm and event
 	public User() {
 		this.name = "TestName";
-		this.setEventos(Arrays.asList(new Evento()));
 		this.setAlarmas(Arrays.asList(new Alarma()));
 		this.setLastLogin(new Date());
 	}
 
+	public User(String name, String password) {
+		this.name = name;
+		this.password = password;
+	}
+
 	public User(String string) {
 		this.name = string;
-		this.setEventos(Arrays.asList(new Evento(), new Evento()));
 		this.setAlarmas(Arrays.asList(new Alarma(), new Alarma()));
 		this.setLastLogin(new Date());
 		this.setPassword("password");
 	}
 
-	public List<Evento> getEventos() {
-		return eventos;
+	public List<EventsList> getEventsLists() {
+		return eventsLists;
 	}
 
-	public void setEventos(List<Evento> eventos) {
-		this.eventos = eventos;
+	public void setEventos(List<EventsList> eventsLists) {
+		this.eventsLists = eventsLists;
 	}
 
 

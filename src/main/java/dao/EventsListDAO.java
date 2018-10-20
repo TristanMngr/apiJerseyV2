@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import com.mongodb.WriteResult;
 import model.Evento;
 import model.EventsList;
+import model.User;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.dao.BasicDAO;
@@ -17,12 +18,14 @@ import org.mongodb.morphia.query.Query;
 public class EventsListDAO extends BasicDAO<EventsList, ObjectId> {
 
     private final AtomicLong counter = new AtomicLong();
+    private UserDAO userDAO;
 
     // Dummy database. Initialize with some dummy values.
     private List<EventsList> listas;
 
-    public EventsListDAO(Datastore dataStore) {
+    public EventsListDAO(Datastore dataStore, UserDAO userDAO) {
         super(dataStore);
+        userDAO = userDAO;
     }
 
 
@@ -39,29 +42,42 @@ public class EventsListDAO extends BasicDAO<EventsList, ObjectId> {
 
     /**
      *
-     * @param id
+     * @param userId
      * @return
      */
-    public List<EventsList> getByUserId(Integer userId) {
-        Query<EventsList> query = getDatastore().find(EventsList.class, "userId", userId);
+    public List<EventsList> getByUserId(ObjectId userId) {
+        Query<EventsList> query = getDatastore().find(EventsList.class, "id", userId);
         List<EventsList> eventsLists = query.asList();
         return eventsLists;
     }
 
     public Boolean addEventToList(EventsList lista, Long eventoId) {
         /*return lista.getEventos().add(eventoId);*/
-        return lista.getEventos().add(new Evento());
+        return lista.getEventLists().add(new Evento());
     }
 
     /**
      * Create new EventsList in dummy database. Updates the id and insert new
      * EventsList in list.
      *
-     * @param lista EventsList object
+     * @param nombre EventsList object
      * @return lista object with updated id
      */
-    public boolean create(String nombre, Integer userId) {
-        return listas.add(new EventsList(userId, nombre));
+    public boolean create(String nombre, ObjectId userId) {
+        User user = userDAO.getByUserId(userId);
+
+        if (user == null) {
+            return false;
+        }
+
+        EventsList eventsList = new EventsList(nombre);
+        getDatastore().save(eventsList);
+
+        user.setEventos(Arrays.asList(eventsList));
+        getDatastore().save(user);
+        System.out.println("COUNTER =======>");
+        System.out.println(userDAO.counter);
+        return true;
     }
 
 

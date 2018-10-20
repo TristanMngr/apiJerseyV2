@@ -1,53 +1,49 @@
 package model;
 
+import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-@Entity
+@Entity("eventsLists")
 public class EventsList extends BaseMongoDO {
-    private Integer userId;
-    private String  nombre;
-    private List<Evento> eventos = new ArrayList<Evento>();     //códigos de los eventos
+    private String  name;
+
+    @Embedded
+    private List<Evento> eventLists = new ArrayList<Evento>();     //códigos de los eventos
 
     public EventsList() {
     }
 
-    public EventsList(Integer userId, String nombre) {
-        this.userId = userId;
-        this.nombre = nombre;
+    public EventsList(String name) {
+        this.name = name;
     }
 
-    public EventsList(Integer userId, String nombre, List<Evento> eventos) {
-        this.userId = userId;
-        this.nombre = nombre;
-        this.eventos = eventos;
+    public EventsList(String name, List<Evento> eventLists) {
+        this.name = name;
+        this.eventLists = eventLists;
     }
 
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public EventsList(List<Evento> eventLists) {
+        this.eventLists = eventLists;
     }
 
     public String getNombre() {
-        return nombre;
+        return name;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNombre(String name) {
+        this.name = name;
     }
 
-    public List<Evento> getEventos() {
-        return eventos;
+    public List<Evento> getEventLists() {
+        return eventLists;
     }
 
-    public void setEventos(List<Evento> eventos) {
-        this.eventos = eventos;
+    public void setEventLists(List<Evento> eventos) {
+        this.eventLists = eventos;
     }
 
 }

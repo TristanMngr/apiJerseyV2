@@ -2,9 +2,13 @@ package service;
 
 import dao.EventsListDAO;
 import dao.MongoDBConnection;
-import org.mongodb.morphia.Datastore;
+import dao.UserDAO;
 
-import java.util.*;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -12,18 +16,26 @@ import java.util.stream.Collectors;
  */
 public class ManagementService {
     public static EventsListDAO eventsListsDAO;
+    public static UserDAO       userDAO;
 
     public static void createDAOs() {
         MongoDBConnection conn = MongoDBConnection.getInstance();
-        eventsListsDAO = new EventsListDAO(conn.getDatastore());
+
+        userDAO = new UserDAO(conn.getDatastore());
+        eventsListsDAO = new EventsListDAO(conn.getDatastore(), userDAO);
+
     }
 
     public static EventsListDAO getEventsListDAO() {
         return eventsListsDAO;
     }
 
+    public static UserDAO getUserDAO() {
+        return userDAO;
+    }
+
     public static Map<String, String> getPostParams(String params) {
-        List<String> listaAux = Arrays.asList(params.split("&", -1));
+        List<String>        listaAux   = Arrays.asList(params.split("&", -1));
         Map<String, String> parametros = new HashMap<String, String>();
         listaAux.stream().map(elem -> parametros.put(getNValueFromSplit(elem, "=", 0), getNValueFromSplit(elem, "=", 1))).collect(Collectors.toList());
         return parametros;

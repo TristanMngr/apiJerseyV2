@@ -13,7 +13,7 @@ public class MainController {
 
 
     public MainController() {
-        /*I move the creation DAO in a filter (run when the app is launch), because we can't access them if we don't pass by this pass*/
+        /*I move the creation DAO in a filter (run when the app is launch), because we can't access them if we don't pass by this route*/
     }
 
     @GET
