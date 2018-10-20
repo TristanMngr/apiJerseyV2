@@ -1,21 +1,21 @@
 package service;
 
 import dao.EventsListDAO;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import dao.MongoDBConnection;
+import org.mongodb.morphia.Datastore;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * Clase para funciones genéricas que se usen en varios lugares
  */
 public class ManagementService {
-
     public static EventsListDAO eventsListsDAO;
 
     public static void createDAOs() {
-        eventsListsDAO = new EventsListDAO();
+        MongoDBConnection conn = MongoDBConnection.getInstance();
+        eventsListsDAO = new EventsListDAO(conn.getDatastore());
     }
 
     public static EventsListDAO getEventsListDAO() {

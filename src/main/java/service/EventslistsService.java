@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import model.EventsList;
+import org.bson.types.ObjectId;
 
 public class EventslistsService {
 
@@ -27,8 +28,8 @@ public class EventslistsService {
         return lista.getNombre().equals(nombre);
     }
 
-    public static Boolean agregarEvento(Long listaId, Long codigoEvento) {
-        EventsList lista = ManagementService.getEventsListDAO().get(listaId);
+    public static Boolean agregarEvento(ObjectId listaId, Long codigoEvento) {
+        EventsList lista = ManagementService.getEventsListDAO().getEventsLists(listaId);
         return ManagementService.getEventsListDAO().addEventToList(lista, codigoEvento);
     }
 }

@@ -1,32 +1,29 @@
 package model;
 
-import java.sql.Time;
+import org.mongodb.morphia.annotations.Entity;
+
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
-//import javax.xml.bind.annotation.XmlRootElement;
-//@XmlRootElement
-public class EventsList {
 
-    private Long id;
+@Entity
+public class EventsList extends BaseMongoDO {
     private Integer userId;
-    private String nombre;
-    private List<Long> eventos = new ArrayList<Long>();     //códigos de los eventos
+    private String  nombre;
+    private List<Evento> eventos = new ArrayList<Evento>();     //códigos de los eventos
 
-    public EventsList(Long id, Integer userId, String nombre) {
-        this.id = id;
+    public EventsList() {
+    }
+
+    public EventsList(Integer userId, String nombre) {
         this.userId = userId;
         this.nombre = nombre;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public EventsList(Integer userId, String nombre, List<Evento> eventos) {
+        this.userId = userId;
+        this.nombre = nombre;
+        this.eventos = eventos;
     }
 
     public Integer getUserId() {
@@ -45,11 +42,11 @@ public class EventsList {
         this.nombre = nombre;
     }
 
-    public List<Long> getEventos() {
+    public List<Evento> getEventos() {
         return eventos;
     }
 
-    public void setEventos(List<Long> eventos) {
+    public void setEventos(List<Evento> eventos) {
         this.eventos = eventos;
     }
 

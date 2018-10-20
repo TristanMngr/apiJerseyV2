@@ -1,29 +1,30 @@
 package dao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.IntToLongFunction;
-import java.util.stream.Collectors;
 
+
+import com.mongodb.WriteResult;
+import model.Evento;
 import model.EventsList;
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.dao.BasicDAO;
+import org.mongodb.morphia.query.Query;
 
-public class EventsListDAO {
+public class EventsListDAO extends BasicDAO<EventsList, ObjectId> {
 
     private final AtomicLong counter = new AtomicLong();
 
     // Dummy database. Initialize with some dummy values.
     private List<EventsList> listas;
 
-    {
-//        System.out.println("arma la lista de listas");
-        listas = new ArrayList<EventsList>();
-        this.listas.add(new EventsList(counter.incrementAndGet(), 1, "Lista 1"));
-        this.listas.add(new EventsList(counter.incrementAndGet(), 1, "Lista 2"));
-        this.listas.add(new EventsList(counter.incrementAndGet(), 2, "Lista 3"));
-        this.listas.add(new EventsList(counter.incrementAndGet(), 2, "Lista 4"));
-        this.listas.add(new EventsList(counter.incrementAndGet(), 1, "Lista 5"));
+    public EventsListDAO(Datastore dataStore) {
+        super(dataStore);
     }
+
 
     /**
      * Returns list of eventslists from dummy database.
@@ -31,7 +32,9 @@ public class EventsListDAO {
      * @return list of eventslists
      */
     public List<EventsList> getAllLists() {
-        return listas;
+        Query<EventsList> query = getDatastore().find(EventsList.class);
+        List<EventsList> eventsLists = query.asList();
+        return eventsLists;
     }
 
     /**
@@ -40,17 +43,14 @@ public class EventsListDAO {
      * @return
      */
     public List<EventsList> getByUserId(Integer userId) {
-        List<EventsList> results = new ArrayList<EventsList>();
-        results = listas.stream().filter(elem -> elem.getUserId() == userId).collect(Collectors.toList());
-
-//        for (EventsList e : results) {
-//            System.out.println(e.getNombre()+" - ");
-//        }
-        return results;
+        Query<EventsList> query = getDatastore().find(EventsList.class, "userId", userId);
+        List<EventsList> eventsLists = query.asList();
+        return eventsLists;
     }
 
     public Boolean addEventToList(EventsList lista, Long eventoId) {
-        return lista.getEventos().add(eventoId);
+        /*return lista.getEventos().add(eventoId);*/
+        return lista.getEventos().add(new Evento());
     }
 
     /**
@@ -61,19 +61,9 @@ public class EventsListDAO {
      * @return lista object with updated id
      */
     public boolean create(String nombre, Integer userId) {
-        return listas.add(new EventsList(counter.incrementAndGet(), userId, nombre));
+        return listas.add(new EventsList(userId, nombre));
     }
 
-    /**
-     * Return EventsList object for given id from dummy database. If EventsList
-     * is not found for id, returns null.
-     *
-     * @param id EventsList id
-     * @return EventsList object for given id
-     */
-    public EventsList get(Long id) {
-        return listas.stream().filter(elem -> elem.getId().equals(id)).collect(Collectors.toList()).get(0);
-    }
 
     /**
      * Delete the EventsList object from dummy database. If EventsList not found
@@ -82,18 +72,27 @@ public class EventsListDAO {
      * @param id the EventsList id
      * @return id of deleted EventsList object
      */
-    public Long delete(Long id) {
-
-        for (EventsList e : listas) {
-            if (e.getId().equals(id)) {
-                listas.remove(e);
-                return id;
-            }
-        }
-
-        return null;
+    public WriteResult deleteEventsLists(ObjectId id) {
+        WriteResult writeResult = getDatastore().delete(EventsList.class, id);
+        return writeResult;
     }
 
+
+    /**
+     * Return EventsList object for given id from dummy database. If EventsList
+     * is not found for id, returns null.
+     *
+     * @param id EventsList id
+     * @return EventsList object for given id
+     */
+    public EventsList getEventsLists(ObjectId id) {
+        EventsList eventsList = getDatastore().get(EventsList.class, id);
+
+        return eventsList;
+    }
+
+
+    //TODO persisting for update
     /**
      * Update the EventsList object for given id in dummy database. If
      * EventsList not exists, returns null
