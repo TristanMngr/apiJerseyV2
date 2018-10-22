@@ -46,8 +46,8 @@
                         <div class="dropdown-menu" aria-labelledby="dropdownEventos">
                             <a class="dropdown-item linkReload" data-loadhtml="eventos/index.html" href="#">Eventos Disponibles</a>
                             <a class="dropdown-item linkReload" data-loadhtml="eventos/index.html" href="/eventsLists">Listas</a>
-                            <a class="dropdown-item linkReload" href="/eventsLists/getFromUser?userId=1">Listas del usuario 1</a>
-                            <a class="dropdown-item linkReload" href="/eventsLists/getFromUser?userId=2">Listas del usuario 2</a>
+                            <a class="dropdown-item linkReload" href="/eventsLists/getFromUser?userId=5bcbba1743b244dd134d6f44">Listas del usuario 1</a>
+                            <a class="dropdown-item linkReload" href="/eventsLists/getFromUser?userId=5bcbba1743b244dd134d6f45">Listas del usuario 2</a>
                         </div>
                     </li>
                     <li class="nav-item">

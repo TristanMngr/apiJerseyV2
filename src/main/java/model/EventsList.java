@@ -1,5 +1,6 @@
 package model;
 
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 
@@ -9,41 +10,60 @@ import java.util.List;
 
 @Entity("eventsLists")
 public class EventsList extends BaseMongoDO {
-    private String  name;
+    private String  nombre;
+
+    private ObjectId userId;
 
     @Embedded
-    private List<Evento> eventLists = new ArrayList<Evento>();     //códigos de los eventos
+    private List<Evento> listEvents = new ArrayList<Evento>();     //códigos de los listEvents
 
     public EventsList() {
     }
 
-    public EventsList(String name) {
-        this.name = name;
+    public EventsList(String nombre) {
+        this.nombre = nombre;
     }
 
-    public EventsList(String name, List<Evento> eventLists) {
-        this.name = name;
-        this.eventLists = eventLists;
+    public EventsList(ObjectId userId, String nombre, List<Evento> listEvents) {
+        this.userId = userId;
+        this.nombre = nombre;
+        this.listEvents = listEvents;
     }
 
-    public EventsList(List<Evento> eventLists) {
-        this.eventLists = eventLists;
+    public EventsList(List<Evento> listEvents) {
+        this.listEvents = listEvents;
+    }
+
+    public ObjectId getUserId() {
+        return userId;
+    }
+
+    public void setUserId(ObjectId userId) {
+        this.userId = userId;
+    }
+
+    public List<Evento> getListEvents() {
+        return listEvents;
+    }
+
+    public void setListEvents(List<Evento> listEvents) {
+        this.listEvents = listEvents;
     }
 
     public String getNombre() {
-        return name;
+        return nombre;
     }
 
-    public void setNombre(String name) {
-        this.name = name;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public List<Evento> getEventLists() {
-        return eventLists;
+    public List<Evento> getEventos() {
+        return listEvents;
     }
 
-    public void setEventLists(List<Evento> eventos) {
-        this.eventLists = eventos;
+    public void setEventos(List<Evento> listEvents) {
+        this.listEvents = listEvents;
     }
 
 }

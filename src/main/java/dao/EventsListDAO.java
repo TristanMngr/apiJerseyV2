@@ -1,7 +1,8 @@
 package dao;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.awt.*;
+import java.lang.reflect.Array;
+import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -12,8 +13,12 @@ import model.EventsList;
 import model.User;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Key;
+import org.mongodb.morphia.aggregation.AggregationPipeline;
 import org.mongodb.morphia.dao.BasicDAO;
 import org.mongodb.morphia.query.Query;
+
+import javax.swing.event.ListDataEvent;
 
 public class EventsListDAO extends BasicDAO<EventsList, ObjectId> {
 
@@ -35,26 +40,27 @@ public class EventsListDAO extends BasicDAO<EventsList, ObjectId> {
      * @return list of eventslists
      */
     public List<EventsList> getAllLists() {
-        Query<EventsList> query = getDatastore().find(EventsList.class);
-        List<EventsList> eventsLists = query.asList();
+        Query<EventsList> query       = getDatastore().find(EventsList.class);
+        List<EventsList>  eventsLists = query.asList();
         return eventsLists;
     }
 
     /**
-     *
      * @param userId
      * @return
      */
     public List<EventsList> getByUserId(ObjectId userId) {
-        Query<EventsList> query = getDatastore().find(EventsList.class, "id", userId);
+        Query<EventsList> query       = getDatastore().find(EventsList.class, "userId", userId);
         List<EventsList> eventsLists = query.asList();
+
         return eventsLists;
     }
 
-    public Boolean addEventToList(EventsList lista, Long eventoId) {
-        /*return lista.getEventos().add(eventoId);*/
+    /*public Boolean addEventToList(EventsList lista, Long eventoId) {
+        *//*return lista.getEventos().add(eventoId);*//*
         return lista.getEventLists().add(new Evento());
-    }
+
+    }*/
 
     /**
      * Create new EventsList in dummy database. Updates the id and insert new
@@ -71,12 +77,11 @@ public class EventsListDAO extends BasicDAO<EventsList, ObjectId> {
         }
 
         EventsList eventsList = new EventsList(nombre);
+        eventsList.setUserId(userId);
         getDatastore().save(eventsList);
 
         user.setEventos(Arrays.asList(eventsList));
         getDatastore().save(user);
-        System.out.println("COUNTER =======>");
-        System.out.println(userDAO.counter);
         return true;
     }
 
@@ -85,11 +90,11 @@ public class EventsListDAO extends BasicDAO<EventsList, ObjectId> {
      * Delete the EventsList object from dummy database. If EventsList not found
      * for given id, returns null.
      *
-     * @param id the EventsList id
+     * @param listId the EventsList id
      * @return id of deleted EventsList object
      */
-    public WriteResult deleteEventsLists(ObjectId id) {
-        WriteResult writeResult = getDatastore().delete(EventsList.class, id);
+    public WriteResult deleteEventsLists(ObjectId listId) {
+        WriteResult writeResult = getDatastore().delete(EventsList.class, listId);
         return writeResult;
     }
 
@@ -109,6 +114,7 @@ public class EventsListDAO extends BasicDAO<EventsList, ObjectId> {
 
 
     //TODO persisting for update
+
     /**
      * Update the EventsList object for given id in dummy database. If
      * EventsList not exists, returns null
@@ -117,7 +123,7 @@ public class EventsListDAO extends BasicDAO<EventsList, ObjectId> {
      * @param lista
      * @return EventsList object with id
      */
-    public EventsList update(Long id, EventsList lista) {
+    /*public EventsList update(Long id, EventsList lista) {
 
         for (EventsList l : listas) {
             if (l.getId().equals(id)) {
@@ -129,6 +135,6 @@ public class EventsListDAO extends BasicDAO<EventsList, ObjectId> {
         }
 
         return null;
-    }
+    }*/
 
 }

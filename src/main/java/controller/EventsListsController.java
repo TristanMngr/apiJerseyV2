@@ -30,6 +30,7 @@ public class EventsListsController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getListsFromUser(@Context UriInfo uriDetails) throws JsonProcessingException {
         ObjectId userId = new ObjectId(uriDetails.getQueryParameters().get("userId").get(0));
+        System.out.println(userId);
         return Response.ok(EventsListsService.getByUserId(userId)).build();
     }
 

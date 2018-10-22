@@ -36,14 +36,6 @@ public class UsersController {
         return Response.ok(UserService.getAllUsers()).build();
     }
 
-    @Path("/getFromUser")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getListsFromUser(@Context UriInfo uriDetails) throws JsonProcessingException {
-        ObjectId userId = new ObjectId(uriDetails.getQueryParameters().get("userId").get(0));
-        return Response.ok(UserService.getUserById(userId)).build();
-    }
-
     @OPTIONS
     public Response getOptions() {
         System.out.println("getOptions");
@@ -57,13 +49,28 @@ public class UsersController {
     @Path("{userID}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public Response produceJSON(@PathParam("userID") String name) {
-        if (testListUsers.contains(name.toLowerCase())) {
-            return Response.status(201).entity(new User(name)).build();
+    public Response getUserById(@PathParam("userID") String userId) throws JsonProcessingException {
+        ObjectId userObjectId = new ObjectId(userId);
+        String user = UserService.getUserById(userObjectId);
+        if (user != null) {
+            return  Response.ok(UserService.getUserById(userObjectId)).build();
         } else {
-            return Response.status(404).entity("User: " + name + " not found!").build();
+            return Response.status(404).entity("User: " + userId + " not found!").build();
         }
     }
+
+
+    /*@Path("{userName}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getUserByName(@PathParam("userName") String userName) throws JsonProcessingException {
+        String user = UserService.getUserByName(userName);
+        if (user != null) {
+            return  Response.ok(UserService.getUserByName(userName)).build();
+        } else {
+            return Response.status(404).entity("User: " + userName + " not found!").build();
+        }
+    }*/
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
