@@ -13,9 +13,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import model.EventsList;
 import service.EventslistsService;
 import service.ManagementService;
+import service.UserService;
+import model.User;
 
 @Path("/eventsLists")
 public class EventslistsController {
@@ -24,6 +25,15 @@ public class EventslistsController {
     @Produces({MediaType.APPLICATION_JSON})
     public Response getAllLists() throws JsonProcessingException {
         return Response.status(201).entity(EventslistsService.getAllLists()).build();
+    }
+
+    @Path("/getUserLists")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getUserLists(@Context UriInfo uriDetails) throws JsonProcessingException {
+        Integer userId = Integer.parseInt(uriDetails.getQueryParameters().get("userId").get(0));
+//        System.out.println("user id: " + userId);
+        return Response.status(201).entity(EventslistsService.getByUserId(userId)).build();
     }
 
     @Path("/getFromUser")

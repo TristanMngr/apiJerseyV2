@@ -55,9 +55,7 @@
                         <a class="nav-link dropdown-toggle" href="#" id="dropdownEventos" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Eventos</a>
                         <div class="dropdown-menu" aria-labelledby="dropdownEventos">
                             <a class="dropdown-item linkReload" data-loadhtml="eventos/index.html" href="#">Eventos Disponibles</a>
-                            <a class="dropdown-item linkReload" data-loadhtml="eventos/index.html" href="/eventsLists">Listas</a>
-                            <a class="dropdown-item linkReload" href="/eventsLists/getFromUser?userId=1">Listas del usuario 1</a>
-                            <a class="dropdown-item linkReload" href="/eventsLists/getFromUser?userId=2">Listas del usuario 2</a>
+                            <a class="dropdown-item linkReload" data-loadhtml="listas/index.html" href="#">Listas</a>
                         </div>
                     </li>
                     <li class="nav-item">
