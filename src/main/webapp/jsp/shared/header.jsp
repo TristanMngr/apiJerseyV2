@@ -28,9 +28,19 @@
     <%
         String ServerName = request.getServerName();
         String URL = "http://" + ServerName;
+        String UserName = "";
         if (ServerName == null || ServerName.equals("localhost")) {
             URL += ":" + request.getLocalPort();
         }
+        Cookie[] cookies = request.getCookies();
+        
+        if(cookies !=null){
+        for(Cookie cookie : cookies){
+         if(cookie.getName().equals("username")) 
+        	 UserName = cookie.getValue();
+        	}
+        }
+        
     %>
     <body>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
@@ -60,6 +70,10 @@
                         </div>
                     </li>
                 </ul>
+                <ul class="nav navbar-text navbar-right">
+      				<li><%=UserName%></li> 
+    			</ul>
             </div>
+            
         </nav>
         <main role="main">

@@ -1,28 +1,61 @@
 package controller;
 
 import java.net.URI;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import model.User;
+import service.LoginService;
+import service.SessionService;
+
 @Path("/login")
 public class LoginController {
-	
+	// SyntaxError: JSON.parse: unexpected character at line 2 column 1 of the JSON data
+	private int MAX_AGE = 60;
 	
 	@POST
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	 public Response login(@Context UriInfo uriInfo) {
+	public Response login(@Context HttpHeaders httpHeaders, String data) {
 		
-		// Redirecciona a la pagina inicial si el login fue exitoso 
+		System.out.println(this.getClass().getName() + ":: Login");
+		// TODO: Agregar codigo de error a la pagina.
+		if(!SessionService.validateUser(data, httpHeaders))
+			return Response.status(Response.Status.UNAUTHORIZED).entity("Your id couldn't be verified").build();
+				
+		DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+		Date date = new Date();
 		
-		URI uri = uriInfo.getBaseUriBuilder().build();
-	    return Response.seeOther(uri).build();
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.HOUR_OF_DAY, 1);
+		Date nuevaFecha = calendar.getTime();
+
+		String username = LoginService.getUser(httpHeaders);
+		
+		System.out.println(this.getClass().getName() + ":: username = " + username);
+		
+		String token =  LoginService.getToken();
+		System.out.println(this.getClass().getName() + ":: token = " + token);
+		
+		NewCookie tokenCookie = new NewCookie("tokenG5", dateFormat.format(date), "/", null, 0, "", MAX_AGE, nuevaFecha, false, false);
+		NewCookie usernameCookie = new NewCookie("username", username, "/", null, 0, "", MAX_AGE, nuevaFecha, false, false);
+		Response response = Response.seeOther(URI.create("/")).cookie(tokenCookie).cookie(usernameCookie).build(); 
+		return response;
+		
+
 	}
 	
 }

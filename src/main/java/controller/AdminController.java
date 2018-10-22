@@ -10,7 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import model.User;
+import model.User_Old;
 
 @Path("/admin")
 public class AdminController {
@@ -30,7 +30,7 @@ public class AdminController {
 	 @GET
 	 @Produces({MediaType.APPLICATION_JSON})
 	 public Response getUser(@PathParam("userID") String name) {
-		 return Response.status(201).entity(new User(name)).build(); 
+		 return Response.status(201).entity(new User_Old(name)).build(); 
 	 }
 		 	
 }

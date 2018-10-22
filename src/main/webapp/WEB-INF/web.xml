@@ -20,7 +20,7 @@
     		</init-param>
 			<init-param>
             	<param-name>jersey.config.servlet.filter.forwardOn404</param-name>
-            	<param-value>true --></param-value>
+            	<param-value>true</param-value>
         	</init-param>
     		<init-param>
       			<param-name>jersey.config.servlet.filter.staticContentRegex</param-name>
@@ -28,6 +28,10 @@
     		</init-param>
 
 		</filter>
+		
+		<listener>
+    			<listener-class>controller.LoadConfigurationListener</listener-class>
+		</listener>
 		
 		<filter-mapping>
 			<filter-name>Jersey</filter-name>

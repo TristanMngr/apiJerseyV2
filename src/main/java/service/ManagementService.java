@@ -1,6 +1,8 @@
 package service;
 
 import dao.EventsListDAO;
+import dao.UsersListDAO;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -13,13 +15,19 @@ import java.util.stream.Collectors;
 public class ManagementService {
 
     public static EventsListDAO eventsListsDAO;
+    public static UsersListDAO usersListDAO;
 
     public static void createDAOs() {
         eventsListsDAO = new EventsListDAO();
+        usersListDAO = new UsersListDAO();
     }
 
     public static EventsListDAO getEventsListDAO() {
         return eventsListsDAO;
+    }
+    
+    public static UsersListDAO getUsersListDAO() {
+        return usersListDAO;
     }
 
     public static Map<String, String> getPostParams(String params) {

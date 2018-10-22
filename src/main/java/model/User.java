@@ -1,76 +1,44 @@
 package model;
 
-
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement
 public class User {
-	private String name;
-	private List<String> eventos;
-	private List<String> alarmas;
-	private String password;
-	private Date lastLogin;
-	
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	
-	public User() {
-		this.name = "TestName";
-		this.setEventos(Arrays.asList(""));
-		this.setAlarmas(Arrays.asList(""));
-		this.setLastLogin(new Date());
-	}
 
-	public User(String string) {
-		this.name = string;
-		this.setEventos(Arrays.asList(""));
-		this.setAlarmas(Arrays.asList(""));
-		this.setLastLogin(new Date());
-		this.setPassword("password");
-	}
+	private Integer userId;
+    private String userName;
+    private String password;
 
-	public List<String> getEventos() {
-		return eventos;
+	public User(Integer userId, String userName, String password) {
+		this.userId = userId;
+		this.userName = userName;
+		this.password = password;
 	}
+    
 
-	public void setEventos(List<String> eventos) {
-		this.eventos = eventos;
+    public User(String userName2, String password2) {
+		this.userName = userName2;
+		this.password = password2;
 	}
 
 
-	public Date getLastLogin() {
-		return lastLogin;
+	public Integer getUserId() {
+		return userId;
+	}
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
-	public void setLastLogin(Date lastLogin) {
-		this.lastLogin = lastLogin;
+	public String getUserName() {
+		return userName;
 	}
-
-	public List<String> getAlarmas() {
-		return alarmas;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
-
-	public void setAlarmas(List<String> alarmas) {
-		this.alarmas = alarmas;
-	}
-	
 	public String getPassword() {
 		return password;
 	}
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+    
 	
 }

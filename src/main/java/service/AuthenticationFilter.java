@@ -2,24 +2,19 @@ package service;
 
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.StringTokenizer;
  
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
  
-import org.glassfish.jersey.internal.util.Base64;
 import org.glassfish.jersey.server.mvc.Viewable;
 
  
@@ -44,8 +39,10 @@ public class AuthenticationFilter implements ContainerRequestFilter
     @Override
     public void filter(ContainerRequestContext requestContext)
     {
-        System.out.println("I'm on filter");
-    	
+  	
+    	System.out.println(this.getClass().getName() + ":: filtering ...");
+    	System.out.println(this.getClass().getName() + ":: " + requestContext.getMethod().toString() + 
+    														" " + requestContext.getUriInfo().getRequestUri());
     	Method method = resourceInfo.getResourceMethod();
     	    	
         //Access allowed for all
@@ -64,21 +61,6 @@ public class AuthenticationFilter implements ContainerRequestFilter
             //Fetch authorization header
             final List<String> authorization = headers.get(AUTHORIZATION_PROPERTY);
             
-            final List<String> session = headers.get("Cookie");
-            
-           if(session != null && !session.isEmpty())
-           {
-        	   // TODO: Validate existing session
-        	   System.out.println(this.getClass().getName() + ":: session is not null and not empty");
-        	   return;
-           }
-        	   
-        	if(method.getName().equals("index") && ( session == null || session.isEmpty()))
-        	{
-        		requestContext.abortWith(Response.ok(new Viewable("/jsp/logon", null)).build());
-        		return;
-        	}           
-
             //If no authorization information present; block access
             if(method.getName().equals("login") && (authorization == null || authorization.isEmpty()))
             {
@@ -87,40 +69,71 @@ public class AuthenticationFilter implements ContainerRequestFilter
                 return;
             }
             
-            if(method.getName().equals("index"))
-    		{
-            	// TODO: Guardar Usuario / Token en un DAO
-            	
-            	//Get encoded username and password
-                final String encodedUserPassword = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
-                  
-                //Decode username and password
-                String usernameAndPassword = new String(Base64.decode(encodedUserPassword.getBytes()));;
-      
-                //Split username and password tokens
-                final StringTokenizer tokenizer = new StringTokenizer(usernameAndPassword, ":");
-                final String username = tokenizer.nextToken();
-                final String password = tokenizer.nextToken();
-                  
-                //Verifying Username and password
-                System.out.println(this.getClass().getName() + ":: username = " + username);
-                System.out.println(this.getClass().getName() + ":: password = " + password);
-                  
-                //Verify user access
-                if(method.isAnnotationPresent(RolesAllowed.class))
-                {
-                    RolesAllowed rolesAnnotation = method.getAnnotation(RolesAllowed.class);
-                    Set<String> rolesSet = new HashSet<String>(Arrays.asList(rolesAnnotation.value()));
-                      
-                    //Is user valid?
-                    if( ! LoginService.isUserAllowed(username, password, rolesSet))
-                    {
-                        requestContext.abortWith(ACCESS_DENIED);
-                        return;
-                    }
+            boolean found = false;
+            
+            for (Cookie c : requestContext.getCookies().values()) 
+            {
+                if (c.getName().equals("tokenG5")) {
+                	found = true;
+                    break;
                 }
-    	
-    		}
+            }
+            
+        	if(method.getName().equals("index") && !found)
+        	{
+        		System.out.println(this.getClass().getName() + ":: Return to login page");
+        		Viewable view = new Viewable("/jsp/logon");
+        		
+        		requestContext.abortWith(Response.ok(view).build());
+        		return;
+        	}       
+                   
+            
+//            if(!found) {
+//            	System.out.println(this.getClass().getName() + ":: Return to login page");
+//        		requestContext.abortWith(Response.ok(new Viewable("/jsp/logon", null)).build());
+//        		return;
+//            }
+                             	   
+   
+//            if(method.getName().equals("index"))
+//    		{
+//            	System.out.println(this.getClass().getName() + ":: index");
+//            	
+//            	// TODO: Guardar Usuario / Token en un DAO
+//            	
+//            	//Get encoded username and password
+//                final String encodedUserPassword = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
+//                  
+//                //Decode username and password
+//                String usernameAndPassword = new String(Base64.decode(encodedUserPassword.getBytes()));;
+//      
+//                //Split username and password tokens
+//                final StringTokenizer tokenizer = new StringTokenizer(usernameAndPassword, ":");
+//                final String username = tokenizer.nextToken();
+//                final String password = tokenizer.nextToken();
+//                  
+//                //Verifying Username and password
+//                System.out.println(this.getClass().getName() + ":: username = " + username);
+//                System.out.println(this.getClass().getName() + ":: password = " + password);
+//                  
+//                //Verify user access
+//                if(method.isAnnotationPresent(RolesAllowed.class))
+//                {
+//                	System.out.println(this.getClass().getName() + ":: RolesAllowed present");
+//                	
+//                	RolesAllowed rolesAnnotation = method.getAnnotation(RolesAllowed.class);
+//                    Set<String> rolesSet = new HashSet<String>(Arrays.asList(rolesAnnotation.value()));
+//                      
+//                    //Is user valid?
+//                    if( ! LoginService.isUserAllowed(username, password, rolesSet))
+//                    {
+//                        requestContext.abortWith(ACCESS_DENIED);
+//                        return;
+//                    }
+//                }
+//    	
+//    		}
             
         }
     }
