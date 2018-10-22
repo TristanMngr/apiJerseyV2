@@ -218,7 +218,7 @@
 
 			$.ajax({
 				type : 'POST',
-				url : 'http://localhost:8080/users/',
+				url : '/users/',
 				dataType : "text",
 				data : json,
 				//contentType: 'application/x-www-form-urlencoded; charset=utf-8',

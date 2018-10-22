@@ -30,7 +30,7 @@
 		
 		$.ajax({
 		    type: 'POST',
-		    url: 'http://localhost:8080/login',
+		    url: '/login',
 		    dataType: "text",
 		    data : json,
 		    contentType: 'application/x-www-form-urlencoded; charset=utf-8',
