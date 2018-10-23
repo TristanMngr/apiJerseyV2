@@ -4,12 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import model.EventsList;
+import org.bson.types.ObjectId;
 
-public class EventslistsService {
+public class EventsListsService {
 
     private static ObjectMapper mapper = new ObjectMapper();
 
-    public static boolean crearLista(String nombre, Integer userId) {
+    public static boolean crearLista(String nombre, ObjectId userId) {
         return ManagementService.getEventsListDAO().create(nombre, userId);
     }
 
@@ -19,7 +20,7 @@ public class EventslistsService {
 //        return jsonInString;
     }
 
-    public static String getByUserId(Integer userId) throws JsonProcessingException {
+    public static String getByUserId(ObjectId userId) throws JsonProcessingException {
         return mapper.writeValueAsString(ManagementService.getEventsListDAO().getByUserId(userId));
     }
 
@@ -27,8 +28,8 @@ public class EventslistsService {
         return lista.getNombre().equals(nombre);
     }
 
-    public static Boolean agregarEvento(Long listaId, Long codigoEvento) {
-        EventsList lista = ManagementService.getEventsListDAO().get(listaId);
+    public static Boolean agregarEvento(ObjectId listaId, Long codigoEvento) {
+        EventsList lista = ManagementService.getEventsListDAO().getEventsLists(listaId);
         return ManagementService.getEventsListDAO().addEventToList(lista, codigoEvento);
     }
 

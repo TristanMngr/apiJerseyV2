@@ -6,3 +6,8 @@
 .project
 target/
 nb-configuration.xml
+
+# remove all file from intellij idea
+.idea/*
+EventsApiG5.iml
+

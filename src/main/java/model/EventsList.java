@@ -1,39 +1,44 @@
 package model;
 
-import java.sql.Time;
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Embedded;
+import org.mongodb.morphia.annotations.Entity;
+
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
-//import javax.xml.bind.annotation.XmlRootElement;
-//@XmlRootElement
-public class EventsList {
 
-    private Long id;
-    private Integer userId;
-    private String nombre;
-    private List<Long> eventos = new ArrayList<Long>();     //códigos de los eventos
+@Entity("eventsLists")
+public class EventsList extends BaseMongoDO {
+    private String  nombre;
 
-    public EventsList(Long id, Integer userId, String nombre) {
-        this.id = id;
-        this.userId = userId;
+    private ObjectId userId;
+
+    @Embedded
+    private List<Evento> listEvents = new ArrayList<Evento>();     //códigos de los listEvents
+
+    public EventsList() {
+    }
+
+    public EventsList(String nombre) {
         this.nombre = nombre;
     }
 
-    public Long getId() {
-        return id;
+    public EventsList(ObjectId userId, String nombre, List<Evento> listEvents) {
+        this.userId = userId;
+        this.nombre = nombre;
+        this.listEvents = listEvents;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public EventsList(List<Evento> listEvents) {
+        this.listEvents = listEvents;
     }
 
-    public Integer getUserId() {
+    public ObjectId getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(ObjectId userId) {
         this.userId = userId;
     }
 
@@ -45,12 +50,12 @@ public class EventsList {
         this.nombre = nombre;
     }
 
-    public List<Long> getEventos() {
-        return eventos;
+    public List<Evento> getEventos() {
+        return listEvents;
     }
 
-    public void setEventos(List<Long> eventos) {
-        this.eventos = eventos;
+    public void setEventos(List<Evento> listEvents) {
+        this.listEvents = listEvents;
     }
 
 }

@@ -37,6 +37,10 @@
 			<filter-name>Jersey</filter-name>
 		    <url-pattern>/*</url-pattern>
 		</filter-mapping>
+
+	<listener>
+		<listener-class>listener.MongoDBListener</listener-class>
+	</listener>
 					    
 	<error-page>
         <error-code>404</error-code>
