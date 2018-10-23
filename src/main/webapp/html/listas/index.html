@@ -1,8 +1,43 @@
 <div id="subPageContainer">
     <h1 class="display-3 text-center">Listas de Eventos</h1>
     <hr/>
-    <div class="col-lg-8 col-md-10 col-12 offset-lg-2 offset-md-1">
-        <div id="accordion">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-lg-2 col-md-1 col-12 text-center">
+                <div data-toggle="modal" data-target="#createList">
+                    <button type="button" class="btn btn-danger btn-sm" data-toggle="" data-placement="left" title="" >
+                        <i class="far fa-plus-square" style="font-size: 20px;"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-10 col-12">
+                <div id="accordion">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="createList" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Crear lista de eventos</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="col-12">
+                        <div class="form-group row">
+                            <label for="lista" class="col-md-3 col-form-label">Nombre</label>
+                            <div class="col-md-9 input-group mb-3">
+                                <input class="form-control" id="nombreLista" name="nombreLista" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="btnSubmitCrearLista">Guardar</button>
+                    <button type="button" class="btn btn-danger btnDismiss" data-dismiss="modal" >Cerrar</button>
+                </div>
+            </div>
         </div>
     </div>
     <script src="/js/listas/index.js"></script>

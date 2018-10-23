@@ -1,5 +1,6 @@
 package model;
 
+import eventbrite.EventBrite;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,7 +14,7 @@ public class EventsList {
     private Long id;
     private Integer userId;
     private String nombre;
-    private List<Long> eventos = new ArrayList<Long>();     //códigos de los eventos
+    private List<EventBrite> eventos = new ArrayList<EventBrite>();     //códigos de los eventos
 
     public EventsList(Long id, Integer userId, String nombre) {
         this.id = id;
@@ -45,11 +46,11 @@ public class EventsList {
         this.nombre = nombre;
     }
 
-    public List<Long> getEventos() {
+    public List<EventBrite> getEventos() {
         return eventos;
     }
 
-    public void setEventos(List<Long> eventos) {
+    public void setEventos(List<EventBrite> eventos) {
         this.eventos = eventos;
     }
 

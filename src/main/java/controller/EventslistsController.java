@@ -1,6 +1,7 @@
 package controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -56,13 +57,13 @@ public class EventslistsController {
         String nombreLista = parametros.get("nombreLista");
         System.out.println(nombreLista);
         Integer userId = 1; //id del usuario logueado
-        return Response.status(201).entity("{\"error\":" + !(EventslistsService.crearLista(nombreLista, userId)) + "}").build();
+        return Response.status(201).entity(EventslistsService.crearLista(nombreLista, userId)).build();
     }
 
     @Path("/agregarEvento")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response agregarEvento(String params) {
+    public Response agregarEvento(String params) throws IOException {
         Map<String, String> parametros = ManagementService.getPostParams(params);
         Long codigoEvento = Long.parseLong(parametros.get("codigo"));
         Long listaId = Long.parseLong(parametros.get("lista"));

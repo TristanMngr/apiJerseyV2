@@ -1,5 +1,9 @@
 package service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import eventbrite.EventBrite;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.security.InvalidKeyException;
@@ -10,7 +14,6 @@ import java.util.Base64;
 import java.util.Map;
 
 //import com.google.gson.*;
-
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -29,11 +32,13 @@ import org.glassfish.jersey.filter.LoggingFilter;
 //EVENTBRITE KEY: Q2U3MHJELN4VOBCARDUQ - NO BORRAR QUE LA NECESITO PARA BUSCAR DESDE LA WEB DE EVENTBRITE (GUILLE)
 public class EventbriteService {
 
+    private static ObjectMapper mapper = new ObjectMapper();
+
     public static String searchEvents(Map<String, String> paramsEventBrite) {
         String eventosEncontrados;
         //TODO: patrón strategy pendiente
         if (!paramsEventBrite.get("codigo").equals("")) {
-            eventosEncontrados = formatJsonEventoSimple(getEventByID(paramsEventBrite.get("codigo")));
+            eventosEncontrados = formatJsonEventoSimple(getJsonEventByID(paramsEventBrite.get("codigo")));
         } else {
             eventosEncontrados = getEventsByParams(paramsEventBrite);
         }
@@ -51,7 +56,13 @@ public class EventbriteService {
         return response.readEntity(String.class);
     }
 
-    public static String getEventByID(String eventID) {
+    /**
+     * busca un evento en la API de eventbrite
+     *
+     * @param eventID
+     * @return
+     */
+    public static String getJsonEventByID(String eventID) {
         WebTarget service = getWebTargetService("events");
         Response response = service.path(eventID).queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
         if (response.getStatus() != 404) {
@@ -59,6 +70,11 @@ public class EventbriteService {
         } else {
             return "";
         }
+    }
+
+    public static EventBrite getEventByID(Long codigoEvento) throws JsonProcessingException,IOException {
+        String eventoJson = getJsonEventByID(codigoEvento.toString());
+        return mapper.readValue(eventoJson, EventBrite.class);
     }
 
     /* ****************** Categorías ************************* */
@@ -144,4 +160,5 @@ public class EventbriteService {
         }
 
     }
+
 }

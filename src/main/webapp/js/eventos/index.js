@@ -21,6 +21,7 @@ $(document).ready(function () {
     });
 
     $("#btnSubmitCrearLista").click(function () {
+        $(this).attr('disabled', true);
         crearLista();
     });
 
@@ -95,8 +96,8 @@ function mostrarEventos() {
                 buttonModal.setAttribute('data-toggle', 'tooltip');
                 buttonModal.setAttribute('data-placement', 'left');
                 buttonModal.setAttribute('title', 'Agregar a una lista');
-                buttonModal.setAttribute('data-nombre',valor.name.text);
-                buttonModal.setAttribute('data-codigo',valor.id);
+                buttonModal.setAttribute('data-nombre', valor.name.text);
+                buttonModal.setAttribute('data-codigo', valor.id);
                 divModal.appendChild(buttonModal);
                 var icon = document.createElement('i');
                 icon.setAttribute('class', 'fas fa-file-download');
@@ -172,8 +173,10 @@ function crearLista() {
                 $("select#modalSelectListas").html('');
                 armarSelectListasEventos();
                 $("#btnEsconderCrearLista").click();
+                $("#nombreLista").val('');
             }
             $(".imgLoader").addClass('displayNone');
+            $("button").attr('disabled', false);
         }
     });
     return false;
@@ -185,6 +188,8 @@ function crearLista() {
 //}
 
 function agregarEventoEnLista() {
+    $("#btnSubmitAgregarEvento").attr('disabled', true);
+//    $(".imgLoader").removeClass('displayNone');
     var codigo = $("#modalCodigoEvento").val();
     var lista = $("select#modalSelectListas").find(":selected").val();
     $.ajax("/eventsLists/agregarEvento", {
@@ -201,6 +206,7 @@ function agregarEventoEnLista() {
             } else {
                 alert("Error!! No se pudo agregar el evento a la lista deseada");
             }
+            $("#btnSubmitAgregarEvento").attr('disabled', false);
             $("#btnModalDismiss").click();
             $(".imgLoader").addClass('displayNone');
         }

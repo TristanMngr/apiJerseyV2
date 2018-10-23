@@ -1,5 +1,6 @@
 package dao;
 
+import eventbrite.EventBrite;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -49,8 +50,8 @@ public class EventsListDAO {
         return results;
     }
 
-    public Boolean addEventToList(EventsList lista, Long eventoId) {
-        return lista.getEventos().add(eventoId);
+    public Boolean addEventToList(EventsList lista, EventBrite evento) {
+        return lista.getEventos().add(evento);
     }
 
     /**
@@ -60,8 +61,14 @@ public class EventsListDAO {
      * @param lista EventsList object
      * @return lista object with updated id
      */
-    public boolean create(String nombre, Integer userId) {
-        return listas.add(new EventsList(counter.incrementAndGet(), userId, nombre));
+    public Long create(String nombre, Integer userId) {
+        EventsList nuevaLista=new EventsList(counter.incrementAndGet(), userId, nombre);
+        if(listas.add(nuevaLista)){
+            return nuevaLista.getId();
+        }else{
+            return 0L;
+        }
+        
     }
 
     /**
@@ -71,7 +78,7 @@ public class EventsListDAO {
      * @param id EventsList id
      * @return EventsList object for given id
      */
-    public EventsList get(Long id) {
+    public EventsList getById(Long id) {
         return listas.stream().filter(elem -> elem.getId().equals(id)).collect(Collectors.toList()).get(0);
     }
 
