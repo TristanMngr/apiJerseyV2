@@ -1,37 +1,85 @@
 package service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
-import javax.ws.rs.core.HttpHeaders;
-
-import org.json.JSONObject;
-
+import javax.ws.rs.core.Cookie;
+import model.Session;
 import model.User;
 
 public class SessionService {
 
-	public static boolean validateUser(String data, HttpHeaders httpHeaders) {
-		System.out.println("SessionService::getUser");
-		JSONObject json = new JSONObject(data);
-		String userName1 = json.getString("username");
-		String userName2 = LoginService.getUser(httpHeaders);
-		if(!userName1.equals(userName2))
+	public static boolean createSession(String username, String token) {
+		
+		System.out.println("SessionService::createSession");
+		List<User> resultados = ManagementService.getUsersListDAO().getByUsername(username);
+		
+		if(resultados.isEmpty()) {
+			System.out.println("SessionService::createSession - Could not find any user");
 			return false;
+		}
+			
 		
-		String password = UserService.getPassword(httpHeaders);
-		List<User> resultados = ManagementService.getUsersListDAO().getByUsername(userName1);
-		
-		if(resultados.isEmpty())
-			return false;
-		
-		if(resultados.size() == 1)
-			if(resultados.get(0).getPassword().equals(password))
-				return true;
-
-		for (User user : resultados) {
-			System.out.println(user.getUserName());
+		if(resultados.size() == 1) {
+			int userID = resultados.get(0).getUserId();
+			Session sesion = new Session(userID,token, new Date());
+			ManagementService.getSessionListDAO().create(sesion);
+			return true;
 		}
 		return false;
+	}
+
+	public static boolean validateSession(Map<String, Cookie> cookies) {
+		
+		System.out.println("SessionService::validateSession");
+		String tokenFromCookie = "";
+		String userFromCookie = "";
+
+        for (Cookie c : cookies.values()) 
+        {
+            if (c.getName().equals("tokenG5")) {
+            	tokenFromCookie = c.getValue();
+            }
+            if (c.getName().equals("username")) {
+            	userFromCookie = c.getValue();
+            }
+        }
+        
+        if(userFromCookie.equals(""))
+        {
+        	System.out.println("SessionService::validateSession - username not present in the cookie");
+        	return false;
+        }      
+        
+        if(tokenFromCookie.equals(""))
+        {
+        	System.out.println("SessionService::validateSession - username not present in the cookie");
+        	return false;
+        }   
+        
+        int userId = ManagementService.getUsersListDAO().getUserIdFromUsername(userFromCookie);
+        
+        if(userId == -1)
+        {
+        	System.out.println("SessionService::validateSession - No user found");
+        }
+        
+        boolean found = false;
+        
+        for(int i = 0; i < ManagementService.getSessionListDAO().getListadoSesiones().size() ; i++) {
+        	
+        	Session sesion =  ManagementService.getSessionListDAO().getListadoSesiones().get(i);
+        	if(sesion.getToken().equals(tokenFromCookie) && sesion.getUserId() == userId) {
+        		found = true;
+        	}
+        	
+        	// TODO: Remove previous sessions
+        	
+        }
+        
+		
+		return found;
 	}
 
 }

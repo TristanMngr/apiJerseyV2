@@ -71,7 +71,7 @@ public class AuthenticationFilter implements ContainerRequestFilter
             
             boolean found = true;
             
-            for (Cookie c : requestContext.getCookies().values()) 
+            for (Cookie c : requestContext.getCookies().values())
             {
                 if (c.getName().equals("tokenG5")) {
                 	found = true;
@@ -79,62 +79,24 @@ public class AuthenticationFilter implements ContainerRequestFilter
                 }
             }
             
-        	if(method.getName().equals("index") && !found)
-        	{
-        		System.out.println(this.getClass().getName() + ":: Return to login page");
-        		Viewable view = new Viewable("/jsp/logon");
+        	if(method.getName().equals("index") && !found) {
+                System.out.println(this.getClass().getName() + ":: Return to login page");
+                Viewable view = new Viewable("/jsp/logon");
+            }
+
+            // Validate Session
+        	
+        	if(!SessionService.validateSession(requestContext.getCookies()) && !found){
+        		//TODO: Los js no cargan la pagina.
         		
+        		System.out.println(this.getClass().getName() + ":: Session couldn't be validated");
+        		
+        		Viewable view = new Viewable("/jsp/logon");
         		requestContext.abortWith(Response.ok(view).build());
-        		return;
-        	}       
-                   
-            
-//            if(!found) {
-//            	System.out.println(this.getClass().getName() + ":: Return to login page");
-//        		requestContext.abortWith(Response.ok(new Viewable("/jsp/logon", null)).build());
-//        		return;
-//            }
-                             	   
-   
-//            if(method.getName().equals("index"))
-//    		{
-//            	System.out.println(this.getClass().getName() + ":: index");
-//            	
-//            	// TODO: Guardar Usuario / Token en un DAO
-//            	
-//            	//Get encoded username and password
-//                final String encodedUserPassword = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
-//                  
-//                //Decode username and password
-//                String usernameAndPassword = new String(Base64.decode(encodedUserPassword.getBytes()));;
-//      
-//                //Split username and password tokens
-//                final StringTokenizer tokenizer = new StringTokenizer(usernameAndPassword, ":");
-//                final String username = tokenizer.nextToken();
-//                final String password = tokenizer.nextToken();
-//                  
-//                //Verifying Username and password
-//                System.out.println(this.getClass().getName() + ":: username = " + username);
-//                System.out.println(this.getClass().getName() + ":: password = " + password);
-//                  
-//                //Verify user access
-//                if(method.isAnnotationPresent(RolesAllowed.class))
-//                {
-//                	System.out.println(this.getClass().getName() + ":: RolesAllowed present");
-//                	
-//                	RolesAllowed rolesAnnotation = method.getAnnotation(RolesAllowed.class);
-//                    Set<String> rolesSet = new HashSet<String>(Arrays.asList(rolesAnnotation.value()));
-//                      
-//                    //Is user valid?
-//                    if( ! LoginService.isUserAllowed(username, password, rolesSet))
-//                    {
-//                        requestContext.abortWith(ACCESS_DENIED);
-//                        return;
-//                    }
-//                }
-//    	
-//    		}
-            
+        		
+                return;
+        	}
+        	            
         }
     }
 

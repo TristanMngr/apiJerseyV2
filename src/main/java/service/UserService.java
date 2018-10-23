@@ -34,7 +34,7 @@ public class UserService {
     public static String getAllUsers() throws JsonProcessingException {
         return mapper.writeValueAsString(ManagementService.getUserDAO().getAllUsers());
     }
-
+    
     public static User create(String data, HttpHeaders headers) {
         System.out.println("UserService::create");
         JSONObject json     = new JSONObject(data);
