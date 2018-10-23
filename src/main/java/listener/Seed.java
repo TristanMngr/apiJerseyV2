@@ -20,8 +20,6 @@ public class Seed {
         MongoDBConnection conn      = MongoDBConnection.getInstance();
         Datastore         datastore = conn.getDatastore();
 
-        // drop previous database
-        datastore.getDB().dropDatabase();
 
         User userOne = new User(new ObjectId("5bcbba1743b244dd134d6f44"), "Christhian", "password");
         User userTwo = new User(new ObjectId("5bcbba1743b244dd134d6f45"), "Gille", "password");
