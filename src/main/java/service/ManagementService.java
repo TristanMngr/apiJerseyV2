@@ -3,7 +3,7 @@ package service;
 import dao.EventsListDAO;
 import dao.MongoDBConnection;
 import dao.UserDAO;
-
+import dao.UsersListDAO;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,17 +17,22 @@ import java.util.stream.Collectors;
 public class ManagementService {
     public static EventsListDAO eventsListsDAO;
     public static UserDAO       userDAO;
+    public static UsersListDAO usersListDAO;
 
     public static void createDAOs() {
         MongoDBConnection conn = MongoDBConnection.getInstance();
 
         userDAO = new UserDAO(conn.getDatastore());
         eventsListsDAO = new EventsListDAO(conn.getDatastore(), userDAO);
-
+        usersListDAO = new UsersListDAO();
     }
 
     public static EventsListDAO getEventsListDAO() {
         return eventsListsDAO;
+    }
+    
+    public static UsersListDAO getUsersListDAO() {
+        return usersListDAO;
     }
 
     public static UserDAO getUserDAO() {

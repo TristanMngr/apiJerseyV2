@@ -51,16 +51,17 @@ public class EventsListDAO extends BasicDAO<EventsList, ObjectId> {
      */
     public List<EventsList> getByUserId(ObjectId userId) {
         Query<EventsList> query       = getDatastore().find(EventsList.class, "userId", userId);
-        List<EventsList> eventsLists = query.asList();
+        List<EventsList>  eventsLists = query.asList();
 
         return eventsLists;
     }
 
-    /*public Boolean addEventToList(EventsList lista, Long eventoId) {
-        *//*return lista.getEventos().add(eventoId);*//*
-        return lista.getEventLists().add(new Evento());
+    public Boolean addEventToList(EventsList lista, Long eventoId) {
+     /*return lista.getEventos().add(new Evento(eventoId));
+        return lista.getEventos().add(new Evento());*/
+        return false;
 
-    }*/
+    }
 
     /**
      * Create new EventsList in dummy database. Updates the id and insert new

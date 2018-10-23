@@ -1,6 +1,5 @@
 package model;
 
-
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
@@ -13,7 +12,9 @@ import java.util.List;
 
 @Entity("users")
 public class User extends BaseMongoDO {
-    private String name;
+    private String userName;
+
+    private Integer userId;
 
     @Reference
     private List<EventsList> eventsLists;
@@ -22,40 +23,45 @@ public class User extends BaseMongoDO {
     private List<Alarma> alarmas;
 
     private String password;
-    private Date   lastLogin;
 
 
     // TODO change list alarm and event
     public User() {
-        this.name = "TestName";
+        this.userName = "TestName";
         this.setAlarmas(Arrays.asList(new Alarma()));
-        this.setLastLogin(new Date());
     }
 
-    public User(String name, String password) {
-        this.name = name;
+    public User(String userName, String password) {
+        this.userName = userName;
         this.password = password;
     }
 
-    public User(ObjectId objectId, String name, String password) {
-        this.name = name;
+    public User(ObjectId objectId, String userName, String password) {
+        this.userName = userName;
         this.password = password;
         this.setId(objectId);
     }
 
     public User(String string) {
-        this.name = string;
+        this.userName = string;
         this.setAlarmas(Arrays.asList(new Alarma(), new Alarma()));
-        this.setLastLogin(new Date());
         this.setPassword("password");
     }
 
-    public String getName() {
-        return name;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEventsLists(List<EventsList> eventsLists) {
+        this.eventsLists = eventsLists;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public List<EventsList> getEventsLists() {
@@ -64,15 +70,6 @@ public class User extends BaseMongoDO {
 
     public void setEventos(List<EventsList> eventsLists) {
         this.eventsLists = eventsLists;
-    }
-
-
-    public Date getLastLogin() {
-        return lastLogin;
-    }
-
-    public void setLastLogin(Date lastLogin) {
-        this.lastLogin = lastLogin;
     }
 
     public List<Alarma> getAlarmas() {
@@ -90,5 +87,4 @@ public class User extends BaseMongoDO {
     public void setPassword(String password) {
         this.password = password;
     }
-
 }

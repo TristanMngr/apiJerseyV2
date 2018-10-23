@@ -28,9 +28,19 @@
     <%
         String ServerName = request.getServerName();
         String URL = "http://" + ServerName;
+        String UserName = "";
         if (ServerName == null || ServerName.equals("localhost")) {
             URL += ":" + request.getLocalPort();
         }
+        Cookie[] cookies = request.getCookies();
+        
+        if(cookies !=null){
+        for(Cookie cookie : cookies){
+         if(cookie.getName().equals("username")) 
+        	 UserName = cookie.getValue();
+        	}
+        }
+        
     %>
     <body>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
@@ -48,6 +58,8 @@
                             <a class="dropdown-item linkReload" data-loadhtml="eventos/index.html" href="/eventsLists">Listas</a>
                             <a class="dropdown-item linkReload" href="/eventsLists/getFromUser?userId=5bcbba1743b244dd134d6f44">Listas del usuario 1</a>
                             <a class="dropdown-item linkReload" href="/eventsLists/getFromUser?userId=5bcbba1743b244dd134d6f45">Listas del usuario 2</a>
+                            <a class="dropdown-item linkReload" data-loadhtml="listas/index.html" href="#">Listas</a>
+
                         </div>
                     </li>
                     <li class="nav-item">
@@ -60,6 +72,10 @@
                         </div>
                     </li>
                 </ul>
+                <ul class="nav navbar-text navbar-right">
+      				<li><%=UserName%></li> 
+    			</ul>
             </div>
+            
         </nav>
         <main role="main">

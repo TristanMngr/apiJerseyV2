@@ -42,14 +42,6 @@ public class EventsList extends BaseMongoDO {
         this.userId = userId;
     }
 
-    public List<Evento> getListEvents() {
-        return listEvents;
-    }
-
-    public void setListEvents(List<Evento> listEvents) {
-        this.listEvents = listEvents;
-    }
-
     public String getNombre() {
         return nombre;
     }

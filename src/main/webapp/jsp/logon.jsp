@@ -10,41 +10,67 @@
 <script rel="javascript" type="text/javascript">
 	var clientId = "MyApp";
 	var clientSecret = "MySecret";
-	
-	// var authorizationBasic = $.base64.btoa(clientId + ':' + clientSecret);
-	var authorizationBasic = window.btoa(clientId + ':' + clientSecret);
 
 	function sendobject() {
+		var x = $("form").serializeArray();
+	    $.each(x, function(i, field){
+	        if (field.name == 'j_username')
+	        	clientId = field.value;
+
+	        if (field.name == 'j_password')
+	        	clientSecret = field.value;
+        	 
+	    });
+
+	    var authorizationBasic = btoa(clientId + ':' + clientSecret);
+		var postData = {}
+		postData.username = clientId;
+		var json = JSON.stringify(postData)
+    
+		
 		$.ajax({
 		    type: 'POST',
-		    url: 'http://localhost:8080/login',
-		    data: { username: 'John', password: 'Smith', grant_type: 'password' },
-		    dataType: "json",
+		    url: '/login',
+		    dataType: "text",
+		    data : json,
 		    contentType: 'application/x-www-form-urlencoded; charset=utf-8',
 		    xhrFields: {
 		       withCredentials: true
 		    },
-		    // crossDomain: true,
 		    headers: {
 		       'Authorization': 'Basic ' + authorizationBasic
 		    },
-		    //beforeSend: function (xhr) {
-		    //},
-/* 		    success: function (result) {
+ 		    success: function (result) {
 		       var token = result;
+ 		    	console.log("success");
+ 		    	window.location.reload();
+ 		    	return true;
 		    },
-		    //complete: function (jqXHR, textStatus) {
-		    //},
-		    error: function (req, status, error) {
-		    alert(error);
-		    } */
+ 		    error: function (req, status, error) {
+		    	alert(error);
+		    	console.log("error");
+		    	window.location.reload();
+		    	return true;
+		    }
 		});
 	}
 </script>
 
+	<%
+ 		String ServerName=request.getServerName();
+		String URL = "";
+		if( ServerName != null && !ServerName.equals("localhost") ) {
+	       URL = ServerName;
+	   	}
+		else
+		{
+			URL = ServerName + ":" + request.getLocalPort();
+		}
+	%>
+
 <h2>Hello, please log in:</h2>
 <br><br>
-<form method=post>
+<form method=post id="loginForm">
 <table border="0" cellspacing="2" cellpadding="1">
 <tr>
   <td>Username:</td>
@@ -61,6 +87,7 @@
   </td>
 </tr>
 </table>
+<h2>If you don't have an account, just <a href="http://<%=URL%>/jsp/signup.jsp">Signup</a></h2>
 </form>
 
 
