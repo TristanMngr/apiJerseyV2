@@ -12,7 +12,7 @@
         	</init-param>
 			<init-param>
     			<param-name>jersey.config.server.provider.classnames</param-name>
-    			<param-value>org.glassfish.jersey.server.mvc.jsp.JspMvcFeature; <!--service.AuthenticationFilter--></param-value>
+    			<param-value>org.glassfish.jersey.server.mvc.jsp.JspMvcFeature; service.AuthenticationFilter</param-value>
 			</init-param> 
     		<init-param>
         		<param-name>jersey.config.server.mvc.templateBasePath</param-name>

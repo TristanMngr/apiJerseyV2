@@ -69,7 +69,7 @@ public class AuthenticationFilter implements ContainerRequestFilter
                 return;
             }
             
-            boolean found = false;
+            boolean found = true;
             
             for (Cookie c : requestContext.getCookies().values()) 
             {
