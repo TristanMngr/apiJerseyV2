@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
@@ -79,10 +80,11 @@ public class UsersController {
 		return Response.status(201).entity(result).build();		
 	}
 
-
+	@PermitAll
 	@POST
 	public Response postUserInJSON(@Context HttpHeaders httpHeaders, String data) {
 		System.out.println(this.getClass().getName() + ":: postUserInJSON ...");
+		// TODO: Verificar que el usuario fue creado y evaluar respuesta.
 		User newUser = UserService.create(data, httpHeaders);
 
 		List<User> listado = ManagementService.getUsersListDAO().getListadoUsuarios();

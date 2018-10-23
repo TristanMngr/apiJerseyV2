@@ -10,8 +10,6 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Cookie;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
  
@@ -54,87 +52,20 @@ public class AuthenticationFilter implements ContainerRequestFilter
                 requestContext.abortWith(ACCESS_FORBIDDEN);
                 return;
             }
-            
-            //Get request headers
-            final MultivaluedMap<String, String> headers = requestContext.getHeaders();
-              
-            //Fetch authorization header
-            final List<String> authorization = headers.get(AUTHORIZATION_PROPERTY);
-            
-            //If no authorization information present; block access
-            if(method.getName().equals("login") && (authorization == null || authorization.isEmpty()))
-            {
-            	System.out.println(this.getClass().getName() + ":: authorization is null or Empty");
-            	requestContext.abortWith(ACCESS_DENIED);
-                return;
-            }
-            
-            boolean found = false;
-            
-            for (Cookie c : requestContext.getCookies().values()) 
-            {
-                if (c.getName().equals("tokenG5")) {
-                	found = true;
-                    break;
-                }
-            }
-            
-        	if(method.getName().equals("index") && !found)
-        	{
-        		System.out.println(this.getClass().getName() + ":: Return to login page");
-        		Viewable view = new Viewable("/jsp/logon");
+
+            // Validate Session
+        	
+        	if(!SessionService.validateSession(requestContext.getCookies())){
+        		//TODO: Los js no cargan la pagina.
         		
+        		System.out.println(this.getClass().getName() + ":: Session couldn't be validated");
+        		
+        		Viewable view = new Viewable("/jsp/logon");
         		requestContext.abortWith(Response.ok(view).build());
-        		return;
-        	}       
-                   
-            
-//            if(!found) {
-//            	System.out.println(this.getClass().getName() + ":: Return to login page");
-//        		requestContext.abortWith(Response.ok(new Viewable("/jsp/logon", null)).build());
-//        		return;
-//            }
-                             	   
-   
-//            if(method.getName().equals("index"))
-//    		{
-//            	System.out.println(this.getClass().getName() + ":: index");
-//            	
-//            	// TODO: Guardar Usuario / Token en un DAO
-//            	
-//            	//Get encoded username and password
-//                final String encodedUserPassword = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
-//                  
-//                //Decode username and password
-//                String usernameAndPassword = new String(Base64.decode(encodedUserPassword.getBytes()));;
-//      
-//                //Split username and password tokens
-//                final StringTokenizer tokenizer = new StringTokenizer(usernameAndPassword, ":");
-//                final String username = tokenizer.nextToken();
-//                final String password = tokenizer.nextToken();
-//                  
-//                //Verifying Username and password
-//                System.out.println(this.getClass().getName() + ":: username = " + username);
-//                System.out.println(this.getClass().getName() + ":: password = " + password);
-//                  
-//                //Verify user access
-//                if(method.isAnnotationPresent(RolesAllowed.class))
-//                {
-//                	System.out.println(this.getClass().getName() + ":: RolesAllowed present");
-//                	
-//                	RolesAllowed rolesAnnotation = method.getAnnotation(RolesAllowed.class);
-//                    Set<String> rolesSet = new HashSet<String>(Arrays.asList(rolesAnnotation.value()));
-//                      
-//                    //Is user valid?
-//                    if( ! LoginService.isUserAllowed(username, password, rolesSet))
-//                    {
-//                        requestContext.abortWith(ACCESS_DENIED);
-//                        return;
-//                    }
-//                }
-//    	
-//    		}
-            
+        		
+                return;
+        	}
+        	            
         }
     }
 

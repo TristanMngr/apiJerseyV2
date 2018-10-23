@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-import model.EventsList;
 import model.User;
 
 public class UsersListDAO {
@@ -23,16 +22,31 @@ public class UsersListDAO {
 	}
 	
 	public void create(User newUser) {
+        // TODO: Validar que un unico usuario exista.
+		
 		int idUsuario = getListadoUsuarios().size() + 1;
 		newUser.setUserId(idUsuario);
 		getListadoUsuarios().add(newUser);
 	}
 	
     public List<User> getByUsername(String username) {
-        List<User> results = new ArrayList<User>();
+        // TODO: Validar que un unico usuario exista.
+    	
+    	List<User> results = new ArrayList<User>();
         results = listadoUsuarios.stream().filter(elem -> elem.getUserName().equals(username)).collect(Collectors.toList());
 
         return results;
+    }
+    
+    public int getUserIdFromUsername(String username) {
+        // TODO: Validar que un unico usuario exista.
+    	
+    	List<User> results = new ArrayList<User>();
+        results = listadoUsuarios.stream().filter(elem -> elem.getUserName().equals(username)).collect(Collectors.toList());
+        if(results.size() != 1)
+        	return -1;
+        
+        return results.get(0).getUserId();
     }
 
 }

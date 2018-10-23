@@ -8,6 +8,10 @@ import java.util.Set;
 import javax.ws.rs.core.HttpHeaders;
 import javax.xml.bind.DatatypeConverter;
 
+import org.json.JSONObject;
+
+import model.User;
+
 public class LoginService {
 
 	public static String getToken()  {
@@ -38,9 +42,11 @@ public class LoginService {
 	}
 
 	public static String getUser(HttpHeaders headers) {
-		System.out.println("LoginService::getUser");		
-
-		List<String> list = headers.getRequestHeader("Authorization");
+		System.out.println("LoginService::getUser");
+		// TODO: Enviar responde sino hay Header.
+		if(headers.getRequestHeader("Authorization") == null)
+			System.out.println("No hay authentication header");
+		
 		String auth = headers.getRequestHeader("Authorization").get(0);
 		auth = auth.substring("Basic ".length());
 
@@ -67,4 +73,36 @@ public class LoginService {
 		return isAllowed;
 	}
 
+	public static boolean validateUser(String data, HttpHeaders httpHeaders) {
+		System.out.println("LoginService::validateUser");
+		JSONObject json = new JSONObject(data);
+		String userName1 = json.getString("username");
+		String userName2 = LoginService.getUser(httpHeaders);
+		if(!userName1.equals(userName2))
+		{
+			System.out.println("SessionService::validateUser - User on Header is not the same provided on Body");
+			return false;
+		}
+			
+		
+		String password = UserService.getPassword(httpHeaders);
+		List<User> resultados = ManagementService.getUsersListDAO().getByUsername(userName1);
+		
+		if(resultados.isEmpty()) {
+			System.out.println("SessionService::validateUser - Could not find any user");
+			return false;
+		}
+			
+		
+		if(resultados.size() == 1)
+			if(resultados.get(0).getPassword().equals(password))
+				return true;
+
+		for (User user : resultados) {
+			System.out.println(user.getUserName());
+		}
+		return false;
+	}
+
+	
 }
