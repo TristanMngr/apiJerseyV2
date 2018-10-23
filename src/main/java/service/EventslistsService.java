@@ -31,4 +31,16 @@ public class EventslistsService {
         EventsList lista = ManagementService.getEventsListDAO().get(listaId);
         return ManagementService.getEventsListDAO().addEventToList(lista, codigoEvento);
     }
+
+    /**
+     * busca los datos de los eventos según el código y arma el objeto lisa
+     * completo con esos datos
+     *
+     * @param EventsList lista
+     * @return EventsList listaArmada
+     */
+//    private static EventsList armarListaEventos(EventsList lista) {
+//        lista.getEventos().stream().map(codigo -> EventbriteService.getEventByID(codigo.toString()));
+//
+//    }
 }

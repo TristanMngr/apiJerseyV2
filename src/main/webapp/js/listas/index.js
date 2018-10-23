@@ -42,7 +42,13 @@ function getUserLists() {
                 ////
                 var cardBody = document.createElement('div');
                 cardBody.setAttribute('class', 'card-body');
-                cardBody.appendChild(document.createTextNode("lista de eventos"));
+                $.each(lista.eventos, function (_, codEvento) {
+                    var h6Evento = document.createElement('h6');
+                    h6Evento.setAttribute('class', 'codEvento');
+                    h6Evento.appendChild(document.createTextNode(codEvento));
+                    cardBody.appendChild(h6Evento);
+                });
+                
                 cardCollapse.appendChild(cardBody);
                 ////    
 
