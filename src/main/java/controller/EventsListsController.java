@@ -63,7 +63,7 @@ public class EventsListsController {
         Map<String, String> parametros  = ManagementService.getPostParams(params);
         String              nombreLista = parametros.get("nombreLista");
         System.out.println(nombreLista);
-        ObjectId userId = 1; //id del usuario logueado TODO: recibirlo por parámetro u obtenerlo del UserService
+        ObjectId userId = new ObjectId(); //id del usuario logueado TODO: recibirlo por parámetro u obtenerlo del UserService
         return Response.status(201).entity(EventsListsService.crearLista(nombreLista, userId)).build();
     }
 
@@ -73,7 +73,7 @@ public class EventsListsController {
     public Response agregarEvento(String params) throws IOException {
         Map<String, String> parametros = ManagementService.getPostParams(params);
         Long codigoEvento = Long.parseLong(parametros.get("codigo"));
-        Long listaId = Long.parseLong(parametros.get("lista"));
+        Integer listaId = Integer.parseInt(parametros.get("lista"));
 //        EventslistsService.agregarEvento(listaId, codigoEvento);
         return Response.status(201).entity("{\"error\":" + !(EventsListsService.agregarEvento(listaId, codigoEvento)) + "}").build();
     }

@@ -17,8 +17,9 @@ import java.util.stream.Collectors;
  * Clase para funciones genéricas que se usen en varios lugares
  */
 public class ManagementService {
+
     public static EventsListDAO eventsListsDAO;
-    public static UserDAO       userDAO;
+    public static UserDAO userDAO;
     public static UsersListDAO usersListDAO;
     public static SessionListDAO listadoSesiones;
 
@@ -34,11 +35,11 @@ public class ManagementService {
     public static SessionListDAO getSessionListDAO() {
         return listadoSesiones;
     }
-    
+
     public static EventsListDAO getEventsListDAO() {
         return eventsListsDAO;
     }
-    
+
     public static UsersListDAO getUsersListDAO() {
         return usersListDAO;
     }
@@ -48,7 +49,7 @@ public class ManagementService {
     }
 
     public static Map<String, String> getPostParams(String params) {
-        List<String>        listaAux   = Arrays.asList(params.split("&", -1));
+        List<String> listaAux = Arrays.asList(params.split("&", -1));
         Map<String, String> parametros = new HashMap<String, String>();
         listaAux.stream().map(elem -> parametros.put(getNValueFromSplit(elem, "=", 0), getNValueFromSplit(elem, "=", 1))).collect(Collectors.toList());
         return parametros;

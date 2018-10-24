@@ -30,7 +30,7 @@ public class EventsListsService {
         return mapper.writeValueAsString(ManagementService.getEventsListDAO().getByUserId(userId));
     }
 
-    public static EventsList getByListaId(ObjectId listaId) {
+    public static EventsList getByListaId(Integer listaId) {
         return ManagementService.getEventsListDAO().getByListaId(listaId);
     }
 
@@ -38,7 +38,7 @@ public class EventsListsService {
         return lista.getNombre().equals(nombre);
     }
 
-    public static Boolean agregarEvento(ObjectId listaId, Long codigoEvento) throws IOException {
+    public static Boolean agregarEvento(Integer listaId, Long codigoEvento) throws IOException {
         EventsList lista = ManagementService.getEventsListDAO().getByListaId(listaId);
         EventBrite evento = EventbriteService.getEventByID(codigoEvento);
         return ManagementService.getEventsListDAO().addEventToList(lista, evento);

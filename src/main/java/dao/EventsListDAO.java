@@ -71,7 +71,7 @@ public class EventsListDAO extends BasicDAO<EventsList, ObjectId> {
 //    public EventsList getById(Long id) {
 //        return listas.stream().filter(elem -> elem.getId().equals(id)).collect(Collectors.toList()).get(0);
 //    }
-    public EventsList getByListaId(ObjectId listaId) {
+    public EventsList getByListaId(Integer listaId) {
         Query<EventsList> query = getDatastore().find(EventsList.class, "listaId", listaId);
         EventsList eventsLists = query.asList().get(0);
         return eventsLists;
