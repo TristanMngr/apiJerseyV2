@@ -53,11 +53,11 @@ function appendDomLista(lista) {
 }
 
 function getUserLists() {
-    $.ajax("/eventsLists/getUserLists", {
+    $.ajax("/eventsLists/getFromUser", {
         type: "GET",
         asynchronous: false,
         data: {
-            userId: 1
+            userId: "1",
         },
         complete: function (response) {
             var dataRecibida = $.parseJSON(response.responseText);
@@ -72,7 +72,7 @@ function getUserLists() {
 function crearLista() {
     $(".imgLoader").removeClass('displayNone');
     var nombreLista = $("#nombreLista").val();
-    $.ajax("/eventsLists/crearLista", {
+    $.ajax("/eventsLists/create", {
         type: "POST",
         data: {
             'nombreLista': nombreLista,

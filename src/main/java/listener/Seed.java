@@ -27,23 +27,23 @@ public class Seed {
         User userFour = new User(new ObjectId("5bcbba1743b244dd134d6f47"), "Juan", "password");
         User userFive = new User(new ObjectId("5bcbba1743b244dd134d6f48"),"Tristan", "password");
 
-        Evento eventOne   = new Evento("ATLANTA'S", "5b281078cc5815bc2e5a5b2a","eventOne");
-        Evento eventTwo   = new Evento("Georgetown Glow","5b281078cc5815bc2e5a5b2b","eventTwo");
-        Evento eventThree = new Evento("AllStar Weekend Party", "5b281078cc5815bc2e5a5b2c","eventThree");
+//        Evento eventOne   = new Evento("ATLANTA'S", "5b281078cc5815bc2e5a5b2a","eventOne");
+//        Evento eventTwo   = new Evento("Georgetown Glow","5b281078cc5815bc2e5a5b2b","eventTwo");
+//        Evento eventThree = new Evento("AllStar Weekend Party", "5b281078cc5815bc2e5a5b2c","eventThree");
 
         Alarma alarmaOne = new Alarma("alarmaOne");
         Alarma alarmaTwo = new Alarma("alarmaTwo");
         Alarma alarmaTree = new Alarma("alarmaTree");
 
 
-        EventsList eventsListOne = new EventsList(new ObjectId("5bcbba1743b244dd134d6f44"),"listOne", Arrays.asList(eventOne, eventTwo));
-        EventsList eventListTwo = new EventsList(new ObjectId("5bcbba1743b244dd134d6f44"), "listTwo", Arrays.asList(eventThree, eventTwo));
-        EventsList eventListThree = new EventsList(new ObjectId("5bcbba1743b244dd134d6f45"), "listThree", Arrays.asList(eventThree, eventTwo));
-        EventsList eventListFour = new EventsList(new ObjectId("5bcbba1743b244dd134d6f45"), "listFour", Arrays.asList(eventOne));
-        EventsList eventsListFive = new EventsList(new ObjectId("5bcbba1743b244dd134d6f46"),"listOne", Arrays.asList(eventOne, eventTwo));
-        EventsList eventsListSix = new EventsList(new ObjectId("5bcbba1743b244dd134d6f47"),"listOne", Arrays.asList(eventOne, eventTwo));
-        EventsList eventsListSeven = new EventsList(new ObjectId("5bcbba1743b244dd134d6f48"),"listOne", Arrays.asList(eventOne, eventTwo));
-        EventsList eventsListEight = new EventsList(new ObjectId("5bcbba1743b244dd134d6f48"),"listOne", Arrays.asList(eventOne, eventTwo));
+        EventsList eventsListOne = new EventsList(new ObjectId("5bcbba1743b244dd134d6f44"),"listOne", Arrays.asList());
+        EventsList eventListTwo = new EventsList(new ObjectId("5bcbba1743b244dd134d6f44"), "listTwo", Arrays.asList());
+        EventsList eventListThree = new EventsList(new ObjectId("5bcbba1743b244dd134d6f45"), "listThree", Arrays.asList());
+        EventsList eventListFour = new EventsList(new ObjectId("5bcbba1743b244dd134d6f45"), "listFour", Arrays.asList());
+        EventsList eventsListFive = new EventsList(new ObjectId("5bcbba1743b244dd134d6f46"),"listOne", Arrays.asList());
+        EventsList eventsListSix = new EventsList(new ObjectId("5bcbba1743b244dd134d6f47"),"listOne", Arrays.asList());
+        EventsList eventsListSeven = new EventsList(new ObjectId("5bcbba1743b244dd134d6f48"),"listOne", Arrays.asList());
+        EventsList eventsListEight = new EventsList(new ObjectId("5bcbba1743b244dd134d6f48"),"listOne", Arrays.asList());
 
 
         List<EventsList> eventsLists = new ArrayList<>();

@@ -192,7 +192,7 @@ function agregarEventoEnLista() {
 //    $(".imgLoader").removeClass('displayNone');
     var codigo = $("#modalCodigoEvento").val();
     var lista = $("select#modalSelectListas").find(":selected").val();
-    $.ajax("/eventsLists/agregarEvento", {
+    $.ajax("/eventsLists/addEvent", {
         type: "POST",
         data: {
             'codigo': codigo,

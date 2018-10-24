@@ -1,36 +1,24 @@
 package dao;
 
 import eventbrite.EventBrite;
-import java.util.ArrayList;
-import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import com.mongodb.WriteResult;
-import model.Evento;
 import model.EventsList;
 import model.User;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Key;
-import org.mongodb.morphia.aggregation.AggregationPipeline;
 import org.mongodb.morphia.dao.BasicDAO;
 import org.mongodb.morphia.query.Query;
 
-import javax.swing.event.ListDataEvent;
-
 public class EventsListDAO extends BasicDAO<EventsList, ObjectId> {
 
-//    private final AtomicLong counter = new AtomicLong();
-    private UserDAO userDAO;
+    private final UserDAO userDAO;
 
-    // Dummy database. Initialize with some dummy values.
-//    private List<EventsList> listas;
     public EventsListDAO(Datastore dataStore, UserDAO userDAO) {
         super(dataStore);
-        userDAO = userDAO;
+        this.userDAO = userDAO;
     }
 
     /**
@@ -65,22 +53,18 @@ public class EventsListDAO extends BasicDAO<EventsList, ObjectId> {
      * Return EventsList object for given id from dummy database. If EventsList
      * is not found for id, returns null.
      *
-     * @param id EventsList id
+     * @param listaId ObjectId
      * @return EventsList object for given id
      */
-//    public EventsList getById(Long id) {
-//        return listas.stream().filter(elem -> elem.getId().equals(id)).collect(Collectors.toList()).get(0);
-//    }
-    public EventsList getByListaId(Integer listaId) {
+    public EventsList getByListaId(ObjectId listaId) {
         Query<EventsList> query = getDatastore().find(EventsList.class, "listaId", listaId);
         EventsList eventsLists = query.asList().get(0);
         return eventsLists;
     }
 
     /**
-     * Create new EventsList
-     * Add the list in User object
-     * 
+     * Create new EventsList Add the list in User object
+     *
      * @param nombre String object
      * @param userId ObjectId object
      * @return listaId

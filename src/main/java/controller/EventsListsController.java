@@ -33,49 +33,38 @@ public class EventsListsController {
         return Response.status(201).entity(EventsListsService.getAllLists()).build();
     }
 
-    /*@Path("/getUserLists")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response getUserLists(@Context UriInfo uriDetails) throws JsonProcessingException {
-        ObjectId userId = new ObjectId(uriDetails.getQueryParameters().get("userId").get(0));
-        return Response.ok(EventsListsService.getByUserId(userId)).build();
-
-        Integer userId = Integer.parseInt(uriDetails.getQueryParameters().get("userId").get(0));
-//        System.out.println("user id: " + userId);
-        return Response.status(201).entity(EventsListsService.getByUserId(userId)).build();
-    }*/
-
     @Path("/getFromUser")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getListsFromUser(@Context UriInfo uriDetails) throws JsonProcessingException {
-        ObjectId userId = new ObjectId(uriDetails.getQueryParameters().get("userId").get(0));
+        ObjectId userId = new ObjectId(uriDetails.getQueryParameters().get("userId").get(0).toString());
         return Response.ok(EventsListsService.getByUserId(userId)).build();
     }
 
     /**
+     * @param params
      * @return imprime en pantalla el json de lassss listassss de eventos
+     * @throws com.fasterxml.jackson.core.JsonProcessingException
      */
-    @Path("/crearLista")
+    @Path("/create")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response crearLista(String params) throws JsonProcessingException {
-        Map<String, String> parametros  = ManagementService.getPostParams(params);
-        String              nombreLista = parametros.get("nombreLista");
+        Map<String, String> parametros = ManagementService.getPostParams(params);
+        String nombreLista = parametros.get("nombreLista");
         System.out.println(nombreLista);
-        ObjectId userId = new ObjectId(); //id del usuario logueado TODO: recibirlo por parámetro u obtenerlo del UserService
-        return Response.status(201).entity(EventsListsService.crearLista(nombreLista, userId)).build();
+        ObjectId userId = new ObjectId("1"); //id del usuario logueado TODO: recibirlo por parámetro u obtenerlo del UserService
+        return Response.status(201).entity(EventsListsService.create(nombreLista, userId)).build();
     }
 
-    @Path("/agregarEvento")
+    @Path("/addEvent")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response agregarEvento(String params) throws IOException {
+    public Response addEvent(String params) throws IOException {
         Map<String, String> parametros = ManagementService.getPostParams(params);
         Long codigoEvento = Long.parseLong(parametros.get("codigo"));
-        Integer listaId = Integer.parseInt(parametros.get("lista"));
-//        EventslistsService.agregarEvento(listaId, codigoEvento);
-        return Response.status(201).entity("{\"error\":" + !(EventsListsService.agregarEvento(listaId, codigoEvento)) + "}").build();
+        ObjectId listaId = new ObjectId(parametros.get("lista"));
+        return Response.status(201).entity("{\"error\":" + !(EventsListsService.addEvent(listaId, codigoEvento)) + "}").build();
     }
 
 }
