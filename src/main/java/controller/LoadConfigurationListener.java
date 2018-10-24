@@ -11,7 +11,7 @@ public class LoadConfigurationListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent sce) {
 		// TODO Auto-generated method stub
 		System.out.println(this.getClass().getName() + ":: contextInitialized ...");
-		ManagementService.createDAOs();
+		/*ManagementService.createDAOs();*/
 	}
 
 	@Override
@@ -20,7 +20,4 @@ public class LoadConfigurationListener implements ServletContextListener {
 		System.out.println(this.getClass().getName() + ":: contextDestroyed ...");
 		
 	}
-
-
-
 }

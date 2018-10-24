@@ -10,6 +10,8 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
  
@@ -52,10 +54,39 @@ public class AuthenticationFilter implements ContainerRequestFilter
                 requestContext.abortWith(ACCESS_FORBIDDEN);
                 return;
             }
+            
+            //Get request headers
+            final MultivaluedMap<String, String> headers = requestContext.getHeaders();
+              
+            //Fetch authorization header
+            final List<String> authorization = headers.get(AUTHORIZATION_PROPERTY);
+            
+            //If no authorization information present; block access
+            if(method.getName().equals("login") && (authorization == null || authorization.isEmpty()))
+            {
+            	System.out.println(this.getClass().getName() + ":: authorization is null or Empty");
+            	requestContext.abortWith(ACCESS_DENIED);
+                return;
+            }
+            
+            boolean found = true;
+            
+            for (Cookie c : requestContext.getCookies().values())
+            {
+                if (c.getName().equals("tokenG5")) {
+                	found = true;
+                    break;
+                }
+            }
+            
+        	if(method.getName().equals("index") && !found) {
+                System.out.println(this.getClass().getName() + ":: Return to login page");
+                Viewable view = new Viewable("/jsp/logon");
+            }
 
             // Validate Session
         	
-        	if(!SessionService.validateSession(requestContext.getCookies())){
+        	if(!SessionService.validateSession(requestContext.getCookies()) && !found){
         		//TODO: Los js no cargan la pagina.
         		
         		System.out.println(this.getClass().getName() + ":: Session couldn't be validated");

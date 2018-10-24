@@ -2,28 +2,35 @@ package dao;
 
 import eventbrite.EventBrite;
 import java.util.ArrayList;
+import java.awt.*;
+import java.lang.reflect.Array;
+import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.IntToLongFunction;
-import java.util.stream.Collectors;
 
+import com.mongodb.WriteResult;
+import model.Evento;
 import model.EventsList;
+import model.User;
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Key;
+import org.mongodb.morphia.aggregation.AggregationPipeline;
+import org.mongodb.morphia.dao.BasicDAO;
+import org.mongodb.morphia.query.Query;
 
-public class EventsListDAO {
+import javax.swing.event.ListDataEvent;
 
-    private final AtomicLong counter = new AtomicLong();
+public class EventsListDAO extends BasicDAO<EventsList, ObjectId> {
+
+//    private final AtomicLong counter = new AtomicLong();
+    private UserDAO userDAO;
 
     // Dummy database. Initialize with some dummy values.
-    private List<EventsList> listas;
-
-    {
-//        System.out.println("arma la lista de listas");
-        listas = new ArrayList<EventsList>();
-        this.listas.add(new EventsList(counter.incrementAndGet(), 1, "Lista 1"));
-        this.listas.add(new EventsList(counter.incrementAndGet(), 1, "Lista 2"));
-        this.listas.add(new EventsList(counter.incrementAndGet(), 2, "Lista 3"));
-        this.listas.add(new EventsList(counter.incrementAndGet(), 2, "Lista 4"));
-        this.listas.add(new EventsList(counter.incrementAndGet(), 1, "Lista 5"));
+//    private List<EventsList> listas;
+    public EventsListDAO(Datastore dataStore, UserDAO userDAO) {
+        super(dataStore);
+        userDAO = userDAO;
     }
 
     /**
@@ -32,43 +39,26 @@ public class EventsListDAO {
      * @return list of eventslists
      */
     public List<EventsList> getAllLists() {
-        return listas;
+        Query<EventsList> query = getDatastore().find(EventsList.class);
+        List<EventsList> eventsLists = query.asList();
+        return eventsLists;
     }
 
     /**
-     *
-     * @param id
+     * @param userId
      * @return
      */
-    public List<EventsList> getByUserId(Integer userId) {
-        List<EventsList> results = new ArrayList<EventsList>();
-        results = listas.stream().filter(elem -> elem.getUserId() == userId).collect(Collectors.toList());
+    public List<EventsList> getByUserId(ObjectId userId) {
+        Query<EventsList> query = getDatastore().find(EventsList.class, "userId", userId);
+        List<EventsList> eventsLists = query.asList();
 
-//        for (EventsList e : results) {
-//            System.out.println(e.getNombre()+" - ");
-//        }
-        return results;
+        return eventsLists;
     }
 
     public Boolean addEventToList(EventsList lista, EventBrite evento) {
-        return lista.getEventos().add(evento);
-    }
-
-    /**
-     * Create new EventsList in dummy database. Updates the id and insert new
-     * EventsList in list.
-     *
-     * @param lista EventsList object
-     * @return lista object with updated id
-     */
-    public Long create(String nombre, Integer userId) {
-        EventsList nuevaLista=new EventsList(counter.incrementAndGet(), userId, nombre);
-        if(listas.add(nuevaLista)){
-            return nuevaLista.getId();
-        }else{
-            return 0L;
-        }
-        
+        /*return lista.getEventos().add(new Evento(eventoId));
+        return lista.getEventos().add(new Evento());*/
+        return false;
     }
 
     /**
@@ -78,29 +68,68 @@ public class EventsListDAO {
      * @param id EventsList id
      * @return EventsList object for given id
      */
-    public EventsList getById(Long id) {
-        return listas.stream().filter(elem -> elem.getId().equals(id)).collect(Collectors.toList()).get(0);
+//    public EventsList getById(Long id) {
+//        return listas.stream().filter(elem -> elem.getId().equals(id)).collect(Collectors.toList()).get(0);
+//    }
+    public EventsList getByListaId(ObjectId listaId) {
+        Query<EventsList> query = getDatastore().find(EventsList.class, "listaId", listaId);
+        EventsList eventsLists = query.asList().get(0);
+        return eventsLists;
+    }
+
+    /**
+     * Create new EventsList
+     * Add the list in User object
+     * 
+     * @param nombre String object
+     * @param userId ObjectId object
+     * @return listaId
+     */
+    public EventsList create(String nombre, ObjectId userId) {
+        User user = userDAO.getByUserId(userId);
+
+        if (user == null) {
+            return null;
+        }
+
+        EventsList eventsList = new EventsList(nombre);
+
+//        eventsList.setListaId(1);   //TODO: cómo hacer el id autoincrement
+        eventsList.setUserId(userId);
+        getDatastore().save(eventsList);
+
+        user.setEventsLists(Arrays.asList(eventsList));
+        getDatastore().save(user);
+
+        return eventsList;
     }
 
     /**
      * Delete the EventsList object from dummy database. If EventsList not found
      * for given id, returns null.
      *
-     * @param id the EventsList id
+     * @param listaId ObjectId
      * @return id of deleted EventsList object
      */
-    public Long delete(Long id) {
-
-        for (EventsList e : listas) {
-            if (e.getId().equals(id)) {
-                listas.remove(e);
-                return id;
-            }
-        }
-
-        return null;
+    public WriteResult deleteEventsLists(ObjectId listaId) {
+        WriteResult writeResult = getDatastore().delete(EventsList.class, listaId);
+        return writeResult;
     }
 
+    /**
+     * Return EventsList object for given id from dummy database. If EventsList
+     * is not found for id, returns null.
+     *
+     * @param id EventsList id
+     * @return EventsList object for given id
+     */
+    public EventsList getEventsLists(ObjectId id) {
+        EventsList eventsList = getDatastore().get(EventsList.class, id);
+
+        return eventsList;
+    }
+
+    //TODO persisting for update
     /**
      * Update the EventsList object for given id in dummy database. If
      * EventsList not exists, returns null
@@ -109,7 +138,7 @@ public class EventsListDAO {
      * @param lista
      * @return EventsList object with id
      */
-    public EventsList update(Long id, EventsList lista) {
+    /*public EventsList update(Long id, EventsList lista) {
 
         for (EventsList l : listas) {
             if (l.getId().equals(id)) {
@@ -121,6 +150,5 @@ public class EventsListDAO {
         }
 
         return null;
-    }
-
+    }*/
 }
