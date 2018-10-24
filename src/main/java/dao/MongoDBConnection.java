@@ -27,9 +27,13 @@ public class MongoDBConnection {
                     .connectionsPerHost(4)
                     .maxConnectionIdleTime((60 * 1_000))
                     .maxConnectionLifeTime((120 * 1_000));
-            ;
 
-            MongoClientURI uri = new MongoClientURI("mongodb://localhost:27017", options);
+
+            //local connection
+            /*MongoClientURI uri = new MongoClientURI("mongodb://localhost:27017", options);*/
+
+            // remote connection
+            MongoClientURI uri = new MongoClientURI("mongodb://heroku_7h0pgzxc:n2ch01otcr2dsb2p8vta9hn09h@ds145325.mlab.com:45325/heroku_7h0pgzxc", options);
 
             System.out.println("About to connect to MongoDB @ " + uri.toString());
 
@@ -63,7 +67,7 @@ public class MongoDBConnection {
 
     public Datastore getDatastore() {
         if (dataStore == null) {
-            String dbName = "api_jersey_test";
+            String dbName = "heroku_7h0pgzxc";
             System.out.println("Starting DataStore on DB: %s" + dbName);
             dataStore = getMorphia().createDatastore(getMongo(), dbName);
         }
