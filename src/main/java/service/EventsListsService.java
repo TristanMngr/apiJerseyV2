@@ -11,8 +11,9 @@ public class EventsListsService {
 
     private static ObjectMapper mapper = new ObjectMapper();
 
-    public static String create(String nombre, ObjectId userId) throws JsonProcessingException {
-        EventsList listaCreada = ManagementService.getEventsListDAO().create(nombre, userId);
+    public static String create(String nombre, Integer userId) throws JsonProcessingException {
+        ObjectId userIdObj = new ObjectId(Integer.toHexString(userId));
+        EventsList listaCreada = ManagementService.getEventsListDAO().create(nombre, userIdObj);
         if (listaCreada == null) {
             return "{\"error\":1}";
         }
@@ -20,25 +21,26 @@ public class EventsListsService {
     }
 
     public static String getAllLists() throws JsonProcessingException {
-//        List<EventsList> listas = eventsListDAO.getAllLists();
         return mapper.writeValueAsString(ManagementService.getEventsListDAO().getAllLists());
-//        return jsonInString;
     }
 
-    public static String getByUserId(ObjectId userId) throws JsonProcessingException {
-        return mapper.writeValueAsString(ManagementService.getEventsListDAO().getByUserId(userId));
+    public static String getByUserId(Integer userId) throws JsonProcessingException {
+        ObjectId userIdObj = new ObjectId(Integer.toHexString(userId));
+        return mapper.writeValueAsString(ManagementService.getEventsListDAO().getByUserId(userIdObj));
     }
 
-    public static EventsList getByListaId(ObjectId listaId) {
-        return ManagementService.getEventsListDAO().getByListaId(listaId);
+    public static EventsList getByListaId(Integer listaId) {
+        ObjectId listaIdObj = new ObjectId(Integer.toHexString(listaId));
+        return ManagementService.getEventsListDAO().getByListaId(listaIdObj);
     }
 
     public static Boolean seLlama(EventsList lista, String nombre) {
         return lista.getNombre().equals(nombre);
     }
 
-    public static Boolean addEvent(ObjectId listaId, Long codigoEvento) throws IOException {
-        EventsList lista = ManagementService.getEventsListDAO().getByListaId(listaId);
+    public static Boolean addEvent(Integer listaId, Long codigoEvento) throws IOException {
+        ObjectId listaIdObj = new ObjectId(Integer.toHexString(listaId));
+        EventsList lista = ManagementService.getEventsListDAO().getByListaId(listaIdObj);
         EventBrite evento = EventbriteService.getEventByID(codigoEvento);
         return ManagementService.getEventsListDAO().addEventToList(lista, evento);
     }

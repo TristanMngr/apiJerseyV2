@@ -2,8 +2,6 @@ package controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import java.util.Map;
 import javax.ws.rs.GET;
@@ -15,14 +13,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import dao.EventsListDAO;
-import org.bson.types.ObjectId;
 import service.EventsListsService;
 import service.ManagementService;
-import service.UserService;
-import model.User;
 
-import org.bson.types.ObjectId;
 
 @Path("/eventsLists")
 public class EventsListsController {
@@ -37,7 +30,7 @@ public class EventsListsController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getListsFromUser(@Context UriInfo uriDetails) throws JsonProcessingException {
-        ObjectId userId = new ObjectId(uriDetails.getQueryParameters().get("userId").get(0).toString());
+        Integer userId = Integer.parseInt(uriDetails.getQueryParameters().get("userId").get(0).toString());
         return Response.ok(EventsListsService.getByUserId(userId)).build();
     }
 
@@ -53,7 +46,7 @@ public class EventsListsController {
         Map<String, String> parametros = ManagementService.getPostParams(params);
         String nombreLista = parametros.get("nombreLista");
         System.out.println(nombreLista);
-        ObjectId userId = new ObjectId("1"); //id del usuario logueado TODO: recibirlo por parámetro u obtenerlo del UserService
+        Integer userId = 1;
         return Response.status(201).entity(EventsListsService.create(nombreLista, userId)).build();
     }
 
@@ -63,7 +56,7 @@ public class EventsListsController {
     public Response addEvent(String params) throws IOException {
         Map<String, String> parametros = ManagementService.getPostParams(params);
         Long codigoEvento = Long.parseLong(parametros.get("codigo"));
-        ObjectId listaId = new ObjectId(parametros.get("lista"));
+        Integer listaId=Integer.parseInt(parametros.get("lista"));
         return Response.status(201).entity("{\"error\":" + !(EventsListsService.addEvent(listaId, codigoEvento)) + "}").build();
     }
 
