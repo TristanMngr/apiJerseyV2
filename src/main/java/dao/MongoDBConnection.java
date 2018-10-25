@@ -1,6 +1,8 @@
 package dao;
 
 import model.BaseMongoDO;
+import service.EncryptionServices;
+
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
@@ -33,8 +35,15 @@ public class MongoDBConnection {
             /*MongoClientURI uri = new MongoClientURI("mongodb://localhost:27017", options);*/
 
             // remote connection
-            MongoClientURI uri = new MongoClientURI("mongodb://heroku_7h0pgzxc:n2ch01otcr2dsb2p8vta9hn09h@ds145325.mlab.com:45325/heroku_7h0pgzxc", options);
-
+            
+            String mongoUser = "iktBnbHMqwUsStkwgYpBmw==";
+            String mongoPassword = "axo0aFqgpeH6YdBZhwNcpTL9v6ihSaQQdHASkS+B1UU=";
+            
+            //MongoClientURI uri = new MongoClientURI("mongodb://heroku_7h0pgzxc:n2ch01otcr2dsb2p8vta9hn09h@ds145325.mlab.com:45325/heroku_7h0pgzxc", options);
+            MongoClientURI uri = new MongoClientURI("mongodb://" + 
+            										EncryptionServices.decrypt(mongoUser) + ":" + 
+            										EncryptionServices.decrypt(mongoPassword) +
+            										"@ds145325.mlab.com:45325/heroku_7h0pgzxc", options);
             System.out.println("About to connect to MongoDB @ " + uri.toString());
 
             try {

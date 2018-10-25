@@ -43,9 +43,11 @@ public class LoginService {
 
 	public static String getUser(HttpHeaders headers) {
 		System.out.println("LoginService::getUser");
-		// TODO: Enviar responde sino hay Header.
-		if(headers.getRequestHeader("Authorization") == null)
+		if(headers.getRequestHeader("Authorization") == null) {
 			System.out.println("No hay authentication header");
+			return "";
+		}
+			
 		
 		String auth = headers.getRequestHeader("Authorization").get(0);
 		auth = auth.substring("Basic ".length());
@@ -88,7 +90,7 @@ public class LoginService {
 		String password = UserService.getPassword(httpHeaders);
 		List<User> resultados = ManagementService.getUsersListDAO().getByUsername(userName1);
 		
-		if(resultados.isEmpty()) {
+		if(resultados == null || resultados.isEmpty()) {
 			System.out.println("SessionService::validateUser - Could not find any user");
 			return false;
 		}

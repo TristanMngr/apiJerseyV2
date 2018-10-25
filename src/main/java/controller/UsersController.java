@@ -86,16 +86,23 @@ public class UsersController {
         testListUsers.add(user.getUserName());
         return Response.status(201).entity(result).build();
     }
+   
+    @PermitAll
+	@POST
+	public Response postUserInJSON(@Context HttpHeaders httpHeaders, String data) {
+		System.out.println(this.getClass().getName() + ":: postUserInJSON ...");
+		// TODO: Verificar que el usuario fue creado y evaluar respuesta.
+		User newUser = UserService.create(data, httpHeaders);
 
+		List<User> listado = ManagementService.getUsersListDAO().getListadoUsuarios();
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response postUserInJSON(User user) {
-        System.out.println("Hice un POST");
-        String result = "Track saved : " + user;
-        testListUsers.add("*" + user.getUserName() + "*");
-        return Response.status(201).entity(result).build();
-    }
+		JSONObject obj = new JSONObject();
+		obj.put("OPERATION", "GET");
+		obj.put("URL", "/");
+		
+		Response response = Response.status(201).entity(obj.toString()).build();
+		return response;
+	}
 
 	/*@GET
 	@Produces({MediaType.APPLICATION_JSON})
@@ -132,28 +139,5 @@ public class UsersController {
 		} 
 	}
 
-	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response createUserInJSON(User_Old user) {
-		System.out.println("Hice un PUT");
-		String result = "Track saved : " + user;stListUsers.add(user.getName());
-		return Response.status(201).entity(result).build();		
-	}
-
-	@PermitAll
-	@POST
-	public Response postUserInJSON(@Context HttpHeaders httpHeaders, String data) {
-		System.out.println(this.getClass().getName() + ":: postUserInJSON ...");
-		// TODO: Verificar que el usuario fue creado y evaluar respuesta.
-		User newUser = UserService.create(data, httpHeaders);
-
-		List<User> listado = ManagementService.getUsersListDAO().getListadoUsuarios();
-
-		JSONObject obj = new JSONObject();
-		obj.put("OPERATION", "GET");
-		obj.put("URL", "/");
-		
-		Response response = Response.status(201).entity(obj.toString()).build();
-		return response;
-	}*/
+	*/
 }

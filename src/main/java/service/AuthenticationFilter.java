@@ -25,7 +25,9 @@ import org.glassfish.jersey.server.mvc.Viewable;
 @Provider
 public class AuthenticationFilter implements ContainerRequestFilter
 {
-     
+    
+	private static boolean allowAnonymousUser = false;
+	
     @Context
     private ResourceInfo resourceInfo;
      
@@ -39,7 +41,14 @@ public class AuthenticationFilter implements ContainerRequestFilter
     @Override
     public void filter(ContainerRequestContext requestContext)
     {
-  	
+    	
+    	if(allowAnonymousUser) {
+    		System.out.println(this.getClass().getName() + ":: allowAnonymousUser");
+    		return;
+    	}
+    		
+    	
+    	
     	System.out.println(this.getClass().getName() + ":: filtering ...");
     	System.out.println(this.getClass().getName() + ":: " + requestContext.getMethod().toString() + 
     														" " + requestContext.getUriInfo().getRequestUri());
@@ -69,26 +78,10 @@ public class AuthenticationFilter implements ContainerRequestFilter
                 return;
             }
             
-            boolean found = true;
-            
-            for (Cookie c : requestContext.getCookies().values())
-            {
-                if (c.getName().equals("tokenG5")) {
-                	found = true;
-                    break;
-                }
-            }
-            
-        	if(method.getName().equals("index") && !found) {
-                System.out.println(this.getClass().getName() + ":: Return to login page");
-                Viewable view = new Viewable("/jsp/logon");
-            }
-
             // Validate Session
         	
-        	if(!SessionService.validateSession(requestContext.getCookies()) && !found){
-        		//TODO: Los js no cargan la pagina.
-        		
+        	if(!SessionService.validateSession(requestContext.getCookies())){
+       		
         		System.out.println(this.getClass().getName() + ":: Session couldn't be validated");
         		
         		Viewable view = new Viewable("/jsp/logon");

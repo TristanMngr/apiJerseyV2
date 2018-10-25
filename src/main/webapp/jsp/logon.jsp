@@ -47,8 +47,10 @@
  		    	return true;
 		    },
  		    error: function (req, status, error) {
-		    	alert(error);
-		    	console.log("error");
+		    	alert(req.responseText);
+		    	console.log(req);
+		    	console.log(status);
+		    	console.log(error);
 		    	window.location.reload();
 		    	return true;
 		    }

@@ -21,25 +21,37 @@ public class UsersListDAO {
 		return listadoUsuarios;
 	}
 	
-	public void create(User newUser) {
-        // TODO: Validar que un unico usuario exista.
-		
+	public boolean create(User newUser) {
+	
 		int idUsuario = getListadoUsuarios().size() + 1;
 		newUser.setUserId(idUsuario);
+		
+		List<User> results = getByUsername(newUser.getUserName());
+		if(results.size() != 0)
+        	return false;
+		
 		getListadoUsuarios().add(newUser);
+		
+		results = getByUsername(newUser.getUserName());
+		if(results.size() != 1)
+        	return false;
+		
+		return true;
+		
 	}
 	
     public List<User> getByUsername(String username) {
-        // TODO: Validar que un unico usuario exista.
     	
     	List<User> results = new ArrayList<User>();
         results = listadoUsuarios.stream().filter(elem -> elem.getUserName().equals(username)).collect(Collectors.toList());
+        
+        if(results.size() != 1)
+        	return null;
 
         return results;
     }
     
     public int getUserIdFromUsername(String username) {
-        // TODO: Validar que un unico usuario exista.
     	
     	List<User> results = new ArrayList<User>();
         results = listadoUsuarios.stream().filter(elem -> elem.getUserName().equals(username)).collect(Collectors.toList());
