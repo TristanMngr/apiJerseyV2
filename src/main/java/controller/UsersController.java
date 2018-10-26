@@ -1,8 +1,6 @@
 package controller;
 
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.security.PermitAll;
@@ -18,19 +16,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import model.User;
 import org.bson.types.ObjectId;
-import service.EventsListsService;
+
 import service.UserService;
 import org.json.JSONObject;
-
-import model.User;
-import model.User_Old;
-import service.ManagementService;
-import service.UserService;
 
 @Path("/users")
 public class UsersController {
@@ -92,14 +83,14 @@ public class UsersController {
 	public Response postUserInJSON(@Context HttpHeaders httpHeaders, String data) {
 		System.out.println(this.getClass().getName() + ":: postUserInJSON ...");
 		// TODO: Verificar que el usuario fue creado y evaluar respuesta.
-		User newUser = UserService.create(data, httpHeaders);
-
-		List<User> listado = ManagementService.getUsersListDAO().getListadoUsuarios();
-
-		JSONObject obj = new JSONObject();
-		obj.put("OPERATION", "GET");
-		obj.put("URL", "/");
 		
+		User newUser = UserService.create(data, httpHeaders);
+		if(newUser == null)
+			return Response.status(Response.Status.UNAUTHORIZED).entity("Your user couldn't be created").build();
+		
+        JSONObject obj = new JSONObject();
+		obj.put("OPERATION", "GET");
+		obj.put("URL", "/");	
 		Response response = Response.status(201).entity(obj.toString()).build();
 		return response;
 	}

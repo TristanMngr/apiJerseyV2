@@ -6,20 +6,20 @@ public class Session {
 
 	private Integer sessionID;
 
-	private Integer userId;
+	private String userId;
     private String token;
     private Date lastLogin;
     
-	public Session(Integer userId, String token, Date lastLogin) {
+	public Session(String userId, String token, Date lastLogin) {
 		this.userId = userId;
 		this.token = token;
 		this.lastLogin = lastLogin;
 	}
 	
-	public Integer getUserId() {
+	public String getUserId() {
 		return userId;
 	}
-	public void setUserId(Integer userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 	public String getToken() {

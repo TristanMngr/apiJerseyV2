@@ -20,7 +20,7 @@ public class UserDAO extends BasicDAO<User, ObjectId> {
     }
 
     public User getUserByName(String userName) {
-        Query<User> query = getDatastore().find(User.class, "name", userName);
+        Query<User> query = getDatastore().find(User.class, "userName", userName);
         User        user  = query.asList().get(0);
         return user;
     }

@@ -13,17 +13,14 @@ import java.util.List;
 @Entity("users")
 public class User extends BaseMongoDO {
     private String userName;
-
     private Integer userId;
-
+    private String password;
+    
     @Reference
     private List<EventsList> eventsLists;
 
     @Embedded
     private List<Alarma> alarmas;
-
-    private String password;
-
 
     // TODO change list alarm and event
     public User() {
@@ -32,8 +29,10 @@ public class User extends BaseMongoDO {
     }
 
     public User(String userName, String password) {
-        this.userName = userName;
-        this.password = password;
+    	this.setUserName(userName);
+    	this.setPassword(password);
+    	this.setAlarmas(Arrays.asList(new Alarma(), new Alarma()));
+    	this.setEventos(eventsLists);
     }
 
     public User(ObjectId objectId, String userName, String password) {

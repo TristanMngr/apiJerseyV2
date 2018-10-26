@@ -1,7 +1,6 @@
 package service;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.core.Cookie;
@@ -13,21 +12,17 @@ public class SessionService {
 	public static boolean createSession(String username, String token) {
 		
 		System.out.println("SessionService::createSession");
-		List<User> resultados = ManagementService.getUsersListDAO().getByUsername(username);
+		User user = ManagementService.getUserDAO().getUserByName(username);
 		
-		if(resultados.isEmpty()) {
+		if(user == null ) {
 			System.out.println("SessionService::createSession - Could not find any user");
 			return false;
 		}
 			
-		
-		if(resultados.size() == 1) {
-			int userID = resultados.get(0).getUserId();
-			Session sesion = new Session(userID,token, new Date());
-			ManagementService.getSessionListDAO().create(sesion);
-			return true;
-		}
-		return false;
+		String userID = user.getId().toString();
+		Session sesion = new Session(userID,token, new Date());
+		ManagementService.getSessionListDAO().create(sesion);
+		return true;
 	}
 
 	public static boolean validateSession(Map<String, Cookie> cookies) {
@@ -58,9 +53,9 @@ public class SessionService {
         	return false;
         }   
         
-        int userId = ManagementService.getUsersListDAO().getUserIdFromUsername(userFromCookie);
+        User user = ManagementService.getUserDAO().getUserByName(userFromCookie);
         
-        if(userId == -1)
+        if(user == null)
         {
         	System.out.println("SessionService::validateSession - No user found");
         }
@@ -70,7 +65,7 @@ public class SessionService {
         for(int i = 0; i < ManagementService.getSessionListDAO().getListadoSesiones().size() ; i++) {
         	
         	Session sesion =  ManagementService.getSessionListDAO().getListadoSesiones().get(i);
-        	if(sesion.getToken().equals(tokenFromCookie) && sesion.getUserId() == userId) {
+        	if(sesion.getToken().equals(tokenFromCookie) && sesion.getUserId().equals(user.getId().toString())) {
         		found = true;
         	}
         	

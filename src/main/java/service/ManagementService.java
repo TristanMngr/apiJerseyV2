@@ -4,9 +4,6 @@ import dao.EventsListDAO;
 import dao.MongoDBConnection;
 import dao.UserDAO;
 import dao.SessionListDAO;
-import dao.UsersListDAO;
-import model.Session;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +17,6 @@ public class ManagementService {
 
     public static EventsListDAO eventsListsDAO;
     public static UserDAO userDAO;
-    public static UsersListDAO usersListDAO;
     public static SessionListDAO listadoSesiones;
 
     public static void createDAOs() {
@@ -28,7 +24,6 @@ public class ManagementService {
 
         userDAO = new UserDAO(conn.getDatastore());
         eventsListsDAO = new EventsListDAO(conn.getDatastore(), userDAO);
-        usersListDAO = new UsersListDAO();
         listadoSesiones = new SessionListDAO();
     }
 
@@ -38,10 +33,6 @@ public class ManagementService {
 
     public static EventsListDAO getEventsListDAO() {
         return eventsListsDAO;
-    }
-
-    public static UsersListDAO getUsersListDAO() {
-        return usersListDAO;
     }
 
     public static UserDAO getUserDAO() {

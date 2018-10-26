@@ -21,6 +21,8 @@ public class MongoDBConnection {
     private Morphia morphia = null;
 
     private MongoDBConnection() {}
+    
+    private static boolean useLocalDB = false;
 
     public MongoClient getMongo() throws RuntimeException {
         if (mongo == null) {
@@ -31,19 +33,26 @@ public class MongoDBConnection {
                     .maxConnectionLifeTime((120 * 1_000));
 
 
-            //local connection
-            /*MongoClientURI uri = new MongoClientURI("mongodb://localhost:27017", options);*/
-
+            MongoClientURI uri;
+            if(useLocalDB) {
+            	 uri = new MongoClientURI("mongodb://localhost:27017", options);
+            }
+            else
+            {
+                String mongoUser = "iktBnbHMqwUsStkwgYpBmw==";
+                String mongoPassword = "axo0aFqgpeH6YdBZhwNcpTL9v6ihSaQQdHASkS+B1UU=";
+                
+                //MongoClientURI uri = new MongoClientURI("mongodb://heroku_7h0pgzxc:n2ch01otcr2dsb2p8vta9hn09h@ds145325.mlab.com:45325/heroku_7h0pgzxc", options);
+                uri = new MongoClientURI("mongodb://" + 
+                										EncryptionServices.decrypt(mongoUser) + ":" + 
+                										EncryptionServices.decrypt(mongoPassword) +
+                										"@ds145325.mlab.com:45325/heroku_7h0pgzxc", options);
+            }
+                     
+            
             // remote connection
             
-            String mongoUser = "iktBnbHMqwUsStkwgYpBmw==";
-            String mongoPassword = "axo0aFqgpeH6YdBZhwNcpTL9v6ihSaQQdHASkS+B1UU=";
-            
-            //MongoClientURI uri = new MongoClientURI("mongodb://heroku_7h0pgzxc:n2ch01otcr2dsb2p8vta9hn09h@ds145325.mlab.com:45325/heroku_7h0pgzxc", options);
-            MongoClientURI uri = new MongoClientURI("mongodb://" + 
-            										EncryptionServices.decrypt(mongoUser) + ":" + 
-            										EncryptionServices.decrypt(mongoPassword) +
-            										"@ds145325.mlab.com:45325/heroku_7h0pgzxc", options);
+
             System.out.println("About to connect to MongoDB @ " + uri.toString());
 
             try {
@@ -75,7 +84,9 @@ public class MongoDBConnection {
     }
 
     public Datastore getDatastore() {
-        if (dataStore == null) {
+        //TODO: Why do we have this Horrible DBName? :)
+    	
+    	if (dataStore == null) {
             String dbName = "heroku_7h0pgzxc";
             System.out.println("Starting DataStore on DB: %s" + dbName);
             dataStore = getMorphia().createDatastore(getMongo(), dbName);

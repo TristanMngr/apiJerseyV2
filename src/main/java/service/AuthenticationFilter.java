@@ -10,7 +10,6 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
@@ -26,7 +25,7 @@ import org.glassfish.jersey.server.mvc.Viewable;
 public class AuthenticationFilter implements ContainerRequestFilter
 {
     
-	private static boolean allowAnonymousUser = false;
+	private static boolean allowAnonymousUser = true;
 	
     @Context
     private ResourceInfo resourceInfo;

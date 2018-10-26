@@ -37,10 +37,11 @@ public class UserService {
     
     public static User create(String data, HttpHeaders headers) {
         System.out.println("UserService::create");
+        // TODO: Confirm if user can be created. We are not checking unique username
         JSONObject json     = new JSONObject(data);
         String     userName = json.getString("username");
         User       newUser  = new User(userName, getPassword(headers));
-        ManagementService.getUsersListDAO().create(newUser);
+        ManagementService.getUserDAO().save(newUser);
         return newUser;
     }
 

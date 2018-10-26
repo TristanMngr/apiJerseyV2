@@ -2,7 +2,6 @@ package service;
 
 import java.nio.charset.Charset;
 import java.security.SecureRandom;
-import java.util.List;
 import java.util.Set;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -86,24 +85,21 @@ public class LoginService {
 			return false;
 		}
 			
-		
 		String password = UserService.getPassword(httpHeaders);
-		List<User> resultados = ManagementService.getUsersListDAO().getByUsername(userName1);
+		User user = ManagementService.getUserDAO().getUserByName(userName1);
 		
-		if(resultados == null || resultados.isEmpty()) {
+		if(user == null) {
 			System.out.println("SessionService::validateUser - Could not find any user");
 			return false;
 		}
-			
 		
-		if(resultados.size() == 1)
-			if(resultados.get(0).getPassword().equals(password))
-				return true;
-
-		for (User user : resultados) {
-			System.out.println(user.getUserName());
+		if(!user.getPassword().equals(password))
+		{
+			System.out.println("SessionService::validateUser - Password does not match");
+			return false;
 		}
-		return false;
+			
+		return true;
 	}
 
 	
