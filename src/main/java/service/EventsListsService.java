@@ -2,58 +2,47 @@ package service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eventbrite.EventBrite;
 import java.io.IOException;
+import java.util.List;
 import model.EventsList;
+import model.User;
 import org.bson.types.ObjectId;
 
 public class EventsListsService {
 
     private static ObjectMapper mapper = new ObjectMapper();
 
-    public static String create(String nombre, Integer userId) throws JsonProcessingException {
-        ObjectId userIdObj = new ObjectId(Integer.toHexString(userId));
-        EventsList listaCreada = ManagementService.getEventsListDAO().create(nombre, userIdObj);
-        if (listaCreada == null) {
-            return "{\"error\":1}";
-        }
-        return "{\"error\":0,\"lista\":" + mapper.writeValueAsString(listaCreada) + "}";
+    public static String create(String nombre, String userId) throws JsonProcessingException {
+        EventsList listaCreada = new EventsList(userId, nombre);
+        ManagementService.getEventsListDAO().create(listaCreada);
+        User user = UserService.addListToUser(listaCreada, userId);
+        return "{\"error\":0,\"lista\":" + mapper.writeValueAsString(listaCreada) + ",\"user\":" + mapper.writeValueAsString(user) + "}";
     }
 
     public static String getAllLists() throws JsonProcessingException {
         return mapper.writeValueAsString(ManagementService.getEventsListDAO().getAllLists());
     }
 
-    public static String getByUserId(Integer userId) throws JsonProcessingException {
-        ObjectId userIdObj = new ObjectId(Integer.toHexString(userId));
-        return mapper.writeValueAsString(ManagementService.getEventsListDAO().getByUserId(userIdObj));
+    public static String getByUserId(String userId) throws JsonProcessingException {
+        return mapper.writeValueAsString(UserService.getUserObjectById(userId));
     }
 
-    public static EventsList getByListaId(Integer listaId) {
-        ObjectId listaIdObj = new ObjectId(Integer.toHexString(listaId));
-        return ManagementService.getEventsListDAO().getByListaId(listaIdObj);
+    public static EventsList getByListaId(String listaId) {
+        return ManagementService.getEventsListDAO().getByListaId(new ObjectId(listaId));
     }
 
     public static Boolean seLlama(EventsList lista, String nombre) {
         return lista.getNombre().equals(nombre);
     }
 
-    public static Boolean addEvent(Integer listaId, Long codigoEvento) throws IOException {
-        ObjectId listaIdObj = new ObjectId(Integer.toHexString(listaId));
-        EventsList lista = ManagementService.getEventsListDAO().getByListaId(listaIdObj);
-        EventBrite evento = EventbriteService.getEventByID(codigoEvento);
-        return ManagementService.getEventsListDAO().addEventToList(lista, evento);
+    public static Boolean addEvent(String listaId, Long codigoEvento) throws IOException {
+        EventsList lista = ManagementService.getEventsListDAO().getByListaId(new ObjectId(listaId));
+//        EventBrite evento = EventbriteService.getEventByID(codigoEvento);
+        List<Long> events = lista.getEvents();
+        events.add(codigoEvento);
+        lista.setEvents(events);
+        ManagementService.getEventsListDAO().saveEventToList(lista, events);
+        return true;
     }
 
-    /**
-     * busca los datos de los eventos según el código y arma el objeto lisa
-     * completo con esos datos
-     *
-     * @param EventsList lista
-     * @return EventsList listaArmada
-     */
-//    private static EventsList armarListaEventos(EventsList lista) {
-//        lista.getEventos().stream().map(codigo -> EventbriteService.getEventByID(codigo.toString()));
-//
-//    }
 }

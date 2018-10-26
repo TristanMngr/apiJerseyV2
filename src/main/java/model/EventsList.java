@@ -7,56 +7,51 @@ import org.mongodb.morphia.annotations.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.mongodb.morphia.annotations.Reference;
 
 @Entity("eventsLists")
 public class EventsList extends BaseMongoDO {
 
-    private ObjectId listaId;
     private String nombre;
-    private ObjectId userId;
 
-    @Embedded
-    private List<EventBrite> events = new ArrayList<EventBrite>();
+    @Reference
+    private String user;
+
+    @Reference
+    private List<Long> events = new ArrayList<Long>();
 
     public EventsList() {
     }
 
-    public EventsList(String nombre) {
+    public EventsList(String user, String nombre) {
         this.nombre = nombre;
+        this.user = user;
     }
 
-    public EventsList(ObjectId userId, String nombre, List<EventBrite> listEvents) {
-        this.userId = userId;
+    public EventsList(String user, String nombre, List<Long> listEvents) {
         this.nombre = nombre;
+        this.user = user;
         this.events = listEvents;
     }
 
-    public EventsList(List<EventBrite> listEvents) {
+    public EventsList(List<Long> listEvents) {
         this.events = listEvents;
     }
 
-    public ObjectId  getListaId() {
-        return listaId;
-    }
-
-    public void setListaId(ObjectId  listaId) {
-        this.listaId = listaId;
-    }
-
-    public List<EventBrite> getEvents() {
+    public List<Long> getEvents() {
         return events;
     }
 
-    public void setEvents(List<EventBrite> events) {
+    public void setEvents(List<Long> events) {
         this.events = events;
     }
 
-    public ObjectId getUserId() {
-        return userId;
+    public String getUserId() {
+        return user;
     }
 
-    public void setUserId(ObjectId userId) {
-        this.userId = userId;
+    public void setUserId(String user) {
+        this.user = user;
     }
 
     public String getNombre() {

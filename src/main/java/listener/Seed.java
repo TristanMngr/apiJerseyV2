@@ -14,37 +14,40 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Seed {
+
     {
         System.out.println("SEED database");
 
-        MongoDBConnection conn      = MongoDBConnection.getInstance();
-        Datastore         datastore = conn.getDatastore();
+        MongoDBConnection conn = MongoDBConnection.getInstance();
+        Datastore datastore = conn.getDatastore();
+        
+        String userOneId="5bcbba1743b244dd134d6f44";
+        String userTwoId="5bcbba1743b244dd134d6f45";
+        String userThreeId="5bcbba1743b244dd134d6f46";
+        String userFourId="5bcbba1743b244dd134d6f47";
+        String userFiveId="5bcbba1743b244dd134d6f48";
 
-
-        User userOne = new User(new ObjectId("5bcbba1743b244dd134d6f44"), "Christhian", "password");
-        User userTwo = new User(new ObjectId("5bcbba1743b244dd134d6f45"), "Gille", "password");
-        User userThree = new User(new ObjectId("5bcbba1743b244dd134d6f46"), "Francisco", "password");
-        User userFour = new User(new ObjectId("5bcbba1743b244dd134d6f47"), "Juan", "password");
-        User userFive = new User(new ObjectId("5bcbba1743b244dd134d6f48"),"Tristan", "password");
+        User userOne = new User(new ObjectId(userOneId), "Christhian", "password");
+        User userTwo = new User(new ObjectId(userTwoId), "Gille", "password");
+        User userThree = new User(new ObjectId(userThreeId), "Francisco", "password");
+        User userFour = new User(new ObjectId(userFourId), "Juan", "password");
+        User userFive = new User(new ObjectId(userFiveId), "Tristan", "password");
 
 //        Evento eventOne   = new Evento("ATLANTA'S", "5b281078cc5815bc2e5a5b2a","eventOne");
 //        Evento eventTwo   = new Evento("Georgetown Glow","5b281078cc5815bc2e5a5b2b","eventTwo");
 //        Evento eventThree = new Evento("AllStar Weekend Party", "5b281078cc5815bc2e5a5b2c","eventThree");
-
         Alarma alarmaOne = new Alarma("alarmaOne");
         Alarma alarmaTwo = new Alarma("alarmaTwo");
         Alarma alarmaTree = new Alarma("alarmaTree");
 
-
-        EventsList eventsListOne = new EventsList(new ObjectId("5bcbba1743b244dd134d6f44"),"listOne", Arrays.asList());
-        EventsList eventListTwo = new EventsList(new ObjectId("5bcbba1743b244dd134d6f44"), "listTwo", Arrays.asList());
-        EventsList eventListThree = new EventsList(new ObjectId("5bcbba1743b244dd134d6f45"), "listThree", Arrays.asList());
-        EventsList eventListFour = new EventsList(new ObjectId("5bcbba1743b244dd134d6f45"), "listFour", Arrays.asList());
-        EventsList eventsListFive = new EventsList(new ObjectId("5bcbba1743b244dd134d6f46"),"listOne", Arrays.asList());
-        EventsList eventsListSix = new EventsList(new ObjectId("5bcbba1743b244dd134d6f47"),"listOne", Arrays.asList());
-        EventsList eventsListSeven = new EventsList(new ObjectId("5bcbba1743b244dd134d6f48"),"listOne", Arrays.asList());
-        EventsList eventsListEight = new EventsList(new ObjectId("5bcbba1743b244dd134d6f48"),"listOne", Arrays.asList());
-
+        EventsList eventsListOne = new EventsList(userOneId,"listOne", Arrays.asList());
+        EventsList eventListTwo = new EventsList(userOneId, "listTwo", Arrays.asList());
+        EventsList eventListThree = new EventsList(userTwoId, "listThree", Arrays.asList());
+        EventsList eventListFour = new EventsList(userTwoId, "listFour", Arrays.asList());
+        EventsList eventsListFive = new EventsList(userThreeId,"listOne", Arrays.asList());
+        EventsList eventsListSix = new EventsList(userFourId,"listOne", Arrays.asList());
+        EventsList eventsListSeven = new EventsList(userFiveId,"listOne", Arrays.asList());
+        EventsList eventsListEight = new EventsList(userFiveId,"listOne", Arrays.asList());
 
         List<EventsList> eventsLists = new ArrayList<>();
         eventsLists.add(eventsListOne);

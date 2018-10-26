@@ -7,6 +7,7 @@ import org.bson.types.ObjectId;
 
 import java.util.List;
 import javax.ws.rs.core.HttpHeaders;
+import model.EventsList;
 
 import org.json.JSONObject;
 import model.User;
@@ -34,13 +35,13 @@ public class UserService {
     public static String getAllUsers() throws JsonProcessingException {
         return mapper.writeValueAsString(ManagementService.getUserDAO().getAllUsers());
     }
-    
+
     public static User create(String data, HttpHeaders headers) {
         System.out.println("UserService::create");
         // TODO: Confirm if user can be created. We are not checking unique username
-        JSONObject json     = new JSONObject(data);
-        String     userName = json.getString("username");
-        User       newUser  = new User(userName, getPassword(headers));
+        JSONObject json = new JSONObject(data);
+        String userName = json.getString("username");
+        User newUser = new User(userName, getPassword(headers));
         ManagementService.getUserDAO().save(newUser);
         return newUser;
     }
@@ -49,10 +50,27 @@ public class UserService {
         System.out.println("UserService::getPassword");
 
         List<String> list = headers.getRequestHeader("Authorization");
-        String       auth = headers.getRequestHeader("Authorization").get(0);
+        String auth = headers.getRequestHeader("Authorization").get(0);
         auth = auth.substring("Basic ".length());
 
         return auth;
     }
-}
 
+    public static User getUserObjectById(String userId) {
+        return ManagementService.getUserDAO().getByUserId(new ObjectId(userId));
+    }
+
+    public static List<EventsList> getListsByUser(String userId) {
+        User user = getUserObjectById(userId);
+        return user.getEventsLists();
+    }
+
+    public static User addListToUser(EventsList list, String userId) {
+        User user = getUserObjectById(userId);
+        List<EventsList> lists = getListsByUser(userId);
+        lists.add(list);
+        user.setEventsLists(lists);
+        ManagementService.getUserDAO().saveEventsListsToUser(new ObjectId(userId), lists);
+        return user;
+    }
+}
