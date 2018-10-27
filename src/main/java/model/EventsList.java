@@ -7,21 +7,20 @@ import org.mongodb.morphia.annotations.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.mongodb.morphia.annotations.Reference;
 
 @Entity("eventsLists")
 public class EventsList extends BaseMongoDO {
 
     private String nombre;
 
-    @Reference
+//    @Reference
     private String user;
 
-    @Reference
+//    @Reference
     private List<Long> events = new ArrayList<Long>();
-
-    public EventsList() {
-    }
+    private String hexId="";
+    
+    public EventsList(){};
 
     public EventsList(String user, String nombre) {
         this.nombre = nombre;
@@ -31,10 +30,6 @@ public class EventsList extends BaseMongoDO {
     public EventsList(String user, String nombre, List<Long> listEvents) {
         this.nombre = nombre;
         this.user = user;
-        this.events = listEvents;
-    }
-
-    public EventsList(List<Long> listEvents) {
         this.events = listEvents;
     }
 
@@ -60,6 +55,14 @@ public class EventsList extends BaseMongoDO {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getHexId() {
+        return hexId;
+    }
+
+    public void setHexId(String hexId) {
+        this.hexId = hexId;
     }
 
 }

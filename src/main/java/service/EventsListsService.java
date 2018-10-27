@@ -24,7 +24,9 @@ public class EventsListsService {
     }
 
     public static String getByUserId(String userId) throws JsonProcessingException {
-        return mapper.writeValueAsString(UserService.getUserObjectById(userId));
+        User user=UserService.getUserObjectById(userId);
+        user.getEventsLists().stream().forEach(list->buildHexId(list));
+        return mapper.writeValueAsString(user);
     }
 
     public static EventsList getByListaId(String listaId) {
@@ -43,6 +45,11 @@ public class EventsListsService {
         lista.setEvents(events);
         ManagementService.getEventsListDAO().saveEventToList(lista, events);
         return true;
+    }
+    
+    private static EventsList buildHexId(EventsList list){
+        list.setHexId(list.getId().toHexString());
+        return list;
     }
 
 }

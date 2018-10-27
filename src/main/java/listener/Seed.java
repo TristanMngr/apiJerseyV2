@@ -28,7 +28,7 @@ public class Seed {
         String userFiveId="5bcbba1743b244dd134d6f48";
 
         User userOne = new User(new ObjectId(userOneId), "Christhian", "password");
-        User userTwo = new User(new ObjectId(userTwoId), "Gille", "password");
+        User userTwo = new User(new ObjectId(userTwoId), "Guille", "password");
         User userThree = new User(new ObjectId(userThreeId), "Francisco", "password");
         User userFour = new User(new ObjectId(userFourId), "Juan", "password");
         User userFive = new User(new ObjectId(userFiveId), "Tristan", "password");

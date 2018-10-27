@@ -13,7 +13,7 @@ function appendDomLista(lista) {
     ////
     var cardHeader = document.createElement('div');
     cardHeader.setAttribute('class', 'card-header');
-    cardHeader.setAttribute('id', 'heading_' + lista.id);
+    cardHeader.setAttribute('id', 'heading_' + lista.hexId);
     card.appendChild(cardHeader);
     ////
     var h5 = document.createElement('h5');
@@ -23,16 +23,16 @@ function appendDomLista(lista) {
     var buttonCollapse = document.createElement('button');
     buttonCollapse.setAttribute('class', 'btn btn-link collapsed');
     buttonCollapse.setAttribute('data-toggle', 'collapse');
-    buttonCollapse.setAttribute('data-target', '#collapse_' + lista.id);
+    buttonCollapse.setAttribute('data-target', '#collapse_' + lista.hexId);
     buttonCollapse.setAttribute('aria-expanded', 'false');
-    buttonCollapse.setAttribute('aria-controls', 'collapse_' + lista.id);
+    buttonCollapse.setAttribute('aria-controls', 'collapse_' + lista.hexId);
     buttonCollapse.appendChild(document.createTextNode(lista.nombre));
     h5.appendChild(buttonCollapse);
     ////
     var cardCollapse = document.createElement('div');
-    cardCollapse.setAttribute('id', 'collapse_' + lista.id);
+    cardCollapse.setAttribute('id', 'collapse_' + lista.hexId);
     cardCollapse.setAttribute('class', 'collapse');
-    cardCollapse.setAttribute('aria-labelledby', 'heading_' + lista.id);
+    cardCollapse.setAttribute('aria-labelledby', 'heading_' + lista.hexId);
     cardCollapse.setAttribute('data-parent', '#accordion');
     card.appendChild(cardCollapse);
     ////
@@ -57,11 +57,11 @@ function getUserLists() {
         type: "GET",
         asynchronous: false,
         data: {
-            userId: "1",
+            userId: "5bcbba1743b244dd134d6f44",
         },
         complete: function (response) {
             var dataRecibida = $.parseJSON(response.responseText);
-            $.each(dataRecibida, function (_, lista) {
+            $.each(dataRecibida.eventsLists, function (_, lista) {
                 appendDomLista(lista);
             });
         }
