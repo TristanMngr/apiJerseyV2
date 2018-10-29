@@ -1,29 +1,42 @@
 package dao;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
+
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.dao.BasicDAO;
+import org.mongodb.morphia.query.Query;
 
 import model.Session;
+import model.User;
 
-public class SessionListDAO {
-    private final AtomicLong counter = new AtomicLong();
+public class SessionListDAO extends BasicDAO<Session, ObjectId> {
 
-    private List<Session> listadoSesiones;
-
-    {
-    	listadoSesiones = new ArrayList<Session>();
+	public SessionListDAO(Datastore ds) {
+		super(ds);
+	}
+	
+    public Session getSessionByName(String userName) {  	
+        Query<Session> query = getDatastore().find(Session.class, "userName", userName);
+        Session session = query.asList().get(0);
+        return session;
     }
 
-	public List<Session> getListadoSesiones() {
-		return listadoSesiones;
-	}
-    
-	public void create(Session newSession) {
-		int idSession = getListadoSesiones().size() + 1;
-		newSession.setSessionID(idSession);
-		getListadoSesiones().add(newSession);
+	public List<Session>  getSessionsByUser(User user) {
+		Query<Session> query = getDatastore().find(Session.class, "user", user);
+		
+		return query.asList();
+
 	}
 	
-	
+	public Session  getSessionByUserWithToken(User user, String token) {
+		Query<Session> query = getDatastore().find(Session.class, "user", user);
+		query.criteria("tokenG5").equals(token);
+		
+		Session session = query.asList().get(0);
+		
+		return session;
+
+	}
+		
 }

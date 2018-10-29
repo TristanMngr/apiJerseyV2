@@ -19,9 +19,8 @@ public class SessionService {
 			return false;
 		}
 			
-		String userID = user.getId().toString();
-		Session sesion = new Session(userID,token, new Date());
-		ManagementService.getSessionListDAO().create(sesion);
+		Session sesion = new Session(user,token, new Date());
+		ManagementService.getSessionListDAO().save(sesion);
 		return true;
 	}
 
@@ -61,18 +60,18 @@ public class SessionService {
         }
         
         boolean found = false;
-        
-        for(int i = 0; i < ManagementService.getSessionListDAO().getListadoSesiones().size() ; i++) {
-        	
-        	Session sesion =  ManagementService.getSessionListDAO().getListadoSesiones().get(i);
-        	if(sesion.getToken().equals(tokenFromCookie) && sesion.getUserId().equals(user.getId().toString())) {
-        		found = true;
-        	}
-        	
-        	// TODO: Remove previous sessions
-        	
-        }
-        
+//        List<Session> sesiones =  ManagementService.getSessionListDAO().getSessionsByUser(user);
+//        
+//		for (final Session sesion : sesiones) {
+//	        if(sesion.getToken().equals(tokenFromCookie))  
+//    		{
+//	        	found = true;
+//    		}
+//		}
+		
+		Session session = ManagementService.getSessionListDAO().getSessionByUserWithToken(user, tokenFromCookie);
+		if(session != null)
+			found = true;
 		
 		return found;
 	}

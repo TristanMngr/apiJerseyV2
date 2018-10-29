@@ -10,7 +10,6 @@ import javax.ws.rs.core.HttpHeaders;
 import model.EventsList;
 
 import org.json.JSONObject;
-import model.User;
 
 public class UserService {
 

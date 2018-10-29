@@ -1,6 +1,5 @@
 package dao;
 
-import java.util.Arrays;
 import model.User;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
@@ -9,7 +8,6 @@ import org.mongodb.morphia.query.Query;
 
 import java.util.List;
 import model.EventsList;
-import org.bson.Document;
 import org.mongodb.morphia.query.UpdateOperations;
 import org.mongodb.morphia.query.UpdateResults;
 
@@ -26,9 +24,12 @@ public class UserDAO extends BasicDAO<User, ObjectId> {
     }
 
     public User getUserByName(String userName) {
+    	
         Query<User> query = getDatastore().find(User.class, "userName", userName);
-        User user = query.asList().get(0);
-        return user;
+        List<User> listado = query.asList();
+        if(listado != null && !listado.isEmpty())
+        	return listado.get(0);
+        return null;
     }
 
     public List<User> getAllUsers() {

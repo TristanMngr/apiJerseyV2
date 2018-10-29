@@ -24,7 +24,7 @@ public class ManagementService {
 
         userDAO = new UserDAO(conn.getDatastore());
         eventsListsDAO = new EventsListDAO(conn.getDatastore(), userDAO);
-        listadoSesiones = new SessionListDAO();
+        listadoSesiones = new SessionListDAO(conn.getDatastore());
     }
 
     public static SessionListDAO getSessionListDAO() {
