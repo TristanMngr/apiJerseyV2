@@ -5,6 +5,11 @@ $(document).ready(function () {
         $(this).attr('disabled', true);
         crearLista();
     });
+
+    $(document).on('click', ".btnDeleteList", function () {
+        var listaId = $(this).data('hexid');
+        deleteList(listaId);
+    });
 });
 
 function appendDomLista(lista) {
@@ -29,6 +34,15 @@ function appendDomLista(lista) {
     buttonCollapse.appendChild(document.createTextNode(lista.nombre));
     h5.appendChild(buttonCollapse);
     ////
+    var buttonDelete = document.createElement('button');
+    buttonDelete.setAttribute('class', 'btn btn-sm btn-danger btnDeleteList float-right');
+    buttonDelete.setAttribute('data-hexid', lista.hexId);
+    var icon = document.createElement('i');
+    icon.setAttribute('class', 'fas fa-trash-alt');
+//    icon.setAttribute('style', 'font-size: 20px;');
+    buttonDelete.appendChild(icon);
+    h5.appendChild(buttonDelete);
+    ////
     var cardCollapse = document.createElement('div');
     cardCollapse.setAttribute('id', 'collapse_' + lista.hexId);
     cardCollapse.setAttribute('class', 'collapse');
@@ -38,7 +52,8 @@ function appendDomLista(lista) {
     ////
     var cardBody = document.createElement('div');
     cardBody.setAttribute('class', 'card-body');
-    $.each(lista.eventos, function (_, evento) {
+    $.each(lista.eventsObj, function (_, eventoJson) {
+        var evento = $.parseJSON(eventoJson);
         var h6Evento = document.createElement('h6');
         h6Evento.setAttribute('class', 'evento');
         h6Evento.appendChild(document.createTextNode(evento.id + ' - ' + evento.name.text + ' - ' + evento.start.local));
@@ -52,7 +67,27 @@ function appendDomLista(lista) {
     $("#accordion").append(card);
 }
 
+function deleteList(listaId) {
+    $(".imgLoader").removeClass('displayNone');
+    $.ajax("/eventsLists/delete", {
+        type: "POST",
+        asynchronous: false,
+        data: {
+            listaId: listaId,
+        },
+        complete: function (response) {
+            var dataRecibida = $.parseJSON(response.responseText);
+            if (!dataRecibida.error) {
+                $("#heading_" + listaId).parent().remove();
+            }
+            $(".imgLoader").addClass('displayNone');
+        }
+    });
+    return false;
+}
+
 function getUserLists() {
+    $(".imgLoader").removeClass('displayNone');
     $.ajax("/eventsLists/getFromUser", {
         type: "GET",
         asynchronous: false,
@@ -64,6 +99,7 @@ function getUserLists() {
             $.each(dataRecibida.eventsLists, function (_, lista) {
                 appendDomLista(lista);
             });
+            $(".imgLoader").addClass('displayNone');
         }
     });
     return false;
@@ -87,12 +123,6 @@ function crearLista() {
             $("button").attr('disabled', false);
             $(".btnDismiss").click();
             $(".imgLoader").addClass('displayNone');
-
-
-
-
-//            $("#subPageContainer").remove();
-//            $("main").load("/html/listas/index.html");
         }
     });
     return false;

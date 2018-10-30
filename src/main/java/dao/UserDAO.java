@@ -1,5 +1,6 @@
 package dao;
 
+import com.mongodb.WriteResult;
 import model.User;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
@@ -24,11 +25,12 @@ public class UserDAO extends BasicDAO<User, ObjectId> {
     }
 
     public User getUserByName(String userName) {
-    	
+
         Query<User> query = getDatastore().find(User.class, "userName", userName);
         List<User> listado = query.asList();
-        if(listado != null && !listado.isEmpty())
-        	return listado.get(0);
+        if (listado != null && !listado.isEmpty()) {
+            return listado.get(0);
+        }
         return null;
     }
 
@@ -42,5 +44,11 @@ public class UserDAO extends BasicDAO<User, ObjectId> {
         Query<User> querySearch = getDatastore().find(User.class, "id", userId);
         UpdateOperations<User> updateOps = getDatastore().createUpdateOperations(User.class).set("eventsLists", lists);
         return getDatastore().updateFirst(querySearch, updateOps);
+    }
+
+    public UpdateResults removeEventsListFromUser(ObjectId userId, EventsList list) {
+        Query<User> querySearch = getDatastore().find(User.class, "id", userId);
+        UpdateOperations<User> updateOps = getDatastore().createUpdateOperations(User.class).removeAll("eventsLists", list);
+        return getDatastore().update(querySearch, updateOps);
     }
 }

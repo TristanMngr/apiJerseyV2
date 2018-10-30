@@ -145,13 +145,13 @@ function armarSelectListasEventos() {
     $.ajax("/eventsLists/getFromUser", {
         type: "GET",
         data: {
-            userId: 1,
+            userId: "5bcbba1743b244dd134d6f45",     //TODO getUserLogged()
         },
         asynchronous: false,
         complete: function (response) {
             var dataRecibida = $.parseJSON(response.responseText);
-            $.each(dataRecibida, function (key, valor) {
-                $("select#modalSelectListas").append('<option value="' + valor.id + '">' + valor.nombre + '</option>');
+            $.each(dataRecibida.eventsLists, function (_, lista) {
+                $("select#modalSelectListas").append('<option value="' + lista.hexId + '">' + lista.nombre + '</option>');
             });
         }
     });
@@ -161,7 +161,7 @@ function armarSelectListasEventos() {
 function crearLista() {
     $(".imgLoader").removeClass('displayNone');
     var nombreLista = $("#nombreLista").val();
-    $.ajax("/eventsLists/crearLista", {
+    $.ajax("/eventsLists/create", {
         type: "POST",
         data: {
             'nombreLista': nombreLista,

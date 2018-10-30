@@ -19,6 +19,8 @@ import service.ManagementService;
 @Path("/eventsLists")
 public class EventsListsController {
 
+    private final String loggedUser="5bcbba1743b244dd134d6f45"; //TODO getUserLogged()
+    
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response getAllLists() throws JsonProcessingException {
@@ -30,8 +32,7 @@ public class EventsListsController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getListsFromUser(@Context UriInfo uriDetails) throws JsonProcessingException {
         String userId = uriDetails.getQueryParameters().get("userId").get(0);
-        System.out.println(userId);
-//        String userId = "5bcbba1743b244dd134d6f44";
+        userId = this.loggedUser;
         return Response.ok(EventsListsService.getByUserId(userId)).build();
     }
 
@@ -46,8 +47,7 @@ public class EventsListsController {
     public Response crearLista(String params) throws JsonProcessingException {
         Map<String, String> parametros = ManagementService.getPostParams(params);
         String nombreLista = parametros.get("nombreLista");
-        System.out.println(nombreLista);
-        String userId = "5bcbba1743b244dd134d6f44";
+        String userId = this.loggedUser;
         return Response.status(201).entity(EventsListsService.create(nombreLista, userId)).build();
     }
 
@@ -59,6 +59,16 @@ public class EventsListsController {
         Long codigoEvento = Long.parseLong(parametros.get("codigo"));
         String listaId = parametros.get("lista");
         return Response.status(201).entity("{\"error\":" + !(EventsListsService.addEvent(listaId, codigoEvento)) + "}").build();
+    }
+    
+    @Path("/delete")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteList(String params) throws JsonProcessingException {
+        Map<String, String> parametros = ManagementService.getPostParams(params);
+        String listaId = parametros.get("listaId");
+        String userId = this.loggedUser;
+        return Response.status(201).entity(EventsListsService.deleteList(listaId, userId)).build();
     }
 
 }

@@ -14,22 +14,23 @@ public class EventsList extends BaseMongoDO {
     private String nombre;
 
 //    @Reference
-    private String user;
+//    private ObjectId user;
 
 //    @Reference
     private List<Long> events = new ArrayList<Long>();
-    private String hexId="";
+    private List<String> eventsObj = new ArrayList<String>();
+    private String hexId;
     
     public EventsList(){};
 
     public EventsList(String user, String nombre) {
         this.nombre = nombre;
-        this.user = user;
+//        this.user = new ObjectId(user);
     }
 
     public EventsList(String user, String nombre, List<Long> listEvents) {
         this.nombre = nombre;
-        this.user = user;
+//        this.user = new ObjectId(user);
         this.events = listEvents;
     }
 
@@ -41,13 +42,13 @@ public class EventsList extends BaseMongoDO {
         this.events = events;
     }
 
-    public String getUserId() {
-        return user;
-    }
-
-    public void setUserId(String user) {
-        this.user = user;
-    }
+//    public ObjectId getUserId() {
+//        return user;
+//    }
+//
+//    public void setUserId(ObjectId user) {
+//        this.user = user;
+//    }
 
     public String getNombre() {
         return nombre;
@@ -65,4 +66,13 @@ public class EventsList extends BaseMongoDO {
         this.hexId = hexId;
     }
 
+    public List<String> getEventsObj() {
+        return eventsObj;
+    }
+
+    public void setEventsObj(List<String> eventsObj) {
+        this.eventsObj = eventsObj;
+    }
+
+    
 }
