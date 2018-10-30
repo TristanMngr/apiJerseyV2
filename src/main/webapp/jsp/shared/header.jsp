@@ -70,7 +70,10 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-text navbar-right">
-      				<li><%=UserName%></li> 
+      				<%-- <li><%=UserName%></li>  --%>
+      				<li class="nav-item">
+                        <a href="/logout"><%=UserName%></a>
+                    </li>
     			</ul>
             </div>
             

@@ -60,20 +60,19 @@ public class SessionService {
         }
         
         boolean found = false;
-//        List<Session> sesiones =  ManagementService.getSessionListDAO().getSessionsByUser(user);
-//        
-//		for (final Session sesion : sesiones) {
-//	        if(sesion.getToken().equals(tokenFromCookie))  
-//    		{
-//	        	found = true;
-//    		}
-//		}
 		
 		Session session = ManagementService.getSessionListDAO().getSessionByUserWithToken(user, tokenFromCookie);
 		if(session != null)
 			found = true;
 		
 		return found;
+	}
+
+	public static void deleteSession(String username, String token) {
+		User user = ManagementService.getUserDAO().getUserByName(username);
+		ManagementService.getSessionListDAO().deleteSessionByUserWithToken(user, token);
+		
+		
 	}
 
 }

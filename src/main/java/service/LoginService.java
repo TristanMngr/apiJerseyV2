@@ -2,8 +2,10 @@ package service;
 
 import java.nio.charset.Charset;
 import java.security.SecureRandom;
+import java.util.Map;
 import java.util.Set;
 
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 import javax.xml.bind.DatatypeConverter;
 
@@ -40,10 +42,10 @@ public class LoginService {
 		return generatedString;   	
 	}
 
-	public static String getUser(HttpHeaders headers) {
+	public static String getUserFromHeaders(HttpHeaders headers) {
 		System.out.println("LoginService::getUser");
 		if(headers.getRequestHeader("Authorization") == null) {
-			System.out.println("No hay authentication header");
+			System.out.println("LoginService::getUser - No hay authentication header");
 			return "";
 		}
 			
@@ -54,6 +56,49 @@ public class LoginService {
 		String[] values = new String(DatatypeConverter.parseBase64Binary(auth), Charset.forName("ASCII")).split(":");
 
 		return values[0];
+	}
+	
+	public static String getUserFromCookie(Map<String, Cookie> cookies) {
+	
+		System.out.println("LoginService::getUserFromCookie");
+		String userFromCookie = "";
+
+        for (Cookie c : cookies.values()) 
+        {
+            if (c.getName().equals("username")) {
+            	userFromCookie = c.getValue();
+            	break;
+            }
+        }
+        
+        if(userFromCookie.equals(""))
+        {
+        	System.out.println("SessionService::validateSession - username not present in the cookie");
+        	return "";
+        }  
+		
+		return userFromCookie;
+	}
+	
+	public static String getTokenFromCookie(Map<String, Cookie> cookies) {
+		System.out.println("LoginService::getUserFromCookie");
+		String tokenFromCookie = "";
+
+        for (Cookie c : cookies.values()) 
+        {
+            if (c.getName().equals("tokenG5")) {
+            	tokenFromCookie = c.getValue();
+            	break;
+            }
+        }
+        
+        if(tokenFromCookie.equals(""))
+        {
+        	System.out.println("SessionService::validateSession - TokenG5 not present in the cookie");
+        	return "";
+        }  
+		
+		return tokenFromCookie;
 	}
 
 	static boolean isUserAllowed(final String username, final String password, final Set<String> rolesSet)
@@ -78,7 +123,7 @@ public class LoginService {
 		System.out.println("LoginService::validateUser");
 		JSONObject json = new JSONObject(data);
 		String userName1 = json.getString("username");
-		String userName2 = LoginService.getUser(httpHeaders);
+		String userName2 = LoginService.getUserFromHeaders(httpHeaders);
 		if(!userName1.equals(userName2))
 		{
 			System.out.println("SessionService::validateUser - User on Header is not the same provided on Body");
@@ -101,6 +146,8 @@ public class LoginService {
 			
 		return true;
 	}
+
+
 
 	
 }

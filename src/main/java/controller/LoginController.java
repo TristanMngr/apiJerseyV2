@@ -17,7 +17,6 @@ import javax.ws.rs.core.Response;
 
 import service.LoginService;
 import service.SessionService;
-import service.UserService;
 
 @Path("/login")
 public class LoginController {
@@ -41,7 +40,7 @@ public class LoginController {
 		calendar.add(Calendar.HOUR_OF_DAY, 1);
 		Date nuevaFecha = calendar.getTime();
 
-		String username = LoginService.getUser(httpHeaders);
+		String username = LoginService.getUserFromHeaders(httpHeaders);
 		
 		System.out.println(this.getClass().getName() + ":: username = " + username);
 		

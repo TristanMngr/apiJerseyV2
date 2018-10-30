@@ -30,12 +30,26 @@ public class SessionListDAO extends BasicDAO<Session, ObjectId> {
 	}
 	
 	public Session  getSessionByUserWithToken(User user, String token) {
-		Query<Session> query = getDatastore().find(Session.class, "user", user);
-		query.criteria("tokenG5").equals(token);
+		Query<Session> query = getDatastore().find(Session.class, "user", user).filter("token = " , token);
 		
-		Session session = query.asList().get(0);
+		List<Session> listado = query.asList();
+        if(listado != null && !listado.isEmpty())
+        	return listado.get(0);
 		
-		return session;
+		return null;
+
+	}
+	
+	public void deleteSessionByUserWithToken(User user, String token) {
+		Query<Session> query = getDatastore().find(Session.class, "user", user).filter("token = " , token);
+		Session sesion;
+		
+		List<Session> listado = query.asList();
+        if(listado != null && !listado.isEmpty()) {
+        	getDatastore().delete(query);
+        }
+		
+		return;
 
 	}
 		
