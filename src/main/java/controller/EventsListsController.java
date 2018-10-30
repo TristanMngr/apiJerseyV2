@@ -47,6 +47,7 @@ public class EventsListsController {
     public Response crearLista(String params) throws JsonProcessingException {
         Map<String, String> parametros = ManagementService.getPostParams(params);
         String nombreLista = parametros.get("nombreLista");
+        nombreLista=nombreLista.replace("+", " ");
         String userId = this.loggedUser;
         return Response.status(201).entity(EventsListsService.create(nombreLista, userId)).build();
     }

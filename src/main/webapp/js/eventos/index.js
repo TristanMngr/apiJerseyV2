@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+alert("ss");
     armarSelectCategorias();
 
     armarSelectListasEventos();
@@ -142,10 +142,11 @@ function formatEventBriteDate(date) {
 }
 
 function armarSelectListasEventos() {
+    $(".imgLoader").removeClass('displayNone');
     $.ajax("/eventsLists/getFromUser", {
         type: "GET",
         data: {
-            userId: "5bcbba1743b244dd134d6f45",     //TODO getUserLogged()
+            userId: "5bcbba1743b244dd134d6f45", //TODO getUserLogged()
         },
         asynchronous: false,
         complete: function (response) {
@@ -153,6 +154,7 @@ function armarSelectListasEventos() {
             $.each(dataRecibida.eventsLists, function (_, lista) {
                 $("select#modalSelectListas").append('<option value="' + lista.hexId + '">' + lista.nombre + '</option>');
             });
+            $(".imgLoader").addClass('displayNone');
         }
     });
     return false;
@@ -189,7 +191,7 @@ function crearLista() {
 
 function agregarEventoEnLista() {
     $("#btnSubmitAgregarEvento").attr('disabled', true);
-//    $(".imgLoader").removeClass('displayNone');
+    $(".imgLoader").removeClass('displayNone');
     var codigo = $("#modalCodigoEvento").val();
     var lista = $("select#modalSelectListas").find(":selected").val();
     $.ajax("/eventsLists/addEvent", {

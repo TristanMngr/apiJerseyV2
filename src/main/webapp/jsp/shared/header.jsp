@@ -33,14 +33,15 @@
             URL += ":" + request.getLocalPort();
         }
         Cookie[] cookies = request.getCookies();
-        
-        if(cookies !=null){
-        for(Cookie cookie : cookies){
-         if(cookie.getName().equals("username")) 
-        	 UserName = cookie.getValue();
-        	}
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("username")) {
+                    UserName = cookie.getValue();
+                }
+            }
         }
-        
+
     %>
     <body>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
@@ -70,12 +71,13 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-text navbar-right">
-      				<%-- <li><%=UserName%></li>  --%>
-      				<li class="nav-item">
+                    <%-- <li><%=UserName%></li>  --%>
+                    <li class="nav-item">
                         <a href="/logout"><%=UserName%></a>
                     </li>
-    			</ul>
+                </ul>
             </div>
-            
+
         </nav>
+        <img src="/images/loading.gif" class="imgLoader displayNone" />
         <main role="main">
