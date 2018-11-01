@@ -21,6 +21,7 @@ public class SessionService {
 			
 		Session sesion = new Session(user,token, new Date());
 		ManagementService.getSessionListDAO().save(sesion);
+		ManagementService.getUserDAO().updateLastLogin(username);
 		return true;
 	}
 

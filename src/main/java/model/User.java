@@ -6,6 +6,7 @@ import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Reference;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 
@@ -14,6 +15,7 @@ public class User extends BaseMongoDO {
     private String userName;
     private Integer userId;
     private String password;
+    private Date lastLogin;
     
     @Reference
     private List<EventsList> eventsLists;
@@ -40,11 +42,11 @@ public class User extends BaseMongoDO {
         this.setId(objectId);
     }
 
-    public User(String string) {
-        this.userName = string;
-        this.setAlarmas(Arrays.asList(new Alarma(), new Alarma()));
-        this.setPassword("password");
-    }
+//    public User(String string) {
+//        this.userName = string;
+//        this.setAlarmas(Arrays.asList(new Alarma(), new Alarma()));
+//        this.setPassword("password");
+//    }
 
     public Integer getUserId() {
         return userId;
@@ -89,4 +91,12 @@ public class User extends BaseMongoDO {
     public void setPassword(String password) {
         this.password = password;
     }
+
+	public Date getLastLogin() {
+		return lastLogin;
+	}
+
+	public void setLastLogin(Date lastLogin) {
+		this.lastLogin = lastLogin;
+	}
 }

@@ -60,6 +60,13 @@
 
                         </div>
                     </li>
+					<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdownAdmin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administrador</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownAdmin">
+                            <a class="dropdown-item linkReload" data-loadhtml="admin/index.html" href="#">Check Usuario</a>
+                            <a class="dropdown-item " href="/users">Get All Users</a>
+                        </div>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link btnMenuPrincipal" href="/users">Usuarios</a>
                     </li>
@@ -70,10 +77,12 @@
                         </div>
                     </li>
                 </ul>
-                <ul class="nav navbar-text navbar-right">
-                    <%-- <li><%=UserName%></li>  --%>
-                    <li class="nav-item">
-                        <a href="/logout"><%=UserName%></a>
+                <ul class="navbar-nav navbar-right">
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdownOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%=UserName%></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownOptions">
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
                     </li>
                 </ul>
             </div>

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import model.User;
 import org.bson.types.ObjectId;
 
+import java.util.Date;
 import java.util.List;
 import javax.ws.rs.core.HttpHeaders;
 import model.EventsList;
@@ -41,6 +42,7 @@ public class UserService {
         JSONObject json = new JSONObject(data);
         String userName = json.getString("username");
         User newUser = new User(userName, getPassword(headers));
+        newUser.setLastLogin(new Date());
         ManagementService.getUserDAO().save(newUser);
         return newUser;
     }

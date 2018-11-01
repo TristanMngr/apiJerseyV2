@@ -1,12 +1,12 @@
 package dao;
 
-import com.mongodb.WriteResult;
 import model.User;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.dao.BasicDAO;
 import org.mongodb.morphia.query.Query;
 
+import java.util.Date;
 import java.util.List;
 import model.EventsList;
 import org.mongodb.morphia.query.UpdateOperations;
@@ -51,4 +51,13 @@ public class UserDAO extends BasicDAO<User, ObjectId> {
         UpdateOperations<User> updateOps = getDatastore().createUpdateOperations(User.class).removeAll("eventsLists", list);
         return getDatastore().update(querySearch, updateOps);
     }
+
+
+	public void updateLastLogin(String username) {
+		System.out.println(this.getClass().getName() + "::updateLastLogin");
+		Query<User> query = getDatastore().find(User.class, "userName", username);
+		UpdateOperations<User> updateOps = getDatastore().createUpdateOperations(User.class).set("lastLogin", new Date());
+		getDatastore().update(query, updateOps);
+		return;
+	}
 }
