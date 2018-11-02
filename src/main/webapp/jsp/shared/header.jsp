@@ -64,6 +64,7 @@
                         <a class="nav-link dropdown-toggle" href="#" id="dropdownAdmin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administrador</a>
                         <div class="dropdown-menu" aria-labelledby="dropdownAdmin">
                             <a class="dropdown-item linkReload" data-loadhtml="admin/index.html" href="#">Check Usuario</a>
+                            <a class="dropdown-item linkReload" data-loadhtml="admin/CompareList.html" href="#">Comparar Listas</a>
                             <a class="dropdown-item " href="/users">Get All Users</a>
                         </div>
                     </li>

@@ -1,0 +1,66 @@
+<div id="subPageContainer">
+    <h1 class="display-3 text-center">Comparador de Listas</h1>
+    <hr/>
+    <div class="col-12">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label for="usuarios" class="col-md-3 col-form-label">Usuario 1</label>
+                    <div class="col-md-9">
+                        <select class="form-control" id="usuarios1" name="usuarios">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+				<div class="form-group row notCodigo">
+                    <label for="listas" class="col-md-3 col-form-label">Listas Usuario 1</label>
+                    <div class="col-md-9">
+                        <select class="form-control" id="listas1" name="listas">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+				<div class="form-group row">
+                    <label for="usuarios" class="col-md-3 col-form-label">Usuario 2</label>
+                    <div class="col-md-9">
+                        <select class="form-control" id="usuarios2" name="usuarios">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row notCodigo">
+                    <label for="listas" class="col-md-3 col-form-label">Listas Usuario 2</label>
+                    <div class="col-md-9">
+                        <select class="form-control" id="listas2" name="listas">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <button type="button" id="btnSubmitBuscarEventos" class="btn btn-info">Buscar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 table-responsive">
+                <table id="eventosEncontrados" class="table table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Inicio</th>
+                            <th>Fin</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/admin/CompareList.js"></script>
+
+</div>
