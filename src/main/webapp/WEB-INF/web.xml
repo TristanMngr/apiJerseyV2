@@ -30,7 +30,7 @@
 		</filter>
 		
 		<listener>
-    			<listener-class>controller.LoadConfigurationListener</listener-class>
+    			<listener-class>listener.LoadConfigurationListener</listener-class>
 		</listener>
 		
 		<filter-mapping>

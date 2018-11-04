@@ -8,8 +8,6 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
 
-import controller.UsersController;
-
 public class EventbriteApiTest extends JerseyTest {
 
 	@Override
@@ -23,5 +21,12 @@ public class EventbriteApiTest extends JerseyTest {
 		String myKey = System.getenv("EVENTBRITE_KEY");
 		assertNotEquals(null, myKey);
 		assertNotEquals("", myKey);
+	}
+	
+	@Test
+	public void testgetAllCategories() {
+		String allCategories = EventbriteService.getAllCategories();
+		System.out.println(allCategories);
+		assertNotEquals(allCategories, "");
 	}
 }

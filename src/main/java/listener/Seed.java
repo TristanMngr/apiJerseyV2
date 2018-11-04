@@ -2,7 +2,6 @@ package listener;
 
 import dao.MongoDBConnection;
 import model.Alarma;
-import model.Evento;
 import model.EventsList;
 import model.User;
 import org.bson.types.ObjectId;
