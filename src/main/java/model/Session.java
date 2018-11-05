@@ -10,7 +10,6 @@ public class Session extends BaseMongoDO {
 
 	private Integer sessionID;
 
-	private String userId;
     private String token;
     private Date lastLogin;
     @Reference
@@ -30,24 +29,13 @@ public class Session extends BaseMongoDO {
 		this.user = user;
 	}
 
-	public Session(String userId, String token, Date lastLogin) {
-		this.userId = userId;
-		this.token = token;
-		this.lastLogin = lastLogin;
-	}
-	
+
 	public Session(User user2, String token2, Date lastLogin2) {
 		this.user = user2;
 		this.token = token2;
 		this.lastLogin = lastLogin2;
 	}
 
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
 	public String getToken() {
 		return token;
 	}

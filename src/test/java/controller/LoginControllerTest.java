@@ -16,11 +16,13 @@ public class LoginControllerTest extends JerseyTest {
 
 	@Override
 	protected Application configure() {
-		return new ResourceConfig(LoginController.class);
+		ResourceConfig config = new ResourceConfig();
+		config.packages("controller");
+		return config;
 	}
 
 	@Test
-	public void testLogin() {
+	public void testLoginFailure() {
 		
 		JSONObject json = new JSONObject();
 		json.put("username", "test");

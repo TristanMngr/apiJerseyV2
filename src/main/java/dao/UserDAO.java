@@ -25,11 +25,12 @@ public class UserDAO extends BasicDAO<User, ObjectId> {
     }
 
     public User getUserByName(String userName) {
-
+    	System.out.println(this.getClass().getName() + ":: getUserByName");
         Query<User> query = getDatastore().find(User.class, "userName", userName);
         List<User> listado = query.asList();
+        
         if (listado != null && !listado.isEmpty()) {
-            return listado.get(0);
+        	return listado.get(0);
         }
         return null;
     }

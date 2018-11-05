@@ -12,7 +12,9 @@ import java.util.List;
 
 @Entity("users")
 public class User extends BaseMongoDO {
-    private String userName;
+    // TODO: Agregar flag admin
+	
+	private String userName;
     private Integer userId;
     private String password;
     private Date lastLogin;

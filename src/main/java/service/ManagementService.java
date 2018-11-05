@@ -20,7 +20,8 @@ public class ManagementService {
     public static SessionListDAO listadoSesiones;
 
     public static void createDAOs() {
-        MongoDBConnection conn = MongoDBConnection.getInstance();
+    	System.out.println("ManagementService::createDAOs");
+    	MongoDBConnection conn = MongoDBConnection.getInstance();
 
         userDAO = new UserDAO(conn.getDatastore());
         eventsListsDAO = new EventsListDAO(conn.getDatastore(), userDAO);
@@ -36,6 +37,12 @@ public class ManagementService {
     }
 
     public static UserDAO getUserDAO() {
+    	System.out.println("ManagementService::getUserDAO");
+    	
+    	if(userDAO == null)
+    		System.out.println("ManagementService::getUserDAO will return null");
+    	
+    	
         return userDAO;
     }
 

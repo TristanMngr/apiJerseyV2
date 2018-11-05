@@ -65,6 +65,8 @@
                         <div class="dropdown-menu" aria-labelledby="dropdownAdmin">
                             <a class="dropdown-item linkReload" data-loadhtml="admin/index.html" href="#">Check Usuario</a>
                             <a class="dropdown-item linkReload" data-loadhtml="admin/CompareList.html" href="#">Comparar Listas</a>
+                            <a class="dropdown-item linkReload" data-loadhtml="admin/EventsCheck.html" href="#">Buscar Eventos</a>
+                            <a class="dropdown-item linkReload" data-loadhtml="admin/Events.html" href="#">Dashboard Eventos</a>
                             <a class="dropdown-item " href="/users">Get All Users</a>
                         </div>
                     </li>
