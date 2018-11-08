@@ -143,6 +143,8 @@ public class LoginService {
 			System.out.println("SessionService::validateUser - Password does not match");
 			return false;
 		}
+
+		EventbriteService.getEventsSinceLastConnexion(user);
 			
 		return true;
 	}

@@ -22,7 +22,7 @@ public class MongoDBConnection {
 
     private MongoDBConnection() {}
     
-    private static boolean useLocalDB = false;
+    private static boolean useLocalDB = true;
 
     public MongoClient getMongo() throws RuntimeException {
         if (mongo == null) {

@@ -15,8 +15,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
+import service.EventbriteService;
 import service.LoginService;
 import service.SessionService;
+import service.EventsListsService;
 
 @Path("/login")
 public class LoginController {
@@ -51,9 +53,9 @@ public class LoginController {
 		NewCookie usernameCookie = new NewCookie("username", username, "/", null, 0, "", MAX_AGE, nuevaFecha, false, false);
 		
 		SessionService.createSession(username,token);
-		
-		
-		Response response = Response.seeOther(URI.create("/")).cookie(tokenCookie).cookie(usernameCookie).build(); 
+
+
+		Response response = Response.seeOther(URI.create("/")).cookie(tokenCookie).cookie(usernameCookie).build();
 		return response;
 		
 

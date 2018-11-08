@@ -74,4 +74,5 @@ public class UserService {
         ManagementService.getUserDAO().saveEventsListsToUser(new ObjectId(userId), lists);
         return user;
     }
+
 }

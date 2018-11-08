@@ -5,7 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import eventbrite.EventBrite;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -14,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
+import model.User;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.filter.LoggingFilter;
 
@@ -108,7 +113,27 @@ public class EventbriteService {
         } else {
             return "";
         }
+    }
 
+    public static String getEventsSinceLastConnexion(User user) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR_OF_DAY, 1);
+        Date dateToday = calendar.getTime();
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+        Map<String, String> paramsEventBrite = new HashMap<>();
+        paramsEventBrite.put("fechaDesde", df.format(user.getLastLogin()));
+        paramsEventBrite.put("fechaHasta", df.format(dateToday));
+
+        System.out.println(paramsEventBrite.get("fechaDesde"));
+        System.out.println(paramsEventBrite.get("fechaHasta"));
+
+        String events = getEventsByParams(paramsEventBrite);
+        System.out.println("here are the events");
+        System.out.println(events);
+        System.out.println("ENDS Events");
+        return events;
     }
 
 }
