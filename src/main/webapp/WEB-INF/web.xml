@@ -29,10 +29,6 @@
 
 		</filter>
 		
-		<listener>
-    			<listener-class>listener.LoadConfigurationListener</listener-class>
-		</listener>
-		
 		<filter-mapping>
 			<filter-name>Jersey</filter-name>
 		    <url-pattern>/*</url-pattern>

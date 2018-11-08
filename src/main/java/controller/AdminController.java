@@ -2,6 +2,8 @@ package controller;
 
 import java.util.List;
 
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -15,10 +17,12 @@ import org.json.JSONObject;
 import model.User;
 import service.ManagementService;
 
+//@DeclareRoles({"ADMIN"})
 @Path("/admin")
 public class AdminController {
 
 	@Path("/users")
+	//@RolesAllowed("ADMIN")
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getUsers() {
@@ -40,9 +44,10 @@ public class AdminController {
 	
 	@Path("/users/{userID}")
 	@GET
+	//@RolesAllowed("ADMIN")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getUser(@PathParam("userID") String name) {
-
+		System.out.println(this.getClass().getName() + ":: AdminController getUser");
 		User user = ManagementService.getUserDAO().getUserByName(name);
 
 		JSONObject obj = new JSONObject();

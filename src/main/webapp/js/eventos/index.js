@@ -1,5 +1,4 @@
 $(document).ready(function () {
-alert("ss");
     armarSelectCategorias();
 
     armarSelectListasEventos();

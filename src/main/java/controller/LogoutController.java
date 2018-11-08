@@ -16,6 +16,7 @@ import service.SessionService;
 
 @Path("/logout")
 public class LogoutController {
+	
 	@PermitAll
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)

@@ -24,6 +24,7 @@ public class User extends BaseMongoDO {
 
     @Embedded
     private List<Alarma> alarmas;
+	private String role;
 
     // TODO change list alarm and event
     public User() {
@@ -36,6 +37,7 @@ public class User extends BaseMongoDO {
     	this.setPassword(password);
     	this.setAlarmas(Arrays.asList(new Alarma(), new Alarma()));
     	this.setEventos(eventsLists);
+    	this.role = "USER";
     }
 
     public User(ObjectId objectId, String userName, String password) {
@@ -100,5 +102,13 @@ public class User extends BaseMongoDO {
 
 	public void setLastLogin(Date lastLogin) {
 		this.lastLogin = lastLogin;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 }
