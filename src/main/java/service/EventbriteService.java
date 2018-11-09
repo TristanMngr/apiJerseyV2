@@ -4,11 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eventbrite.EventBrite;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -21,6 +23,8 @@ import model.Alarm;
 import model.User;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.filter.LoggingFilter;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 //EVENTBRITE KEY: Q2U3MHJELN4VOBCARDUQ - NO BORRAR QUE LA NECESITO PARA BUSCAR DESDE LA WEB DE EVENTBRITE (GUILLE)
 public class EventbriteService {
@@ -116,9 +120,10 @@ public class EventbriteService {
         }
     }
 
-    public static String getEventsSinceLastConnexion(User user) {
+    public static List<EventBrite> getEventsSinceLastConnexion(User user) throws IOException {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String events = "";
+        List<EventBrite> eventBriteList = new ArrayList<>();
 
         Map<String, String> paramsEventBrite = new HashMap<>();
         for (Alarm alarm : user.getAlarms()) {
@@ -132,9 +137,17 @@ public class EventbriteService {
         }
 
 
-        System.out.println("here");
-        System.out.println(paramsEventBrite);
-        System.out.println("here<");
+        JSONObject jsonObj = new JSONObject(events);
+        JSONArray jsonEvents = (JSONArray) jsonObj.get("events");
+
+        for (Object event : jsonEvents) {
+            EventBrite eventBrite = new EventBrite();
+            eventBrite = mapper.readValue(event.toString(), EventBrite.class);
+            System.out.println(eventBrite.getId());
+            eventBriteList.add(eventBrite);
+        }
+
+
 
 
         /*System.out.println("Hashmap>>");
@@ -148,6 +161,6 @@ public class EventbriteService {
 
         String events = response.readEntity(String.class);
         System.out.println(events);*/
-        return events;
+        return eventBriteList;
     }
 }

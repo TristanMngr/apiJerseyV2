@@ -25,7 +25,7 @@ import org.glassfish.jersey.server.mvc.Viewable;
 public class AuthenticationFilter implements ContainerRequestFilter
 {
     
-	private static boolean allowAnonymousUser = false;
+	private static boolean allowAnonymousUser = true;
 	
     @Context
     private ResourceInfo resourceInfo;

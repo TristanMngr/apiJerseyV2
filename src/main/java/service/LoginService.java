@@ -144,7 +144,8 @@ public class LoginService {
 			return false;
 		}
 
-		EventbriteService.getEventsSinceLastConnexion(user);
+		// TODO to uncomment
+		/*EventbriteService.getEventsSinceLastConnexion(user);*/
 			
 		return true;
 	}
