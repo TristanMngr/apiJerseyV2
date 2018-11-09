@@ -21,7 +21,7 @@ public class UserService {
         if (user == null) {
             return null;
         }
-        return mapper.writeValueAsString(ManagementService.getUserDAO().getByUserId(objectId));
+        return mapper.writeValueAsString(user);
     }
 
     public static String getUserByName(String userName) throws JsonProcessingException {

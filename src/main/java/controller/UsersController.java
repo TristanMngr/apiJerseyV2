@@ -20,6 +20,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import model.User;
 import org.bson.types.ObjectId;
 
+import service.AlarmService;
+import service.ManagementService;
 import service.UserService;
 import org.json.JSONObject;
 
@@ -50,7 +52,7 @@ public class UsersController {
         ObjectId userObjectId = new ObjectId(userId);
         String user = UserService.getUserById(userObjectId);
         if (user != null) {
-            return  Response.ok(UserService.getUserById(userObjectId)).build();
+            return  Response.ok(user).build();
         } else {
             return Response.status(404).entity("User: " + userId + " not found!").build();
         }
@@ -94,6 +96,19 @@ public class UsersController {
 		Response response = Response.status(201).entity(obj.toString()).build();
 		return response;
 	}
+
+    @Path("{userId}/alarms")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getAlarmsFromUser(@PathParam("userId") String userId) throws JsonProcessingException {
+        ObjectId userObjectId = new ObjectId(userId);
+        User user = ManagementService.getUserDAO().getByUserId(userObjectId);
+        if (user != null) {
+            return  Response.ok().entity(AlarmService.getAlarmsFromUser(user)).build();
+        } else {
+            return Response.status(404).entity("User: " + userId + " not found!").build();
+        }
+    }
 
 	/*@GET
 	@Produces({MediaType.APPLICATION_JSON})

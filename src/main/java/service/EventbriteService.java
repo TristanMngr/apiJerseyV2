@@ -3,12 +3,11 @@ package service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eventbrite.EventBrite;
+
 import java.io.IOException;
 import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import javax.ws.rs.client.Client;
@@ -18,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
+import model.Alarm;
 import model.User;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.filter.LoggingFilter;
@@ -56,8 +56,8 @@ public class EventbriteService {
      * @return
      */
     public static String getJsonEventByID(String eventID) {
-        WebTarget service = getWebTargetService("events");
-        Response response = service.path(eventID).queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
+        WebTarget service  = getWebTargetService("events");
+        Response  response = service.path(eventID).queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
         if (response.getStatus() != 404) {
             return response.readEntity(String.class);
         } else {
@@ -65,19 +65,20 @@ public class EventbriteService {
         }
     }
 
-    public static EventBrite getEventByID(Long codigoEvento) throws JsonProcessingException,IOException {
+    public static EventBrite getEventByID(Long codigoEvento) throws JsonProcessingException, IOException {
         String eventoJson = getJsonEventByID(codigoEvento.toString());
         return mapper.readValue(eventoJson, EventBrite.class);
     }
 
     /* ****************** Categorías ************************* */
     public static String getAllCategories() {
-        WebTarget service = getWebTargetService("categories");
-        Response response = service.queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
+        WebTarget service  = getWebTargetService("categories");
+        Response  response = service.queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
         return response.readEntity(String.class);
     }
 
     /* *********************** métodos auxiliares ********************** */
+
     /**
      * formatea el json agregando: {"pagination": {"object_count": 18,
      * "page_number": 1, "page_size": 50, "page_count": 1, "has_more_items":
@@ -93,7 +94,7 @@ public class EventbriteService {
 
     private static WebTarget getWebTargetService(String baseElement) {
         ClientConfig config = new ClientConfig();
-        Client client = ClientBuilder.newClient(config);
+        Client       client = ClientBuilder.newClient(config);
         client.register(new LoggingFilter());
         WebTarget service = client.target(getBaseURI(baseElement));
         return service;
@@ -103,8 +104,8 @@ public class EventbriteService {
         return UriBuilder.fromUri("https://www.eventbriteapi.com/v3/" + baseElement + "/").build();
     }
 
-    private static String getAppKey() {       
-    	return EncryptionServices.decrypt("YVOWlcdl36bCvwcaUy8QWbdEQ8cyGKorBRAd3I5dinM=");
+    private static String getAppKey() {
+        return EncryptionServices.decrypt("YVOWlcdl36bCvwcaUy8QWbdEQ8cyGKorBRAd3I5dinM=");
     }
 
     private static String completeStringDatetime(String date) {
@@ -116,24 +117,37 @@ public class EventbriteService {
     }
 
     public static String getEventsSinceLastConnexion(User user) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR_OF_DAY, 1);
-        Date dateToday = calendar.getTime();
-
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String events = "";
 
         Map<String, String> paramsEventBrite = new HashMap<>();
-        paramsEventBrite.put("fechaDesde", df.format(user.getLastLogin()));
-        paramsEventBrite.put("fechaHasta", df.format(dateToday));
+        for (Alarm alarm : user.getAlarms()) {
+            for (String key : alarm.getParamsEventBrite().keySet()) {
+                paramsEventBrite.put(key, alarm.getParamsEventBrite().get(key));
+            }
+            paramsEventBrite.put("fechaDesde", df.format(user.getLastLogin()));
+            paramsEventBrite.put("fechaHasta", "");
+            events += getEventsByParams(paramsEventBrite);
+            paramsEventBrite = new HashMap<>();
+        }
 
-        System.out.println(paramsEventBrite.get("fechaDesde"));
-        System.out.println(paramsEventBrite.get("fechaHasta"));
 
-        String events = getEventsByParams(paramsEventBrite);
-        System.out.println("here are the events");
-        System.out.println(events);
-        System.out.println("ENDS Events");
+        System.out.println("here");
+        System.out.println(paramsEventBrite);
+        System.out.println("here<");
+
+
+        /*System.out.println("Hashmap>>");
+        System.out.println(paramsEventBrite);
+        System.out.println("Hashmap<<");
+
+        WebTarget service = getWebTargetService("events/search");
+        Response response = service
+                .queryParam("start_date.range_start", completeStringDatetime(paramsEventBrite.get("fechaDesde")))
+                .queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
+
+        String events = response.readEntity(String.class);
+        System.out.println(events);*/
         return events;
     }
-
 }
