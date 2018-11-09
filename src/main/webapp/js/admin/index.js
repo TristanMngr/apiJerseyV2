@@ -13,6 +13,11 @@ function mostrarUsuarios() {
     	url: "/admin/users/" + nombre, 
         type: "GET",
         asynchronous: false,
+        error: function (req, status, error) {
+            alert(req.responseText);
+            window.location.reload();
+            return true;
+        },
         complete: function (response) {
             var dataRecibida = $.parseJSON(response.responseText);
             $.each(dataRecibida, function (key, valor) {

@@ -32,4 +32,6 @@ public class LoginControllerTest extends JerseyTest {
 		assertEquals(401, response.getStatus());
 	}
 	
+	
+	
 }

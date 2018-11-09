@@ -92,13 +92,13 @@
                                 <div class="form-group row">
                                     <label for="psw" class="col-md-3 col-form-label">Contraseña</label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control" id="psw" name="psw" title="Debe contener al menos un número, una mayúscula, una minúscula y 8 caracteres como mínimo" required/>
+                                        <input type="password" class="form-control" id="psw" name="psw" title="Debe contener al menos un número, una mayúscula, una minúscula y 8 caracteres como mínimo" required/>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="psw2" class="col-md-3 col-form-label">Repetir Contraseña</label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control" id="psw2" name="psw2" title="Debe contener al menos un número, una mayúscula, una minúscula y 8 caracteres como mínimo" required/>
+                                        <input type="password" class="form-control" id="psw2" name="psw2" title="Debe contener al menos un número, una mayúscula, una minúscula y 8 caracteres como mínimo" required/>
                                     </div>
                                 </div>
                                 <div class="row">

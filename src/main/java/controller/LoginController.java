@@ -52,7 +52,6 @@ public class LoginController {
 		
 		SessionService.createSession(username,token);
 		
-		
 		Response response = Response.seeOther(URI.create("/")).cookie(tokenCookie).cookie(usernameCookie).build(); 
 		return response;
 		

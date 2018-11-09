@@ -7,6 +7,8 @@ import org.bson.types.ObjectId;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 import model.EventsList;
 
@@ -74,4 +76,18 @@ public class UserService {
         ManagementService.getUserDAO().saveEventsListsToUser(new ObjectId(userId), lists);
         return user;
     }
+
+	public static boolean validateRole(Map<String, Cookie> cookies, String string) {
+		System.out.println("UserService::validateRole");
+	
+		Cookie cookieUsername = cookies.get("username");
+		String userFromCookie = cookieUsername.getValue();
+		User user = ManagementService.getUserDAO().getUserByName(userFromCookie);
+		
+		if(user.getRole().equals(string)) {
+			return true;
+		}
+	
+		return false;
+	}
 }

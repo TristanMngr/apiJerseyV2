@@ -6,6 +6,7 @@ import java.util.List;
  
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
@@ -86,6 +87,18 @@ public class AuthenticationFilter implements ContainerRequestFilter
         		requestContext.abortWith(Response.ok(view).build());
         		
                 return;
+        	}
+        	
+        	if(method.isAnnotationPresent(RolesAllowed.class)) {
+        		RolesAllowed rolesAllowed = method.getAnnotation(RolesAllowed.class);
+        		String roleAllowed = rolesAllowed.value()[0];
+        		if(!UserService.validateRole(requestContext.getCookies(), roleAllowed))
+        		{
+        			System.out.println(this.getClass().getName() + ":: User has not the necessary roles");
+            		
+        			requestContext.abortWith(ACCESS_DENIED);
+                    return;
+        		}
         	}
         	            
         }

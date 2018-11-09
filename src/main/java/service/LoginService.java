@@ -55,6 +55,9 @@ public class LoginService {
 
 		String[] values = new String(DatatypeConverter.parseBase64Binary(auth), Charset.forName("ASCII")).split(":");
 
+		if(values.length == 0)
+			return "";
+		
 		return values[0];
 	}
 	
