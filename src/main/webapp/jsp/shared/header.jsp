@@ -60,14 +60,14 @@
 
                         </div>
                     </li>
-					<li class="nav-item dropdown">
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="dropdownAdmin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administrador</a>
                         <div class="dropdown-menu" aria-labelledby="dropdownAdmin">
                             <a class="dropdown-item linkReload" data-loadhtml="admin/index.html" href="#">Check Usuario</a>
                             <a class="dropdown-item linkReload" data-loadhtml="admin/CompareList.html" href="#">Comparar Listas</a>
                             <a class="dropdown-item linkReload" data-loadhtml="admin/EventsCheck.html" href="#">Buscar Eventos</a>
                             <a class="dropdown-item linkReload" data-loadhtml="admin/Events.html" href="#">Dashboard Eventos</a>
-                            <a class="dropdown-item " href="/users">Get All Users</a>
+                            <a class="dropdown-item " href="admin/users">Get All Users</a>
                         </div>
                     </li>
                     <li class="nav-item">
@@ -82,8 +82,8 @@
                 </ul>
                 <ul class="navbar-nav navbar-right">
                     <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="dropdownOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%=UserName%></a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownOptions">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdownOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%=UserName%></a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownOptions">
                             <a class="dropdown-item" href="/logout">Logout</a>
                         </div>
                     </li>

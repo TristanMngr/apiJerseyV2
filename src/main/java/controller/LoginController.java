@@ -23,7 +23,7 @@ import service.EventsListsService;
 @Path("/login")
 public class LoginController {
 	// SyntaxError: JSON.parse: unexpected character at line 2 column 1 of the JSON data
-	private int MAX_AGE = 60;
+	private int MAX_AGE = 60 * 15;
 	
 	@PermitAll
 	@POST
@@ -53,7 +53,6 @@ public class LoginController {
 		NewCookie usernameCookie = new NewCookie("username", username, "/", null, 0, "", MAX_AGE, nuevaFecha, false, false);
 		
 		SessionService.createSession(username,token);
-
 
 		Response response = Response.seeOther(URI.create("/")).cookie(tokenCookie).cookie(usernameCookie).build();
 		return response;
