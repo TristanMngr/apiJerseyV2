@@ -34,5 +34,7 @@ Setear la variable de entorno  **EVENTBRITE_KEY**
 
 Admin User for testing
 
- **Username: ** admin
- **Password: ** 123456aA 
+**Username: ** admin
+ 
+**Password: ** 123456aA 
+ 
