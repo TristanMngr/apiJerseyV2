@@ -20,6 +20,17 @@ import service.ManagementService;
 @Path("/admin")
 public class AdminController {
 
+	@RolesAllowed("ADMIN")
+	@GET
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response getRole() {
+		JSONObject obj = new JSONObject();
+		obj.put("role", "admin");
+		Response response = Response.ok().entity(obj.toString()).build();
+		return response;
+	}
+	
+	
 	@Path("/users")
 	@RolesAllowed("ADMIN")
 	@GET

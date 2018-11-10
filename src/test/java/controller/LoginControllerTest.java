@@ -26,7 +26,6 @@ public class LoginControllerTest extends JerseyTest {
 		
 		JSONObject json = new JSONObject();
 		json.put("username", "test");
-		System.out.println(json.toString());
 		Response response = target().path("login").request(MediaType.TEXT_PLAIN).header("Authorization", "Basic TXlBcHA6TXlTZWNyZXQ=")
 													.post(Entity.entity(json.toString(),MediaType.APPLICATION_FORM_URLENCODED),Response.class);
 		assertEquals(401, response.getStatus());

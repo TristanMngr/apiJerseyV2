@@ -15,7 +15,9 @@ import org.junit.Test;
 public class SessionServiceTest extends JerseyTest {
 	@Override
 	protected Application configure() {
-		return new ResourceConfig(SessionService.class);
+		ResourceConfig config = new ResourceConfig();
+		config.packages("controller");
+		return config;
 	}
 
 	

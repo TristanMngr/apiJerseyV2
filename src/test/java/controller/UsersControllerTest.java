@@ -39,7 +39,9 @@ public class UsersControllerTest extends JerseyTest  {
 
 	@Test
 	public void testGetIt() {
-
+		
+		System.out.println(" +++++ " + this.getClass().getName() + ":: testGetIt()");
+		
 		Response response = target().path("users").request(MediaType.APPLICATION_JSON).get();
 		System.out.println("+" + response.toString() + "+");
 		assertEquals(200, response.getStatus());
@@ -54,41 +56,37 @@ public class UsersControllerTest extends JerseyTest  {
 													.post(Entity.entity(json.toString(),MediaType.APPLICATION_FORM_URLENCODED),Response.class);
 		return response;
 	}
-	
+		
 	@Test
-	public void testSignUp() {
+	public void testLoginOK() {
+		
+		System.out.println(" +++++ " + this.getClass().getName() + ":: testLoginOK()");
 		
 		long size = ManagementService.getUserDAO().count();
 		
 		Response response = signUp();
 		assertEquals(201, response.getStatus());
 		
+		// Cree un usuario
 		assertEquals(size+1, ManagementService.getUserDAO().count());
-		
-		Query<User> query = ManagementService.getUserDAO().getDatastore().find(User.class, "userName", "MyApp");
-		ManagementService.getUserDAO().getDatastore().delete(query);
-		
-		assertEquals(size, ManagementService.getUserDAO().count());
-		
-		return;
-	}
-	
-	//@Test
-	public void testLoginOK() {
-		
-		//Response response = signUp();
-		//assertEquals(201, response.getStatus());
 		
 		System.out.println(ManagementService.getUserDAO().count());
 		
 		JSONObject json = new JSONObject();
 		json.put("username", "MyApp");
 		System.out.println(json.toString());
-		Response response  = target().path("login").request(MediaType.TEXT_PLAIN).header("Authorization", "Basic TXlBcHA6TXlTZWNyZXQ=")
-													.post(Entity.entity(json.toString(),MediaType.APPLICATION_FORM_URLENCODED),Response.class);
+		
+		response  = target().path("login").request().header("Authorization", "Basic TXlBcHA6TXlTZWNyZXQ=")
+				.post(Entity.entity(json.toString(),MediaType.APPLICATION_FORM_URLENCODED),Response.class);
 
-		System.out.println(response.toString());
-		assertEquals(401, response.getStatus());
+		assertEquals(200, response.getStatus());
+		
+		// Elimine un usuario
+		Query<User> query = ManagementService.getUserDAO().getDatastore().find(User.class, "userName", "MyApp");
+		ManagementService.getUserDAO().getDatastore().delete(query);
+		
+		assertEquals(size, ManagementService.getUserDAO().count());
+
 	}
 	
 
