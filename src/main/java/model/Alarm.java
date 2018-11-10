@@ -3,7 +3,7 @@ package model;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Alarm {
+public class Alarm extends BaseMongoDO  {
     private String name;
 
     private Map<String, String> paramsEventBrite;
