@@ -57,7 +57,7 @@
                     success: function (result) {
                         var token = result;
                         console.log("success");
-                        window.location.reload();
+                        location.href = "/"
                         $(".imgLoader").addClass("displayNone");
                         return true;
                     },

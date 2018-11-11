@@ -25,6 +25,28 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     </head>
     <%--         <h1>${it.hello} ${it.world}</h1> --%>
+    
+    <script>
+
+
+
+    	$(document).ready(function () {
+   		
+	    	$.ajax({
+	        	url: "/admin", 
+	            type: "GET",
+	            asynchronous: false,
+	            complete: function (response) {
+	                return;
+	            },
+		    	error: function (req, status, error) {
+	            	$("#dropdownAdmin").addClass('displayNone');
+	            	return;
+	            }
+	        });
+	  });
+    	
+    </script>
     <%
         String ServerName = request.getServerName();
         String URL = "http://" + ServerName;
@@ -41,7 +63,6 @@
                 }
             }
         }
-
     %>
     <body>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">

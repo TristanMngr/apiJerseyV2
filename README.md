@@ -31,3 +31,10 @@ Setear la variable de entorno  **EVENTBRITE_KEY**
 ## Heroku UAT Version
 
 [Login Page](https://apieventos-g5.herokuapp.com/ "link title")
+
+Admin User for testing
+
+**Username:** admin
+ 
+**Password:** 123456aA 
+ 
