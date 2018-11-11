@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -121,46 +122,42 @@ public class EventbriteService {
     }
 
     public static List<EventBrite> getEventsSinceLastConnexion(User user) throws IOException {
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR_OF_DAY, 0);
+
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String events = "";
         List<EventBrite> eventBriteList = new ArrayList<>();
 
-        Map<String, String> paramsEventBrite = new HashMap<>();
-        for (Alarm alarm : user.getAlarms()) {
-            for (String key : alarm.getParamsEventBrite().keySet()) {
-                paramsEventBrite.put(key, alarm.getParamsEventBrite().get(key));
+        if (Utils.getDateDiff(user.getLastLogin(), today.getTime(), TimeUnit.DAYS) >= 1) {
+            Map<String, String> paramsEventBrite = new HashMap<>();
+            for (Alarm alarm : user.getAlarms()) {
+                for (String key : alarm.getParamsEventBrite().keySet()) {
+                    paramsEventBrite.put(key, alarm.getParamsEventBrite().get(key));
+                }
+                paramsEventBrite.put("fechaDesde", df.format(user.getLastLogin()));
+                paramsEventBrite.put("fechaHasta", "");
+                events += getEventsByParams(paramsEventBrite);
+                paramsEventBrite = new HashMap<>();
+                eventBriteList = stringToEventBriteObjectList(events);
             }
-            paramsEventBrite.put("fechaDesde", df.format(user.getLastLogin()));
-            paramsEventBrite.put("fechaHasta", "");
-            events += getEventsByParams(paramsEventBrite);
-            paramsEventBrite = new HashMap<>();
         }
 
+        return eventBriteList;
+    }
+
+    public static List<EventBrite> stringToEventBriteObjectList(String events) throws IOException {
+        List<EventBrite> eventBriteList = new ArrayList<>();
 
         JSONObject jsonObj = new JSONObject(events);
         JSONArray jsonEvents = (JSONArray) jsonObj.get("events");
 
         for (Object event : jsonEvents) {
-            EventBrite eventBrite = new EventBrite();
-            eventBrite = mapper.readValue(event.toString(), EventBrite.class);
+            EventBrite eventBrite = mapper.readValue(event.toString(), EventBrite.class);
             System.out.println(eventBrite.getId());
             eventBriteList.add(eventBrite);
         }
 
-
-
-
-        /*System.out.println("Hashmap>>");
-        System.out.println(paramsEventBrite);
-        System.out.println("Hashmap<<");
-
-        WebTarget service = getWebTargetService("events/search");
-        Response response = service
-                .queryParam("start_date.range_start", completeStringDatetime(paramsEventBrite.get("fechaDesde")))
-                .queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
-
-        String events = response.readEntity(String.class);
-        System.out.println(events);*/
         return eventBriteList;
     }
 }

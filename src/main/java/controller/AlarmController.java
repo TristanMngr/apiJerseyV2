@@ -13,31 +13,31 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 @Path("/alarms")
-public class AlarmController {
+public class AlarmController{
 
     // TODO to remove
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public Response index() throws IOException {
+    public Response testCall() throws IOException {
         return Response.ok(EventbriteService.getEventsSinceLastConnexion(ManagementService.getUserDAO().getByUserId(new ObjectId("5be5f0ad43b244784d05a68f"))), MediaType.APPLICATION_JSON).build();
     }
 
     @Path("/create")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response crearLista(@FormParam("name") String name, @FormParam("categoryId") String categoryId) throws JsonProcessingException {
-        // TODO create method to get connected user
-        User                user        = ManagementService.getUserDAO().getByUserId(new ObjectId("5be5f0ad43b244784d05a68f"));
+    public Response crearLista(@FormParam("name") String name, @FormParam("categoryId") String categoryId, @CookieParam("username") String username) throws JsonProcessingException {
+        User user = ManagementService.getUserDAO().getUserByName(username);
 
         return Response.status(201).entity(AlarmService.createAlarm(user, name, categoryId)).build();
     }
 
     @Path("/destroy")
-    @DELETE
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response destroy(@FormParam("name") String name) throws JsonProcessingException {
+    public Response destroy(@FormParam("name") String name, @CookieParam("username") String username) throws JsonProcessingException {
         // TODO create method to get connected user
-        User                user        = ManagementService.getUserDAO().getByUserId(new ObjectId("5be5f0ad43b244784d05a68f"));
+
+        User user = ManagementService.getUserDAO().getUserByName(username);
 
         return Response.status(200).entity(AlarmService.removeAlarm(user, name)).build();
     }
