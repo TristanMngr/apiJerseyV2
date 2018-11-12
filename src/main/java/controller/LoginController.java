@@ -15,8 +15,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
+import service.EventbriteService;
 import service.LoginService;
 import service.SessionService;
+import service.EventsListsService;
 
 @Path("/login")
 public class LoginController {

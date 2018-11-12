@@ -110,6 +110,9 @@
                     <li class="nav-item">
                         <a class="nav-link btnMenuPrincipal" href="/users">Usuarios</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link btnMenuPrincipal" href="/../jsp/alarm/index.jsp">Alarms</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="dropdownTelegram" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Telegram</a>
                         <div class="dropdown-menu" aria-labelledby="dropdownTelegram">

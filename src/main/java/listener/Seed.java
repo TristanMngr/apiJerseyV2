@@ -1,13 +1,12 @@
 package listener;
 
 import dao.MongoDBConnection;
-import model.Alarma;
+import model.Alarm;
 import model.EventsList;
 import model.User;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,9 +34,9 @@ public class Seed {
 //        Evento eventOne   = new Evento("ATLANTA'S", "5b281078cc5815bc2e5a5b2a","eventOne");
 //        Evento eventTwo   = new Evento("Georgetown Glow","5b281078cc5815bc2e5a5b2b","eventTwo");
 //        Evento eventThree = new Evento("AllStar Weekend Party", "5b281078cc5815bc2e5a5b2c","eventThree");
-        Alarma alarmaOne = new Alarma("alarmaOne");
-        Alarma alarmaTwo = new Alarma("alarmaTwo");
-        Alarma alarmaTree = new Alarma("alarmaTree");
+        Alarm alarmOne  = new Alarm("alarmOne");
+        Alarm alarmTwo  = new Alarm("alarmTwo");
+        Alarm alarmTree = new Alarm("alarmTree");
 
         EventsList eventsListOne = new EventsList(userOneId,"listOne", Arrays.asList());
         EventsList eventListTwo = new EventsList(userOneId, "listTwo", Arrays.asList());
@@ -66,7 +65,7 @@ public class Seed {
         userFour.setEventos(Arrays.asList(eventsListSix));
         userFive.setEventos(Arrays.asList(eventsListSeven, eventsListEight));
 
-        userOne.setAlarmas(Arrays.asList(alarmaOne, alarmaTwo, alarmaTree));
+        userOne.setAlarms(Arrays.asList(alarmOne, alarmTwo, alarmTree));
 
         List<User> users = new ArrayList<>();
         users.add(userOne);

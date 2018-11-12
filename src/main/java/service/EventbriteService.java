@@ -3,9 +3,15 @@ package service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eventbrite.EventBrite;
+
+import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -14,8 +20,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
+import model.Alarm;
+import model.User;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.filter.LoggingFilter;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 //EVENTBRITE KEY: Q2U3MHJELN4VOBCARDUQ - NO BORRAR QUE LA NECESITO PARA BUSCAR DESDE LA WEB DE EVENTBRITE (GUILLE)
 public class EventbriteService {
@@ -51,8 +61,8 @@ public class EventbriteService {
      * @return
      */
     public static String getJsonEventByID(String eventID) {
-        WebTarget service = getWebTargetService("events");
-        Response response = service.path(eventID).queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
+        WebTarget service  = getWebTargetService("events");
+        Response  response = service.path(eventID).queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
         if (response.getStatus() != 404) {
             return response.readEntity(String.class);
         } else {
@@ -60,19 +70,20 @@ public class EventbriteService {
         }
     }
 
-    public static EventBrite getEventByID(Long codigoEvento) throws JsonProcessingException,IOException {
+    public static EventBrite getEventByID(Long codigoEvento) throws JsonProcessingException, IOException {
         String eventoJson = getJsonEventByID(codigoEvento.toString());
         return mapper.readValue(eventoJson, EventBrite.class);
     }
 
     /* ****************** Categorías ************************* */
     public static String getAllCategories() {
-        WebTarget service = getWebTargetService("categories");
-        Response response = service.queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
+        WebTarget service  = getWebTargetService("categories");
+        Response  response = service.queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
         return response.readEntity(String.class);
     }
 
     /* *********************** métodos auxiliares ********************** */
+
     /**
      * formatea el json agregando: {"pagination": {"object_count": 18,
      * "page_number": 1, "page_size": 50, "page_count": 1, "has_more_items":
@@ -88,7 +99,7 @@ public class EventbriteService {
 
     private static WebTarget getWebTargetService(String baseElement) {
         ClientConfig config = new ClientConfig();
-        Client client = ClientBuilder.newClient(config);
+        Client       client = ClientBuilder.newClient(config);
         client.register(new LoggingFilter());
         WebTarget service = client.target(getBaseURI(baseElement));
         return service;
@@ -98,8 +109,8 @@ public class EventbriteService {
         return UriBuilder.fromUri("https://www.eventbriteapi.com/v3/" + baseElement + "/").build();
     }
 
-    private static String getAppKey() {       
-    	return EncryptionServices.decrypt("YVOWlcdl36bCvwcaUy8QWbdEQ8cyGKorBRAd3I5dinM=");
+    private static String getAppKey() {
+        return EncryptionServices.decrypt("YVOWlcdl36bCvwcaUy8QWbdEQ8cyGKorBRAd3I5dinM=");
     }
 
     private static String completeStringDatetime(String date) {
@@ -108,7 +119,45 @@ public class EventbriteService {
         } else {
             return "";
         }
-
     }
 
+    public static List<EventBrite> getEventsSinceLastConnexion(User user) throws IOException {
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR_OF_DAY, 0);
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String events = "";
+        List<EventBrite> eventBriteList = new ArrayList<>();
+
+        if (Utils.getDateDiff(user.getLastLogin(), today.getTime(), TimeUnit.DAYS) >= 1) {
+            Map<String, String> paramsEventBrite = new HashMap<>();
+            for (Alarm alarm : user.getAlarms()) {
+                for (String key : alarm.getParamsEventBrite().keySet()) {
+                    paramsEventBrite.put(key, alarm.getParamsEventBrite().get(key));
+                }
+                paramsEventBrite.put("fechaDesde", df.format(user.getLastLogin()));
+                paramsEventBrite.put("fechaHasta", "");
+                events += getEventsByParams(paramsEventBrite);
+                paramsEventBrite = new HashMap<>();
+                eventBriteList = stringToEventBriteObjectList(events);
+            }
+        }
+
+        return eventBriteList;
+    }
+
+    public static List<EventBrite> stringToEventBriteObjectList(String events) throws IOException {
+        List<EventBrite> eventBriteList = new ArrayList<>();
+
+        JSONObject jsonObj = new JSONObject(events);
+        JSONArray jsonEvents = (JSONArray) jsonObj.get("events");
+
+        for (Object event : jsonEvents) {
+            EventBrite eventBrite = mapper.readValue(event.toString(), EventBrite.class);
+            System.out.println(eventBrite.getId());
+            eventBriteList.add(eventBrite);
+        }
+
+        return eventBriteList;
+    }
 }

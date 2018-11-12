@@ -63,7 +63,7 @@ public class AdminController {
 		JSONObject obj = new JSONObject();
 		obj.put("username", user.getUserName());
 		obj.put("cantListas", user.getEventsLists().size());
-		obj.put("cantAlarmas", user.getAlarmas().size());
+		obj.put("cantAlarmas", user.getAlarms().size());
 		obj.put("lastLogin", user.getLastLogin());
 		Response response = Response.ok().entity(obj.toString()).build();
 		return response;

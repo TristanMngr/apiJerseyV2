@@ -22,7 +22,7 @@ public class MongoDBConnection {
 
     private MongoDBConnection() {}
     
-    private static boolean useLocalDB = false;
+    private static boolean useLocalDB = true;
 
     public MongoClient getMongo() throws RuntimeException {
         if (mongo == null) {
@@ -85,6 +85,7 @@ public class MongoDBConnection {
 
     public Datastore getDatastore() {
         //TODO: Why do we have this Horrible DBName? :)
+        //TODO haha i didn't choose it
     	
     	if (dataStore == null) {
             String dbName = "heroku_7h0pgzxc";

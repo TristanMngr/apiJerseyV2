@@ -4,22 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.security.PermitAll;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.OPTIONS;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import model.User;
 import org.bson.types.ObjectId;
 
+import service.AlarmService;
+import service.ManagementService;
 import service.UserService;
 import org.json.JSONObject;
 
@@ -50,7 +43,7 @@ public class UsersController {
         ObjectId userObjectId = new ObjectId(userId);
         String user = UserService.getUserById(userObjectId);
         if (user != null) {
-            return  Response.ok(UserService.getUserById(userObjectId)).build();
+            return  Response.ok(user).build();
         } else {
             return Response.status(404).entity("User: " + userId + " not found!").build();
         }
@@ -94,6 +87,31 @@ public class UsersController {
 		Response response = Response.status(201).entity(obj.toString()).build();
 		return response;
 	}
+
+    @Path("{userId}/alarms")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getAlarmsFromUser(@PathParam("userId") String userId) throws JsonProcessingException {
+        ObjectId userObjectId = new ObjectId(userId);
+        User user = ManagementService.getUserDAO().getByUserId(userObjectId);
+        if (user != null) {
+            return  Response.ok().entity(AlarmService.getAlarmsFromUser(user)).build();
+        } else {
+            return Response.status(404).entity("User: " + userId + " not found!").build();
+        }
+    }
+
+    /*@Path("/currentUserAlarm")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getCurrentUserAlarms(@CookieParam("username") String username) throws JsonProcessingException {
+        User user = ManagementService.getUserDAO().getUserByName(username);
+        if (user != null) {
+            return  Response.ok().entity(AlarmService.getAlarmsFromUser(user)).build();
+        } else {
+            return Response.status(404).entity("User: " + username + " not found!").build();
+        }
+    }*/
 
 	/*@GET
 	@Produces({MediaType.APPLICATION_JSON})

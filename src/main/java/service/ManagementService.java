@@ -1,9 +1,7 @@
 package service;
 
-import dao.EventsListDAO;
-import dao.MongoDBConnection;
-import dao.UserDAO;
-import dao.SessionListDAO;
+import dao.*;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +16,7 @@ public class ManagementService {
     public static EventsListDAO eventsListsDAO;
     public static UserDAO userDAO;
     public static SessionListDAO listadoSesiones;
+    public static AlarmDAO alarmDAO;
 
     public static void createDAOs() {
     	System.out.println("ManagementService::createDAOs");
@@ -26,6 +25,7 @@ public class ManagementService {
         userDAO = new UserDAO(conn.getDatastore());
         eventsListsDAO = new EventsListDAO(conn.getDatastore(), userDAO);
         listadoSesiones = new SessionListDAO(conn.getDatastore());
+        alarmDAO = new AlarmDAO(conn.getDatastore());
     }
 
     public static SessionListDAO getSessionListDAO() {
@@ -34,6 +34,10 @@ public class ManagementService {
 
     public static EventsListDAO getEventsListDAO() {
         return eventsListsDAO;
+    }
+
+    public static AlarmDAO getAlarmDAO() {
+        return alarmDAO;
     }
 
     public static UserDAO getUserDAO() {
@@ -50,6 +54,7 @@ public class ManagementService {
         List<String> listaAux = Arrays.asList(params.split("&", -1));
         Map<String, String> parametros = new HashMap<String, String>();
         listaAux.stream().map(elem -> parametros.put(getNValueFromSplit(elem, "=", 0), getNValueFromSplit(elem, "=", 1))).collect(Collectors.toList());
+        System.out.println(parametros);
         return parametros;
     }
 
