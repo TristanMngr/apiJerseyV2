@@ -94,12 +94,8 @@ public class UserService {
 	}
 
     public static User currentUser(ContainerRequestContext containerRequestContext) {
-        boolean validateSession = SessionService.validateSession(containerRequestContext.getCookies());
         User user = null;
 
-        if (!validateSession) {
-            return null;
-        }
         for (Cookie c : containerRequestContext.getCookies().values())
         {
             if (c.getName().equals("username")) {
