@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
@@ -17,6 +18,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import dao.MongoDBConnection;
+import service.LoginService;
 import service.ManagementService;
 
 public class AdminControllerTest extends JerseyTest {
@@ -56,9 +58,12 @@ public class AdminControllerTest extends JerseyTest {
 		assertEquals(200, response.getStatus());
 			
 		Map<String, NewCookie> cookies = response.getCookies();
-		NewCookie token = cookies.get("tokenG5");
+		NewCookie tokenCookie = cookies.get("tokenG5");
+		NewCookie usernameCookie = cookies.get("username");
 		
-		response  = target().path("admin").request().cookie("username", "admin").cookie("tokenG5",token.getValue()).get();
+		assertEquals(usernameCookie.getValue(), "admin");
+		
+		response  = target().path("admin").request().cookie("username", usernameCookie.getValue()).cookie("tokenG5",tokenCookie.getValue()).get();
 
 		assertEquals(200, response.getStatus());
 	}

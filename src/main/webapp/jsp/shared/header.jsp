@@ -28,19 +28,35 @@
     
     <script>
 
+	    function hideOptions(option) {
+	        if ( option == 1 ) {
+	        	$("#dropdownAdmin").addClass('displayNone');
+			}
 
+	        if ( option == 2 ) {
+	        	$("#dropdownEventos").addClass('displayNone');
+	        	$("#dropdownTelegram").addClass('displayNone');
+			}
+	       
+	        return false;
+	    };
 
     	$(document).ready(function () {
-   		
+			var isUserRole = false;
+   			
 	    	$.ajax({
 	        	url: "/admin", 
 	            type: "GET",
 	            asynchronous: false,
 	            complete: function (response) {
+					if(isUserRole)
+		            	hideOptions(1);
+					else
+						hideOptions(2);	
 	                return;
 	            },
 		    	error: function (req, status, error) {
-	            	$("#dropdownAdmin").addClass('displayNone');
+		    		isUserRole = true;
 	            	return;
 	            }
 	        });

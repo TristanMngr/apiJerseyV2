@@ -2,9 +2,12 @@ package controller;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Map;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
@@ -39,9 +42,7 @@ public class UsersControllerTest extends JerseyTest  {
 
 	@Test
 	public void testGetIt() {
-		
-		System.out.println(" +++++ " + this.getClass().getName() + ":: testGetIt()");
-		
+				
 		Response response = target().path("users").request(MediaType.APPLICATION_JSON).get();
 		System.out.println("+" + response.toString() + "+");
 		assertEquals(200, response.getStatus());
@@ -59,9 +60,7 @@ public class UsersControllerTest extends JerseyTest  {
 		
 	@Test
 	public void testLoginOK() {
-		
-		System.out.println(" +++++ " + this.getClass().getName() + ":: testLoginOK()");
-		
+				
 		long size = ManagementService.getUserDAO().count();
 		
 		Response response = signUp();
@@ -69,17 +68,33 @@ public class UsersControllerTest extends JerseyTest  {
 		
 		// Cree un usuario
 		assertEquals(size+1, ManagementService.getUserDAO().count());
-		
-		System.out.println(ManagementService.getUserDAO().count());
-		
+				
 		JSONObject json = new JSONObject();
 		json.put("username", "MyApp");
-		System.out.println(json.toString());
 		
+		// login usuario
 		response  = target().path("login").request().header("Authorization", "Basic TXlBcHA6TXlTZWNyZXQ=")
 				.post(Entity.entity(json.toString(),MediaType.APPLICATION_FORM_URLENCODED),Response.class);
 
 		assertEquals(200, response.getStatus());
+		
+		Map<String, NewCookie> cookies = response.getCookies();
+		NewCookie tokenCookie = cookies.get("tokenG5");
+		NewCookie usernameCookie = cookies.get("username");
+		
+		assertEquals(usernameCookie.getValue(), "MyApp");
+		response  = target().path("admin").request().cookie("username", usernameCookie.getValue()).cookie("tokenG5",tokenCookie.getValue()).get();	
+		
+		assertEquals(200, response.getStatus());
+		
+		JSONObject answerFromResponse = new JSONObject(response.readEntity(String.class));
+		
+		assertEquals("admin", answerFromResponse.get("role").toString());
+		
+		//TODO: Test logout
+		//response  = target().path("logout").request().cookie("username", usernameCookie.getValue()).cookie("tokenG5",tokenCookie.getValue()).get();
+		//assertEquals(200, response.getStatus());
+		
 		
 		// Elimine un usuario
 		Query<User> query = ManagementService.getUserDAO().getDatastore().find(User.class, "userName", "MyApp");

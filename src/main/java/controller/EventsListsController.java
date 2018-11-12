@@ -12,11 +12,13 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import service.EventsListsService;
+import service.LoginService;
 import service.ManagementService;
 
 @Path("/eventsLists")
@@ -54,8 +56,13 @@ public class EventsListsController {
     @Path("/create")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response crearLista(String params) throws JsonProcessingException {
-        Map<String, String> parametros = ManagementService.getPostParams(params);
+    //public Response crearLista(String params) throws JsonProcessingException {
+    public Response crearLista(@Context HttpHeaders httpHeaders, String params) throws JsonProcessingException {
+        
+    	String username = LoginService.getUserFromCookie(httpHeaders.getCookies());	
+        setUserLogged(username);
+    	
+    	Map<String, String> parametros = ManagementService.getPostParams(params);
         String nombreLista = parametros.get("nombreLista");
         nombreLista=nombreLista.replace("+", " ");
         String userId = this.loggedUser;
