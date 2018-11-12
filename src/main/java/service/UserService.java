@@ -2,12 +2,14 @@ package service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import model.Session;
 import model.User;
 import org.bson.types.ObjectId;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 import model.EventsList;
@@ -90,4 +92,20 @@ public class UserService {
 	
 		return false;
 	}
+
+    public static User currentUser(ContainerRequestContext containerRequestContext) {
+        boolean validateSession = SessionService.validateSession(containerRequestContext.getCookies());
+        User user = null;
+
+        if (!validateSession) {
+            return null;
+        }
+        for (Cookie c : containerRequestContext.getCookies().values())
+        {
+            if (c.getName().equals("username")) {
+                user = ManagementService.getUserDAO().getUserByName(c.getValue());
+            }
+        }
+        return user;
+    }
 }

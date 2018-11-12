@@ -6,8 +6,11 @@ import org.bson.types.ObjectId;
 import service.AlarmService;
 import service.EventbriteService;
 import service.ManagementService;
+import service.UserService;
 
 import javax.ws.rs.*;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -25,8 +28,8 @@ public class AlarmController{
     @Path("/create")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response crearLista(@FormParam("name") String name, @FormParam("categoryId") String categoryId, @CookieParam("username") String username) throws JsonProcessingException {
-        User user = ManagementService.getUserDAO().getUserByName(username);
+    public Response crearLista(@FormParam("name") String name, @FormParam("categoryId") String categoryId, @Context ContainerRequestContext crc) throws JsonProcessingException {
+        User user = UserService.currentUser(crc);
 
         return Response.status(201).entity(AlarmService.createAlarm(user, name, categoryId)).build();
     }
@@ -34,10 +37,10 @@ public class AlarmController{
     @Path("/destroy")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response destroy(@FormParam("name") String name, @CookieParam("username") String username) throws JsonProcessingException {
+    public Response destroy(@FormParam("name") String name, @Context ContainerRequestContext crc) throws JsonProcessingException {
         // TODO create method to get connected user
 
-        User user = ManagementService.getUserDAO().getUserByName(username);
+        User user = UserService.currentUser(crc);
 
         return Response.status(200).entity(AlarmService.removeAlarm(user, name)).build();
     }

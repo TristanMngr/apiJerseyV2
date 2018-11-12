@@ -101,7 +101,7 @@ public class UsersController {
         }
     }
 
-    @Path("/currentUserAlarm")
+    /*@Path("/currentUserAlarm")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response getCurrentUserAlarms(@CookieParam("username") String username) throws JsonProcessingException {
@@ -111,7 +111,7 @@ public class UsersController {
         } else {
             return Response.status(404).entity("User: " + username + " not found!").build();
         }
-    }
+    }*/
 
 	/*@GET
 	@Produces({MediaType.APPLICATION_JSON})
