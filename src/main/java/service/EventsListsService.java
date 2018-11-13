@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import model.EventsList;
+import model.Session;
 import model.User;
 import org.bson.types.ObjectId;
+import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateResults;
 import static service.EventbriteService.getJsonEventByID;
 
@@ -70,5 +72,24 @@ public class EventsListsService {
         list.setHexId(list.getId().toHexString());
         return list;
     }
+    
+    public static List<Long> getListOfEventsByUserAndListName(String username, String lista){
+    	
+    	User user = ManagementService.getUserDAO().getUserByName(username);
+    	List<EventsList> listados = user.getEventsLists();
+    	
+    	EventsList listadoEventos = null;
+
+    	for(EventsList listado : listados) {
+    		ObjectId id = listado.getId();
+    		Query<EventsList> query = ManagementService.getEventsListDAO().getDatastore().createQuery(EventsList.class).field("_id").equal(id);
+    		listadoEventos = query.get();
+    		if(listadoEventos.getNombre().equals(lista))
+    			break;
+    	} 	
+    	    	
+		return listadoEventos.getEvents();
+    	
+    };
 
 }

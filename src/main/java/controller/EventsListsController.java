@@ -58,7 +58,7 @@ public class EventsListsController {
     @Produces(MediaType.APPLICATION_JSON)
     //public Response crearLista(String params) throws JsonProcessingException {
     public Response crearLista(@Context HttpHeaders httpHeaders, String params) throws JsonProcessingException {
-        
+        //TODO: verificar que no estamos creando una lista con el mismo nombre para el mismo usuario.
     	String username = LoginService.getUserFromCookie(httpHeaders.getCookies());	
         setUserLogged(username);
     	
