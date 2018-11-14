@@ -28,22 +28,20 @@ public class User extends BaseMongoDO {
 
     // TODO change list alarm and event
     public User() {
-        this.userName = "TestName";
-        this.setAlarms(Arrays.asList(new Alarm()));
+        this.role = "USER";
     }
 
     public User(String userName, String password) {
-    	this.setUserName(userName);
-    	this.setPassword(password);
-    	this.setAlarms(Arrays.asList(new Alarm("alarm1", "101"), new Alarm("alarm2", "102")));
-    	this.setEventos(eventsLists);
+    	this.userName = userName;
+    	this.password = password;
     	this.role = "USER";
     }
 
     public User(ObjectId objectId, String userName, String password) {
         this.userName = userName;
-        this.password = password;
+        this.setPassword(password);
         this.setId(objectId);
+        this.setRole("USER");
     }
 
 //    public User(String string) {
