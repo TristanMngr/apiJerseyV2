@@ -7,10 +7,8 @@ import model.User;
 import java.io.IOException;
 
 import java.util.Map;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
+import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -20,6 +18,7 @@ import javax.ws.rs.core.UriInfo;
 import service.EventsListsService;
 import service.LoginService;
 import service.ManagementService;
+import service.UserService;
 
 @Path("/eventsLists")
 public class EventsListsController {
@@ -41,11 +40,9 @@ public class EventsListsController {
     @Path("/getFromUser")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getListsFromUser(@Context UriInfo uriDetails) throws JsonProcessingException {
-        String username = uriDetails.getQueryParameters().get("userId").get(0);
-        setUserLogged(username);
-        String userId = this.loggedUser;
-        return Response.ok(EventsListsService.getByUserId(userId)).build();
+    public Response getListsFromUser(@Context UriInfo uriDetails, @Context ContainerRequestContext crc) throws JsonProcessingException {
+        User user = UserService.currentUser(crc);
+        return Response.ok(user).build();
     }
 
     /**
