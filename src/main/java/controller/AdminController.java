@@ -1,6 +1,9 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.GET;
@@ -16,6 +19,7 @@ import org.json.JSONObject;
 
 import model.EventsList;
 import model.User;
+import service.EventbriteService;
 import service.EventsListsService;
 import service.ManagementService;
 
@@ -47,7 +51,8 @@ public class AdminController {
 		
 		for (User user : listado) 
         {
-            arr.put(user.getUserName());
+            if(!user.getRole().equals("ADMIN"))
+            	arr.put(user.getUserName());
         }	
 		
 		obj.put("users", arr);
@@ -98,8 +103,7 @@ public class AdminController {
 									@QueryParam("user2") String user2,
 									@QueryParam("list2") String list2
 									) {
-		//TODO: Terminar comparacion de listados
-		
+
 		System.out.println(this.getClass().getName() + ":: AdminController compareUserLists");
 		System.out.println(this.getClass().getName() + ":: user1 = " + user1);
 		System.out.println(this.getClass().getName() + ":: list1 = " + list1);
@@ -109,7 +113,41 @@ public class AdminController {
 		List<Long> listado1 = EventsListsService.getListOfEventsByUserAndListName(user1, list1);
 		List<Long> listado2 = EventsListsService.getListOfEventsByUserAndListName(user2, list2);
 		
-		Response response = Response.ok().entity("hola").build();
+		List<JSONObject> compartidos = new ArrayList<>();
+		
+		
+		for (Long i: listado1) {
+			Map<String, String> paramsEventBrite = new HashMap<String, String>();
+			
+			if (listado2.contains(i)) {
+				paramsEventBrite.put("codigo", i.toString());
+				String jsonString = EventbriteService.searchEvents(paramsEventBrite);
+				JSONObject json = new JSONObject(jsonString);
+				
+				
+				String string = json.get("events").toString();
+				JSONArray jsonEvents = new JSONArray(string);
+				
+				String jsonEventsText = jsonEvents.get(0).toString();				
+				JSONObject singleEvent = new JSONObject(jsonEventsText);			
+				JSONObject jsonName = new JSONObject(singleEvent.get("name").toString());
+				JSONObject jsonStart = new JSONObject(singleEvent.get("start").toString());
+				JSONObject jsonEnd = new JSONObject(singleEvent.get("end").toString());
+				
+				JSONObject obj = new JSONObject();
+				obj.put("id", singleEvent.get("id"));
+				obj.put("name", jsonName.get("text"));
+				obj.put("start", jsonStart.get("local"));
+				obj.put("end", jsonEnd.get("local"));
+								
+                compartidos.add(obj);
+            }
+        }
+        
+		
+		
+		JSONArray jsonEvents = new JSONArray(compartidos);
+		Response response = Response.ok().entity(jsonEvents.toString()).build();
 		return response;
 	}
 

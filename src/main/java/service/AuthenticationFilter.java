@@ -13,6 +13,7 @@ import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.Provider;
  
 import org.glassfish.jersey.server.mvc.Viewable;
@@ -32,10 +33,10 @@ public class AuthenticationFilter implements ContainerRequestFilter
     private ResourceInfo resourceInfo;
      
     private static final String AUTHORIZATION_PROPERTY = "Authorization";
-    private static final Response ACCESS_DENIED = Response.status(Response.Status.UNAUTHORIZED)
-                                                        .entity("You cannot access this resource").build();
-    private static final Response ACCESS_FORBIDDEN = Response.status(Response.Status.FORBIDDEN)
-                                                        .entity("Access blocked for all users !!").build();
+    private static final ResponseBuilder ACCESS_DENIED = Response.status(Response.Status.UNAUTHORIZED)
+                                                        .entity("You cannot access this resource");
+    private static final ResponseBuilder ACCESS_FORBIDDEN = Response.status(Response.Status.FORBIDDEN)
+                                                        .entity("Access blocked for all users !!");
       
     @Override
     public void filter(ContainerRequestContext requestContext)
@@ -59,7 +60,7 @@ public class AuthenticationFilter implements ContainerRequestFilter
             //Access denied for all
             if(method.isAnnotationPresent(DenyAll.class))
             {
-                requestContext.abortWith(ACCESS_FORBIDDEN);
+                requestContext.abortWith(ACCESS_FORBIDDEN.build());
                 return;
             }
             
@@ -73,7 +74,7 @@ public class AuthenticationFilter implements ContainerRequestFilter
             if(method.getName().equals("login") && (authorization == null || authorization.isEmpty()))
             {
             	System.out.println(this.getClass().getName() + ":: authorization is null or Empty");
-            	requestContext.abortWith(ACCESS_DENIED);
+            	requestContext.abortWith(ACCESS_DENIED.build());
                 return;
             }
             
@@ -96,7 +97,7 @@ public class AuthenticationFilter implements ContainerRequestFilter
         		{
         			System.out.println(this.getClass().getName() + ":: User has not the necessary roles");
             		
-        			requestContext.abortWith(ACCESS_DENIED);
+        			requestContext.abortWith(ACCESS_DENIED.build());
                     return;
         		}
         	}

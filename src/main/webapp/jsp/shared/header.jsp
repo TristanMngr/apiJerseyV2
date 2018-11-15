@@ -28,6 +28,20 @@
     
     <script>
 
+    	function logout() {
+			alert("See you soon");
+    		$.ajax({
+	        	url: "/logout", 
+	            type: "POST",
+	            asynchronous: false,
+	            complete: function (response) {
+	            	location.href = "/";
+	            	window.location.reload();
+	            }
+	        });
+        };
+    	
+
 	    function hideOptions(option) {
 	        if ( option == 1 ) {
 	        	$("#dropdownAdmin").addClass('displayNone');
@@ -124,7 +138,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="dropdownOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%=UserName%></a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownOptions">
-                            <a class="dropdown-item" href="/logout">Logout</a>
+                            <a class="dropdown-item" onclick="logout()">Logout</a>
                         </div>
                     </li>
                 </ul>

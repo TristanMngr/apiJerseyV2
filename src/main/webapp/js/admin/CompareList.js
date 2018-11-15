@@ -25,8 +25,11 @@ $(document).ready(function () {
 });
 
 function compareList() {
-	alert("Not yet implemented;");
-	return;
+	
+    $(".imgLoader").removeClass('displayNone');
+    var cuerpoTabla = $('table#eventosEncontrados').find('tbody');
+    cuerpoTabla.html('');
+	
 	usuario1 = $('#usuarios1 :selected').text();
 	lista1 = $('#listas1 :selected').text();
 	usuario2 = $('#usuarios2 :selected').text();
@@ -35,7 +38,29 @@ function compareList() {
         type: "GET",
         asynchronous: false,
         complete: function (response) {
-        	alert(response.responseText);
+        	var dataRecibida = $.parseJSON(response.responseText);
+        	$.each(dataRecibida, function (key, valor) {
+        		var filaTr = document.createElement('tr');
+                var celdaTd = document.createElement('td');
+                celdaTd.appendChild(document.createTextNode(valor.id));
+                filaTr.appendChild(celdaTd);
+                //
+                celdaTd = document.createElement('td');
+                celdaTd.appendChild(document.createTextNode(valor.name));
+                filaTr.appendChild(celdaTd);
+                //
+                celdaTd = document.createElement('td');
+                celdaTd.appendChild(document.createTextNode(formatEventBriteDate(valor.start)));
+                filaTr.appendChild(celdaTd);
+                //
+                celdaTd = document.createElement('td');
+                celdaTd.appendChild(document.createTextNode(formatEventBriteDate(valor.end)));
+                filaTr.appendChild(celdaTd);
+                //
+                cuerpoTabla.append(filaTr);
+            });
+            $(".imgLoader").addClass('displayNone');
+        	
         }
     });
 };
@@ -119,4 +144,10 @@ function showEventsForm() {
 	}
 	
     return false;
+};
+
+function formatEventBriteDate(date) {
+    var options = {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'};
+    var fecha = new Date(date).toLocaleDateString("es-ES", options);
+    return fecha;
 }
