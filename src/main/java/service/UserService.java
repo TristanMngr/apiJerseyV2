@@ -39,6 +39,10 @@ public class UserService {
     public static String getAllUsers() throws JsonProcessingException {
         return mapper.writeValueAsString(ManagementService.getUserDAO().getAllUsers());
     }
+    
+    public static String getAllNonAdminUsers() throws JsonProcessingException {
+        return mapper.writeValueAsString(ManagementService.getUserDAO().getAllNonAdminUsers());
+    }
 
     public static User create(String data, HttpHeaders headers) {
         System.out.println("UserService::create");

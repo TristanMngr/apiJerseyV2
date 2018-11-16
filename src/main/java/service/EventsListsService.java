@@ -11,6 +11,8 @@ import model.EventsList;
 import model.Session;
 import model.User;
 import org.bson.types.ObjectId;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateResults;
 import static service.EventbriteService.getJsonEventByID;
@@ -91,5 +93,29 @@ public class EventsListsService {
 		return listadoEventos.getEvents();
     	
     };
+    
+    public static int getCountUsersWithEvent(Long codigo){
+		int cantidad = 0;
+		try {
+			String users = UserService.getAllNonAdminUsers();
+			JSONArray jsonUsers = new JSONArray(users);
+			for (int i = 0; i < jsonUsers.length(); i++) {
+				JSONObject userJSONObj = jsonUsers.getJSONObject(i);
+				JSONArray eventsListJSONObj = new JSONArray(userJSONObj.get("eventsLists").toString());
+				for (int j = 0; j < eventsListJSONObj.length(); j++) {
+					JSONObject eventsObj = eventsListJSONObj.getJSONObject(j);
+					JSONArray jsonEventsList = new JSONArray(eventsObj.get("events").toString());
+					List<Object> eventos = jsonEventsList.toList();
+					if(eventos.contains(codigo))
+						cantidad++;
+				}
+			}
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+    	
+    	
+    	return cantidad;
+    }
 
 }

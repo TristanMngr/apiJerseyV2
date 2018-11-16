@@ -44,7 +44,7 @@ public class UsersControllerTest extends JerseyTest  {
 	public void testGetIt() {
 				
 		Response response = target().path("users").request(MediaType.APPLICATION_JSON).get();
-		System.out.println("+" + response.toString() + "+");
+		System.out.println("++++++++++++++++" + response.toString() + "+++++++++++++++++++++++++++");
 		assertEquals(200, response.getStatus());
 	}
 	

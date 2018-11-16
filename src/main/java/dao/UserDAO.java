@@ -1,6 +1,8 @@
 package dao;
 
 import model.User;
+import service.ManagementService;
+
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.dao.BasicDAO;
@@ -37,6 +39,12 @@ public class UserDAO extends BasicDAO<User, ObjectId> {
 
     public List<User> getAllUsers() {
         Query<User> query = getDatastore().find(User.class);
+        List<User> users = query.asList();
+        return users;
+    }
+    
+    public List<User> getAllNonAdminUsers() {
+    	Query<User> query = getDatastore().createQuery(User.class).field("role").notEqual("ADMIN");
         List<User> users = query.asList();
         return users;
     }
