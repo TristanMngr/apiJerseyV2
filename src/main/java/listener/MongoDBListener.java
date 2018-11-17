@@ -14,7 +14,7 @@ public class MongoDBListener implements ServletContextListener {
         ManagementService.createDAOs();
 
         // seed the database
-        /*Seed seed = new Seed();*/
+        Seed seed = new Seed();
     }
 
     public void contextDestroyed(ServletContextEvent sce) {

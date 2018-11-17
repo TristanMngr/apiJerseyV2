@@ -1,5 +1,6 @@
 package service;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.security.SecureRandom;
 import java.util.Map;
@@ -148,6 +149,18 @@ public class LoginService {
 		}
 
 		// TODO to uncomment
+		try {
+			EventbriteService.getEventsSinceLastConnexion(user);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		/*EventbriteService.getEventsSinceLastConnexion(user);*/
+		// TODO to uncomment
+		try {
+			EventbriteService.getEventsSinceLastConnexion(user);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		/*EventbriteService.getEventsSinceLastConnexion(user);*/
 			
 		return true;

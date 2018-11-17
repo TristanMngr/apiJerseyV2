@@ -77,6 +77,9 @@ public class MongoDBConnection {
             morphia = new Morphia();
 
             System.out.println("Mapping packages for clases within %s" + BaseMongoDO.class.getName());
+
+            // to not set empty array list to null
+            morphia.getMapper().getOptions().setStoreEmpties(true);
             morphia.mapPackageFromClass(BaseMongoDO.class);
         }
 

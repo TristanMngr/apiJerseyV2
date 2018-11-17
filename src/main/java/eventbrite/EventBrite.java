@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import model.BaseMongoDO;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "name", "description", "id", "url", "start", "end", "organization_id", "created", "changed",
@@ -16,14 +17,14 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 		"is_reserved_seating", "show_pick_a_seat", "show_seatmap_thumbnail", "show_colors_in_seatmap_thumbnail",
 		"source", "is_free", "version", "logo_id", "organizer_id", "venue_id", "category_id", "subcategory_id",
 		"format_id", "resource_uri", "is_externally_ticketed", "logo" })
-public class EventBrite {
+public class EventBrite extends BaseMongoDO {
 
 	@JsonProperty("name")
 	private Name name;
 	@JsonProperty("description")
 	private Description description;
 	@JsonProperty("id")
-	private String id;
+	private String idEvent;
 	@JsonProperty("url")
 	private String url;
 	@JsonProperty("start")
@@ -79,7 +80,7 @@ public class EventBrite {
 	@JsonProperty("is_free")
 	private Boolean isFree;
 	@JsonProperty("version")
-	private String version;
+	private String versionEvent;
 	@JsonProperty("logo_id")
 	private Object logoId;
 	@JsonProperty("organizer_id")
@@ -122,13 +123,13 @@ public class EventBrite {
 	}
 
 	@JsonProperty("id")
-	public String getId() {
-		return id;
+	public String getEventId() {
+		return idEvent;
 	}
 
 	@JsonProperty("id")
-	public void setId(String id) {
-		this.id = id;
+	public void setEventId(String id) {
+		this.idEvent = id;
 	}
 
 	@JsonProperty("url")
@@ -402,13 +403,13 @@ public class EventBrite {
 	}
 
 	@JsonProperty("version")
-	public String getVersion() {
-		return version;
+	public String getVersionEvent() {
+		return versionEvent;
 	}
 
 	@JsonProperty("version")
-	public void setVersion(String version) {
-		this.version = version;
+	public void setVersionEvent(String version) {
+		this.versionEvent = version;
 	}
 
 	@JsonProperty("logo_id")

@@ -1,6 +1,7 @@
 package service;
 
 import dao.*;
+import eventbrite.EventBrite;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ public class ManagementService {
     public static UserDAO userDAO;
     public static SessionListDAO listadoSesiones;
     public static AlarmDAO alarmDAO;
+    public static EventBriteDAO eventBriteDAO;
 
     public static void createDAOs() {
     	System.out.println("ManagementService::createDAOs");
@@ -26,6 +28,7 @@ public class ManagementService {
         eventsListsDAO = new EventsListDAO(conn.getDatastore(), userDAO);
         listadoSesiones = new SessionListDAO(conn.getDatastore());
         alarmDAO = new AlarmDAO(conn.getDatastore());
+        eventBriteDAO = new EventBriteDAO(conn.getDatastore());
     }
 
     public static SessionListDAO getSessionListDAO() {
@@ -39,6 +42,8 @@ public class ManagementService {
     public static AlarmDAO getAlarmDAO() {
         return alarmDAO;
     }
+
+    public static EventBriteDAO getEventBriteDAO() { return eventBriteDAO; }
 
     public static UserDAO getUserDAO() {
     	System.out.println("ManagementService::getUserDAO");

@@ -19,10 +19,13 @@ import java.io.IOException;
 public class AlarmController{
 
     // TODO to remove
+    @Path("/test")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public Response testCall() throws IOException {
-        return Response.ok(EventbriteService.getEventsSinceLastConnexion(ManagementService.getUserDAO().getByUserId(new ObjectId("5be5f0ad43b244784d05a68f"))), MediaType.APPLICATION_JSON).build();
+    public Response testCall(@Context ContainerRequestContext crc) throws IOException {
+        User user = UserService.currentUser(crc);
+        EventbriteService.getEventsSinceLastConnexion(user);
+        return Response.ok(user, MediaType.APPLICATION_JSON).build();
     }
 
     @Path("/create")

@@ -102,6 +102,7 @@ public class UserService {
                 user = ManagementService.getUserDAO().getUserByName(c.getValue());
             }
         }
+        System.out.println(user.getUserName());
         return user;
     }
 }

@@ -1,14 +1,11 @@
 package listener;
 
 import dao.MongoDBConnection;
-import model.Alarm;
-import model.EventsList;
 import model.User;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
@@ -20,6 +17,7 @@ public class Seed {
         MongoDBConnection conn = MongoDBConnection.getInstance();
         Datastore datastore = conn.getDatastore();
 
+        datastore.getDB().dropDatabase();
         
         String userOneId="5bcbba1743b244dd134d6f44";
         String userTwoId="5bcbba1743b244dd134d6f45";

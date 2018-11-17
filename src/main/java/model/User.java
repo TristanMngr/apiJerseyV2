@@ -5,6 +5,7 @@ import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Reference;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -28,16 +29,25 @@ public class User extends BaseMongoDO {
 
     // TODO change list alarm and event
     public User() {
+        this.lastLogin = null;
+        this.eventsLists = new ArrayList<>();
+        this.alarms = new ArrayList<>();
         this.role = "USER";
     }
 
     public User(String userName, String password) {
+        this.lastLogin = null;
+        this.eventsLists = new ArrayList<>();
+        this.alarms = new ArrayList<>();
     	this.userName = userName;
     	this.password = password;
     	this.role = "USER";
     }
 
     public User(ObjectId objectId, String userName, String password) {
+        this.lastLogin = null;
+        this.eventsLists = new ArrayList<>();
+        this.alarms = new ArrayList<>();
         this.userName = userName;
         this.setPassword(password);
         this.setId(objectId);
