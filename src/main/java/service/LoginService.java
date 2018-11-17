@@ -150,18 +150,13 @@ public class LoginService {
 
 		// TODO to uncomment
 		try {
+			System.out.println("here");
+			System.out.println(user.getId());
 			EventbriteService.getEventsSinceLastConnexion(user);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		/*EventbriteService.getEventsSinceLastConnexion(user);*/
-		// TODO to uncomment
-		try {
-			EventbriteService.getEventsSinceLastConnexion(user);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		/*EventbriteService.getEventsSinceLastConnexion(user);*/
+
 			
 		return true;
 	}

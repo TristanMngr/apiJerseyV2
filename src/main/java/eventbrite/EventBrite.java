@@ -17,7 +17,7 @@ import model.BaseMongoDO;
 		"is_reserved_seating", "show_pick_a_seat", "show_seatmap_thumbnail", "show_colors_in_seatmap_thumbnail",
 		"source", "is_free", "version", "logo_id", "organizer_id", "venue_id", "category_id", "subcategory_id",
 		"format_id", "resource_uri", "is_externally_ticketed", "logo" })
-public class EventBrite extends BaseMongoDO {
+public class EventBrite {
 
 	@JsonProperty("name")
 	private Name name;

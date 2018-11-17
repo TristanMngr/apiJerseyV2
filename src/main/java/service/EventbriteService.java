@@ -23,6 +23,7 @@ import javax.ws.rs.core.UriBuilder;
 
 import model.Alarm;
 import model.User;
+import model.Event;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.json.JSONArray;
@@ -115,21 +116,6 @@ public class EventbriteService {
         return EncryptionServices.decrypt("YVOWlcdl36bCvwcaUy8QWbdEQ8cyGKorBRAd3I5dinM=");
     }
 
-    /*public static List<EventBrite> stringToEventBriteObjectList(String events) throws IOException {
-        List<EventBrite> eventBriteList = new ArrayList<>();
-
-        JSONObject jsonObj    = new JSONObject(events);
-        JSONArray  jsonEvents = (JSONArray) jsonObj.get("events");
-
-        for (Object event : jsonEvents) {
-            EventBrite eventBrite = mapper.readValue(event.toString(), EventBrite.class);
-            System.out.println(eventBrite.getId());
-            eventBriteList.add(eventBrite);
-        }
-
-        return eventBriteList;
-    }*/
-
     private static String completeStringDatetime(String date) {
         if (!date.equals("")) {
             return date + "T00:00:00";
@@ -142,21 +128,24 @@ public class EventbriteService {
         Calendar today = Calendar.getInstance();
         today.set(Calendar.HOUR_OF_DAY, 0);
 
-        DateFormat                  df             = new SimpleDateFormat("yyyy-MM-dd");
-        String                      events         = "";
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
         HashMap<String, EventBrite> eventBriteHash = new HashMap<>();
 
         // TODO change here the sup
         if (user.getLastLogin() == null || Utils.getDateDiff(user.getLastLogin(), today.getTime(), TimeUnit.DAYS) >= 0) {
-            Map<String, String> paramsEventBrite = new HashMap<>();
-            for (Alarm alarm : user.getAlarms()) {
+
+            for (Alarm alarm : ManagementService.getAlarmDAO().getAlarmFromUser(user)) {
+                Map<String, String> paramsEventBrite = new HashMap<>();
+                String              events           = "";
                 for (String key : alarm.getParamsEventBrite().keySet()) {
                     paramsEventBrite.put(key, alarm.getParamsEventBrite().get(key));
                 }
                 paramsEventBrite.put("fechaDesde", df.format(user.getLastLogin()));
                 paramsEventBrite.put("fechaHasta", "");
+                System.out.println("here param eventBrite");
+                System.out.println(paramsEventBrite);
                 events += getEventsByParams(paramsEventBrite);
-                paramsEventBrite = new HashMap<>();
                 eventBriteHash = stringToEventBriteObjectHash(user, alarm, events);
             }
         }
@@ -174,61 +163,26 @@ public class EventbriteService {
 
         for (Object event : jsonEvents) {
             EventBrite eventBrite = mapper.readValue(event.toString(), EventBrite.class);
-            saveEventBriteObjectIntoAlarm(user, alarm, eventBrite);
-            /*eventBriteHash.putIfAbsent(eventBrite.getId(), eventBrite);
-            eventBriteHash.put(eventBrite.getId(), eventBrite);*/
+            Event eventFromBrite = new Event(
+                    eventBrite.getEventId(),
+                    eventBrite.getName().getText(),
+                    eventBrite.getStart().getUtc(),
+                    eventBrite.getEnd().getUtc(),
+                    eventBrite.getCategoryId());
+            saveEventBriteObjectIntoAlarm(user, alarm, eventFromBrite);
         }
-
-        // TODO to delete
-
 
         return eventBriteHash;
     }
 
-    public static void saveEventBriteObjectIntoAlarm(User user, Alarm alarm, EventBrite eventBrite) {
-        List<EventBrite> eventBriteList = alarm.getEventBriteList();
-        if (alarm.getParamsEventBrite().get("categoryId").equals(eventBrite.getCategoryId())) {
-            if (ManagementService.getEventBriteDAO().isCategoryIdPresent(eventBrite.getCategoryId())) {
-                return;
-            }
-            eventBriteList.add(eventBrite);
-            alarm.setEventBriteList(eventBriteList);
-            ManagementService.getUserDAO().save(user);
+    public static void saveEventBriteObjectIntoAlarm(User user, Alarm alarm, Event event) {
+        List<Event> eventBriteList = alarm.getEvent();
+
+        if (ManagementService.getAlarmDAO().eventNotPresent(user, event)) {
+            eventBriteList.add(event);
+            alarm.setEvent(eventBriteList);
+            ManagementService.getAlarmDAO().save(alarm);
         }
+
     }
 }
-
-        /*while (iterAlarm.hasNext()) {
-            Alarm alarm = iterAlarm.next();
-            Iterator<List<EventBrite>> iterEb = alarm.getEventBriteList().iterator();
-            if (alarm.getParamsEventBrite().get("categoryId").equals(eventBrite.getCategoryId())) {
-                if (!iterEb.hasNext()) {
-                    System.out.println("pass in save null");
-                    alarm.getEventBriteList().add(eventBrite);
-                } else {
-                    while (iterEb.hasNext()) {
-                        EventBrite eb = iterEb.next();
-
-                        if (eventBrite.getId().equals(eb.getId())) {
-                            // break if eventBrite object is already present
-                            System.out.println("id equals");
-                        } else {
-                            System.out.println("save here");
-                            alarm.getEventBriteList().add(eventBrite);
-                        }
-                    }
-
-                }*/
-
-        /*for (Alarm alarm : alarmList) {
-            System.out.println("alarm");
-            System.out.println(alarm.getParamsEventBrite().get("categoryId"));
-            System.out.println(eventBrite.getCategoryId());
-            if (alarm.getParamsEventBrite().get("categoryId").equals(eventBrite.getCategoryId())) {
-                System.out.println("categoryisgood");
-                if (alarm.getEventBriteList().isEmpty()) {
-                    System.out.println("eventBrite list null");
-                    alarm.getEventBriteList().add(eventBrite);*/
-
-
-

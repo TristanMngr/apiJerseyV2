@@ -1,6 +1,7 @@
 package model;
 
 import eventbrite.EventBrite;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,13 +13,16 @@ public class Alarm extends BaseMongoDO {
 
     private Map<String, String> paramsEventBrite = new HashMap<>();
 
-    private List<EventBrite> eventBriteList = new ArrayList<>();
+    private List<Event> event = new ArrayList<>();
+
+    private ObjectId userId;
 
     public Alarm() {
     }
 
     // TODO to remove
-    public Alarm(String name, String categoryId) {
+    public Alarm(ObjectId userId, String name, String categoryId) {
+        this.userId = userId;
         this.name = name;
         paramsEventBrite.put("categoryId", categoryId);
     }
@@ -43,11 +47,19 @@ public class Alarm extends BaseMongoDO {
         this.name = name;
     }
 
-    public List<EventBrite> getEventBriteList() {
-        return eventBriteList;
+    public List<Event> getEvent() {
+        return event;
     }
 
-    public void setEventBriteList(List<EventBrite> eventBriteList) {
-        this.eventBriteList = eventBriteList;
+    public void setEvent(List<Event> event) {
+        this.event = event;
+    }
+
+    public ObjectId getUserId() {
+        return userId;
+    }
+
+    public void setUserId(ObjectId userId) {
+        this.userId = userId;
     }
 }

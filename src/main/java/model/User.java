@@ -22,23 +22,18 @@ public class User extends BaseMongoDO {
     @Reference
     private List<EventsList> eventsLists;
 
-    @Embedded
-    private List<Alarm> alarms;
-
 	private String role;
 
     // TODO change list alarm and event
     public User() {
         this.lastLogin = null;
         this.eventsLists = new ArrayList<>();
-        this.alarms = new ArrayList<>();
         this.role = "USER";
     }
 
     public User(String userName, String password) {
         this.lastLogin = null;
         this.eventsLists = new ArrayList<>();
-        this.alarms = new ArrayList<>();
     	this.userName = userName;
     	this.password = password;
     	this.role = "USER";
@@ -47,7 +42,6 @@ public class User extends BaseMongoDO {
     public User(ObjectId objectId, String userName, String password) {
         this.lastLogin = null;
         this.eventsLists = new ArrayList<>();
-        this.alarms = new ArrayList<>();
         this.userName = userName;
         this.setPassword(password);
         this.setId(objectId);
@@ -86,18 +80,6 @@ public class User extends BaseMongoDO {
 
     public void setEventos(List<EventsList> eventsLists) {
         this.eventsLists = eventsLists;
-    }
-
-    public List<Alarm> getAlarms() {
-        return alarms;
-    }
-
-    public void setAlarms(List<Alarm> alarms) {
-        this.alarms = alarms;
-    }
-
-    public void addAlarm(Alarm alarm) {
-        this.alarms.add(alarm);
     }
 
     public String getPassword() {

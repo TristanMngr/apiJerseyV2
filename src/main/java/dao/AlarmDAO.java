@@ -1,7 +1,8 @@
 package dao;
 
+
 import model.Alarm;
-import model.EventsList;
+import model.Event;
 import model.User;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
@@ -9,6 +10,7 @@ import org.mongodb.morphia.Key;
 import org.mongodb.morphia.dao.BasicDAO;
 import org.mongodb.morphia.query.Query;
 
+import java.awt.*;
 import java.util.List;
 
 public class AlarmDAO extends BasicDAO<Alarm, ObjectId> {
@@ -28,4 +30,17 @@ public class AlarmDAO extends BasicDAO<Alarm, ObjectId> {
         }
         return true;
     }*/
+
+    public List<Alarm> getAlarmFromUser(User user) {
+        Query<Alarm> query = getDatastore().find(Alarm.class).field("userId").hasThisOne(user.getId());
+        return query.asList();
+    }
+
+    public boolean eventNotPresent(User user, Event event) {
+        Query<Alarm> query = getDatastore().find(Alarm.class).
+                filter("userId", user.getId()).
+                filter("event.id", event.getId());
+        System.out.println(query.asList());
+        return query.asList().isEmpty();
+    }
 }
