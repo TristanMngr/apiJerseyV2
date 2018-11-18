@@ -1,7 +1,8 @@
-$(document).ready(function () {
-    getCurrentUserAlarms();
-    armarSelectCategorias();
+var categoriesList = [];
 
+$(document).ready(function () {
+    categoriesList = armarSelectCategorias();
+    getCurrentUserAlarms();
 
     $("#btnCreateAlarm").click(function () {
         createAlarm();
@@ -11,6 +12,7 @@ $(document).ready(function () {
 
 
 function armarSelectCategorias() {
+    var categoriesList = [];
     $.ajax("/events/categories", {
         type: "GET",
         asynchronous: false,
@@ -18,16 +20,18 @@ function armarSelectCategorias() {
             var dataRecibida = $.parseJSON(response.responseText);
             $.each(dataRecibida.categories, function (key, valor) {
                 var linea = '<option value="' + valor.id + '" >' + valor.name + '</option>';
+                categoriesList[valor.id.toString()] = valor.name;
                 $('select#alarmCategory').append(linea);
             });
         }
     });
-    return false;
+    return categoriesList;
 }
 
 function createAlarm() {
     var alarmName = $("#alarmName").val();
     var alarmCategory = $("#alarmCategory").val();
+    var divMessage = $("div#message")[0];
     $.ajax("/alarms/create", {
         type: "POST",
         data: {
@@ -40,57 +44,68 @@ function createAlarm() {
                 alert("error")
             } else {
                 // TODO add all alarm from user
-                createTable(alarmName, alarmCategory);
+                var dataRecibida = $.parseJSON(response.responseText);
+                if (dataRecibida.error === 0) {
+                    createTable(alarmName, alarmCategory);
 
-                var cuerpoTabla = $('table#alarmList').find('tbody');
+                    var cuerpoTabla = $('table#alarmList').find('tbody');
 
-                var filaTr = document.createElement('tr');
-                filaTr.setAttribute("id", alarmName);
+                    var filaTr = document.createElement('tr');
+                    filaTr.setAttribute("id", alarmName);
 
-                var celdaTd = document.createElement('td');
-                celdaTd.appendChild(document.createTextNode(alarmName));
-                filaTr.appendChild(celdaTd);
+                    var celdaTd = document.createElement('td');
+                    celdaTd.appendChild(document.createTextNode(alarmName));
+                    filaTr.appendChild(celdaTd);
 
-                celdaTd = document.createElement('td');
-                celdaTd.appendChild(document.createTextNode(alarmCategory));
-                filaTr.appendChild(celdaTd);
+                    celdaTd = document.createElement('td');
+                    celdaTd.appendChild(document.createTextNode(alarmCategory));
+                    filaTr.appendChild(celdaTd);
 
-                var celdaTd = document.createElement('td');
-                var viewEvents = document.createElement("button");
-                viewEvents.setAttribute('class', 'btn btn-primary btnEvents');
-                viewEvents.setAttribute('type', 'button');
-                viewEvents.setAttribute('data-toggle', 'collapse');
-                viewEvents.setAttribute('data-target', '#accordion');
-                viewEvents.setAttribute('aria-expanded', 'true');
-                viewEvents.setAttribute('aria-controls', 'accordion');
-                viewEvents.appendChild(document.createTextNode('See All'));
-                celdaTd.appendChild(viewEvents);
-                filaTr.appendChild(celdaTd);
+                    var celdaTd = document.createElement('td');
+                    var viewEvents = document.createElement("button");
+                    viewEvents.setAttribute('class', 'btn btn-primary btnEvents');
+                    viewEvents.setAttribute('type', 'button');
+                    viewEvents.setAttribute('data-toggle', 'collapse');
+                    viewEvents.setAttribute('data-target', '#accordion');
+                    viewEvents.setAttribute('aria-expanded', 'true');
+                    viewEvents.setAttribute('aria-controls', 'accordion');
+                    viewEvents.appendChild(document.createTextNode('See All'));
+                    celdaTd.appendChild(viewEvents);
+                    filaTr.appendChild(celdaTd);
 
-                var celdaTd = document.createElement('td');
-                var removeButton = celdaTd.appendChild(document.createElement("button"));
-                removeButton.setAttribute('class', 'btn btn-danger btnRemove');
-                removeButton.setAttribute('type', 'button');
-                removeButton.setAttribute('data-toggle', 'button');
-                removeButton.setAttribute("id", alarmName);
-                removeButton.appendChild(document.createTextNode('Remove'));
-                celdaTd.appendChild(removeButton);
-                filaTr.appendChild(celdaTd);
+                    var celdaTd = document.createElement('td');
+                    var removeButton = celdaTd.appendChild(document.createElement("button"));
+                    removeButton.setAttribute('class', 'btn btn-danger btnRemove');
+                    removeButton.setAttribute('type', 'button');
+                    removeButton.setAttribute('data-toggle', 'button');
+                    removeButton.setAttribute("id", alarmName);
+                    removeButton.appendChild(document.createTextNode('Remove'));
+                    celdaTd.appendChild(removeButton);
+                    filaTr.appendChild(celdaTd);
 
-                // add collapse data
-                var filaTr = document.createElement('tr');
-                filaTr.setAttribute("class", alarmName);
-                var celdaTd = document.createElement('td');
-                celdaTd.setAttribute('colspan', '4');
-                var div = document.createElement('div');
-                div.setAttribute('id', 'event-' + alarmName);
-                div.setAttribute('class', 'collapse');
+                    // add collapse data
+                    var filaTr = document.createElement('tr');
+                    filaTr.setAttribute("class", alarmName);
+                    var celdaTd = document.createElement('td');
+                    celdaTd.setAttribute('colspan', '4');
+                    var div = document.createElement('div');
+                    div.setAttribute('id', 'event-' + alarmName);
+                    div.setAttribute('class', 'collapse');
 
-                filaTr.append(celdaTd);
-                celdaTd.append(div);
-                cuerpoTabla.append(filaTr);
+                    filaTr.append(celdaTd);
+                    celdaTd.append(div);
+                    cuerpoTabla.append(filaTr);
+
+                    divMessage.setAttribute('class', 'col-12 alert alert-success');
+                } else {
+                    divMessage.setAttribute('class', 'col-12 alert alert-danger');
+                }
+
+                divMessage.setAttribute('role', 'alert');
+                divMessage.append(document.createTextNode(''));
+
+                divMessage.innerHTML = dataRecibida.message;
             }
-            //TODO add response
         }
     });
     return false;
@@ -121,6 +136,7 @@ function getCurrentUserAlarms() {
 
 
 function createTable(alarmName, alarmCategory) {
+
     var cuerpoTabla = $('table#alarmList').find('tbody');
     var filaTr = document.createElement('tr');
     filaTr.setAttribute("id", alarmName);
@@ -130,6 +146,7 @@ function createTable(alarmName, alarmCategory) {
     filaTr.append(celdaTd);
 
     celdaTd = document.createElement('td');
+
     celdaTd.append(document.createTextNode(alarmCategory));
     filaTr.append(celdaTd);
 
@@ -173,9 +190,11 @@ function createTable(alarmName, alarmCategory) {
     cuerpoTabla.append(filaTr);
 }
 
+
 $(document).on("click", "button.btnEvents", function () {
     var buttonName = $(this).attr('id').split('-').pop();
     console.log(buttonName);
+
 
     $.ajax("/alarms/" + buttonName, {
         type: "GET",
@@ -185,12 +204,12 @@ $(document).on("click", "button.btnEvents", function () {
                 // TODO handle error
                 alert("error")
             } else {
+                $('table#'+ buttonName).remove();
                 var data = $.parseJSON(response.responseText);
-                console.log(data);
                 var inputElement = $('div#event-' + buttonName);
 
                 var table = document.createElement('table');
-                table.setAttribute('id', 'eventsList');
+                table.setAttribute('id', buttonName);
 
                 var thead = document.createElement('thead');
                 var tbody = document.createElement('tbody');

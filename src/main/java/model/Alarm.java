@@ -1,6 +1,5 @@
 package model;
 
-import eventbrite.EventBrite;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;

@@ -50,4 +50,20 @@ public class AlarmDAO extends BasicDAO<Alarm, ObjectId> {
 
         return query.asList().get(0);
     }
+
+    public boolean nameIsPresent(User user, String name) {
+        Query<Alarm> query = getDatastore().find(Alarm.class).
+                filter("userId", user.getId()).
+                filter("name", name);
+
+        return !query.asList().isEmpty();
+    }
+
+    public boolean categoryIsPresent(User user, String category) {
+        Query<Alarm> query = getDatastore().find(Alarm.class).
+                filter("userId", user.getId()).
+                filter("paramsEventBrite.categoryId", category);
+
+        return !query.asList().isEmpty();
+    }
 }

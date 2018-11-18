@@ -149,15 +149,17 @@ public class LoginService {
 		}
 
 		// TODO to uncomment
-		try {
-			System.out.println("here");
-			System.out.println(user.getId());
-			EventbriteService.getEventsSinceLastConnexion(user);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		new Thread(new Runnable() {
+            public void run()
+            {
+                try {
+                    EventbriteService.getEventsSinceLastConnexion(user);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }}).start();
 
-			
+
 		return true;
 	}
 

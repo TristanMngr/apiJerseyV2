@@ -143,8 +143,7 @@ public class EventbriteService {
                 }
                 paramsEventBrite.put("fechaDesde", df.format(user.getLastLogin()));
                 paramsEventBrite.put("fechaHasta", "");
-                System.out.println("here param eventBrite");
-                System.out.println(paramsEventBrite);
+
                 events += getEventsByParams(paramsEventBrite);
                 eventBriteHash = stringToEventBriteObjectHash(user, alarm, events);
             }

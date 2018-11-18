@@ -9,6 +9,7 @@
 <html>
 <head>
     <title>Alarm</title>
+    <link rel="stylesheet" href="../../css/styles.css">
 </head>
 <jsp:include page="/jsp/shared/header.jsp" flush="true"/>
 <h3 class="display-4 text-center">Alarms</h3>
@@ -40,7 +41,13 @@
                         <button type="button" id="btnCreateAlarm" class="btn btn-info">Create Alarm</button>
                     </div>
                 </div>
+                <br>
+                <div class="row">
+                    <div id="message">
+                    </div>
+                </div>
             </div>
+
             <div class="col-md-8 table-responsive">
                 <div class="row">
                     <h3 class="text-center">List Alarm</h3>
