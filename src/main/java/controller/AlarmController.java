@@ -13,20 +13,9 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 
 @Path("/alarms")
 public class AlarmController{
-
-    // TODO to remove
-    @Path("/test")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response testCall(@Context ContainerRequestContext crc) throws IOException {
-        User user = UserService.currentUser(crc);
-        EventbriteService.getEventsSinceLastConnexion(user);
-        return Response.ok(user, MediaType.APPLICATION_JSON).build();
-    }
 
     @Path("/create")
     @POST
@@ -41,10 +30,19 @@ public class AlarmController{
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response destroy(@FormParam("name") String name, @Context ContainerRequestContext crc) throws JsonProcessingException {
-        // TODO create method to get connected user
-
         User user = UserService.currentUser(crc);
 
         return Response.status(200).entity(AlarmService.removeAlarm(user, name)).build();
     }
+
+    @Path("/{name}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAlarmByName(@PathParam("name") String name, @Context ContainerRequestContext crc) throws JsonProcessingException {
+        User user = UserService.currentUser(crc);
+
+        return Response.status(200).entity(AlarmService.getAlarmByName(user, name)).build();
+    }
+
+
 }

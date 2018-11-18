@@ -2,9 +2,12 @@ package service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dao.AlarmDAO;
 import model.Alarm;
 import model.User;
+import model.Event;
 
+import java.awt.*;
 import java.util.Iterator;
 
 public class AlarmService {
@@ -20,15 +23,22 @@ public class AlarmService {
         return "{\"error\":0,\"alarm\":" + mapper.writeValueAsString(alarm) + ",\"user\":" + mapper.writeValueAsString(user) + "}";
     }
 
-    /*public static String removeAlarm(User user, String name) throws JsonProcessingException {
-        for (Iterator<Alarm> iterator = user.getAlarms().iterator(); iterator.hasNext(); ) {
+    public static String getAlarmByName(User user, String name) throws JsonProcessingException {
+        Alarm alarm = ManagementService.getAlarmDAO().getAlarmByName(user, name);
+
+        return "{\"error\":0,\"events\":" + mapper.writeValueAsString(alarm.getEvent()) + "}";
+    }
+
+
+    public static String removeAlarm(User user, String name) throws JsonProcessingException {
+        for (Iterator<Alarm> iterator = ManagementService.getAlarmDAO().getAlarmFromUser(user).iterator(); iterator.hasNext(); ) {
             Alarm alarm = iterator.next();
             if (alarm.getName() != null && alarm.getName().equals(name)) {
-                iterator.remove();
+                ManagementService.getAlarmDAO().delete(alarm);
             }
         }
 
-        ManagementService.getUserDAO().save(user);
+
         return "{\"error\":0,\"user\":" + mapper.writeValueAsString(user) + "}";
-    }*/
+    }
 }

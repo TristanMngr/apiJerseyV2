@@ -40,7 +40,14 @@ public class AlarmDAO extends BasicDAO<Alarm, ObjectId> {
         Query<Alarm> query = getDatastore().find(Alarm.class).
                 filter("userId", user.getId()).
                 filter("event.id", event.getId());
-        System.out.println(query.asList());
         return query.asList().isEmpty();
+    }
+
+    public Alarm getAlarmByName(User user, String name) {
+        Query<Alarm> query = getDatastore().find(Alarm.class).
+                filter("userId", user.getId()).
+                filter("name", name);
+
+        return query.asList().get(0);
     }
 }

@@ -51,7 +51,8 @@
                     <tr>
                         <th>Name</th>
                         <th>Category</th>
-                        <th></th>
+                        <th>Events</th>
+                        <th>Remove</th>
                     </tr>
                     </thead>
                     <tbody>
