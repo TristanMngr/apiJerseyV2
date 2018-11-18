@@ -17,6 +17,7 @@ public class ManagementService {
     public static UserDAO userDAO;
     public static SessionListDAO listadoSesiones;
     public static AlarmDAO alarmDAO;
+	private static EventsDAO listadoEventos;
 
     public static void createDAOs() {
     	System.out.println("ManagementService::createDAOs");
@@ -25,6 +26,7 @@ public class ManagementService {
         userDAO = new UserDAO(conn.getDatastore());
         eventsListsDAO = new EventsListDAO(conn.getDatastore(), userDAO);
         listadoSesiones = new SessionListDAO(conn.getDatastore());
+        listadoEventos = new EventsDAO(conn.getDatastore());
         alarmDAO = new AlarmDAO(conn.getDatastore());
     }
 
@@ -39,14 +41,17 @@ public class ManagementService {
     public static AlarmDAO getAlarmDAO() {
         return alarmDAO;
     }
+    
+	public static EventsDAO getEventsDAO() {
+		return listadoEventos;
+	}
 
     public static UserDAO getUserDAO() {
     	System.out.println("ManagementService::getUserDAO");
     	
     	if(userDAO == null)
     		System.out.println("ManagementService::getUserDAO will return null");
-    	
-    	
+    	 	
         return userDAO;
     }
 
@@ -62,5 +67,7 @@ public class ManagementService {
         List<String> lista = Arrays.asList(sentencia.split(separador, -1));
         return lista.get(posicion);
     }
+
+
 
 }

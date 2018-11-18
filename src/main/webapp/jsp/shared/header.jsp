@@ -118,7 +118,7 @@
                             <a class="dropdown-item linkReload" data-loadhtml="admin/CompareList.html" href="#">Comparar Listas</a>
                             <a class="dropdown-item linkReload" data-loadhtml="admin/EventsCheck.html" href="#">Buscar Eventos</a>
                             <a class="dropdown-item linkReload" data-loadhtml="admin/Events.html" href="#">Dashboard Eventos</a>
-                            <a class="dropdown-item " href="admin/users">Get All Users</a>
+                            <!-- <a class="dropdown-item " href="admin/users">Get All Users</a> -->
                         </div>
                     </li>
                     <li class="nav-item">

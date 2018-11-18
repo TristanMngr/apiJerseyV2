@@ -11,22 +11,17 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import model.EventsList;
 import model.User;
 import service.EventbriteService;
 import service.EventsListsService;
+import service.EventsService;
 import service.ManagementService;
-import service.UserService;
 
 
 @Path("/admin")
@@ -146,6 +141,19 @@ public class AdminController {
 
 		JSONArray jsonEvents = new JSONArray(compartidos);
 		Response response = Response.ok().entity(jsonEvents.toString()).build();
+		return response;
+	}
+	
+	@Path("/events/search")
+	@GET
+	@RolesAllowed("ADMIN")
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response getEventsCount(@QueryParam("since") int days) {
+		System.out.println(this.getClass().getName() + ":: getEventsCount");
+		
+		int number = EventsService.getEventCount(days);
+
+		Response response = Response.ok(number).build();
 		return response;
 	}
 

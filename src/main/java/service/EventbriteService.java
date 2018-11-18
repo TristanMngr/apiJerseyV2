@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eventbrite.EventBrite;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.text.DateFormat;
