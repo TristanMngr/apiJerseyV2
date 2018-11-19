@@ -92,7 +92,7 @@ function getUserLists() {
         type: "GET",
         asynchronous: false,
         data: {
-            userId: "5bcbba1743b244dd134d6f44",
+            userId: "5be4d37edd70291dc4e618a2",
         },
         complete: function (response) {
             var dataRecibida = $.parseJSON(response.responseText);

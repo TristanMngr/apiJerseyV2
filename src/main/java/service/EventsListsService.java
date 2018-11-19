@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+import model.Event;
 import model.EventsList;
 import model.User;
 import org.bson.types.ObjectId;
@@ -19,10 +20,13 @@ public class EventsListsService {
     private static ObjectMapper mapper = new ObjectMapper();
 
     public static String create(String nombre, String userId) throws JsonProcessingException {
-        EventsList listaCreada = new EventsList(userId, nombre);
-        ManagementService.getEventsListDAO().create(listaCreada);
+        EventsList listaCreada = new EventsList(UserService.getUserObjectById(userId).getId(), nombre);
+        if (ManagementService.getEventsListDAO().create(listaCreada) != null) {
+            listaCreada.setHexId(listaCreada.getId().toHexString());
+        }
+
         User user = UserService.addListToUser(listaCreada, userId);
-        user.getEventsLists().stream().forEach(list -> buildHexId(list));
+//        user.getEventsLists().stream().forEach(list -> buildHexId(list));
         return "{\"error\":0,\"lista\":" + mapper.writeValueAsString(listaCreada) + ",\"user\":" + mapper.writeValueAsString(user) + "}";
     }
 
@@ -32,10 +36,13 @@ public class EventsListsService {
 
     public static String getByUserId(String userId) throws JsonProcessingException {
         User user = UserService.getUserObjectById(userId);
-        user.getEventsLists().stream().forEach(list -> buildHexId(list));
+        List<EventsList> listas = user.getEventsLists();
+//        if (listas != null) {
+//            user.getEventsLists().stream().forEach(list -> list.setEventsObj(list.getEvents().stream().map(event -> getJsonEventByID(event.toString())).collect(Collectors.toList())));
+//        } else {
+//            System.out.println("NO hay listas");
+//        }
 
-        user.getEventsLists().stream().forEach(list -> list.setEventsObj(list.getEvents().stream().map(event -> getJsonEventByID(event.toString())).collect(Collectors.toList())));
-        
         return mapper.writeValueAsString(user);
     }
 
@@ -49,16 +56,16 @@ public class EventsListsService {
 
     public static Boolean addEvent(String listaId, Long codigoEvento) throws IOException {
         //TODO: Verificacion de errores. Sino se puede salvar la lista o el evento.
-    	
-    	EventsList lista = ManagementService.getEventsListDAO().getByListaId(new ObjectId(listaId));
+
+        EventsList lista = ManagementService.getEventsListDAO().getByListaId(new ObjectId(listaId));
 //        EventBrite evento = EventbriteService.getEventByID(codigoEvento);
         List<Long> events = lista.getEvents();
         events.add(codigoEvento);
         lista.setEvents(events);
         ManagementService.getEventsListDAO().saveEventToList(lista, events);
-        ManagementService.getEventsDAO().saveEvent(codigoEvento);
-        
-        
+        //TODO: agregar el evento en la lista embebida en el usuario
+        System.out.println(ManagementService.getEventsDAO().saveEvent(codigoEvento).getId().toString());
+
         return true;
     }
 
@@ -72,55 +79,57 @@ public class EventsListsService {
         return "{\"error\":0}";
     }
 
-    private static EventsList buildHexId(EventsList list) {
-        list.setHexId(list.getId().toHexString());
-        return list;
-    }
-    
-    public static List<Long> getListOfEventsByUserAndListName(String username, String lista){
-    	
-    	User user = ManagementService.getUserDAO().getUserByName(username);
-    	List<EventsList> listados = user.getEventsLists();
-    	
-    	EventsList listadoEventos = null;
+//    private static EventsList buildHexId(EventsList list) {
+//        System.out.println("build Hex Id");
+//        list.setHexId(list.getId().toHexString());
+//        return list;
+//    }
+    public static List<Long> getListOfEventsByUserAndListName(String username, String lista) {
 
-    	for(EventsList listado : listados) {
-    		ObjectId id = listado.getId();
-    		Query<EventsList> query = ManagementService.getEventsListDAO().getDatastore().createQuery(EventsList.class).field("_id").equal(id);
-    		listadoEventos = query.get();
-    		if(listadoEventos.getNombre().equals(lista))
-    			break;
-    	} 	
-    	    	
-		return listadoEventos.getEvents();
-    	
-    };
+        User user = ManagementService.getUserDAO().getUserByName(username);
+        List<EventsList> listados = user.getEventsLists();
+
+        EventsList listadoEventos = null;
+
+        for (EventsList listado : listados) {
+            ObjectId id = listado.getId();
+            Query<EventsList> query = ManagementService.getEventsListDAO().getDatastore().createQuery(EventsList.class).field("_id").equal(id);
+            listadoEventos = query.get();
+            if (listadoEventos.getNombre().equals(lista)) {
+                break;
+            }
+        }
+
+        return listadoEventos.getEvents();
+
+    }
+
+    ;
     
-    public static int getCountUsersWithEvent(Long codigo){
-		int cantidad = 0;
-		try {
-			String users = UserService.getAllNonAdminUsers();
-			JSONArray jsonUsers = new JSONArray(users);
-			for (int i = 0; i < jsonUsers.length(); i++) {
-				JSONObject userJSONObj = jsonUsers.getJSONObject(i);
-				JSONArray eventsListJSONObj = new JSONArray(userJSONObj.get("eventsLists").toString());
-				for (int j = 0; j < eventsListJSONObj.length(); j++) {
-					JSONObject eventsObj = eventsListJSONObj.getJSONObject(j);
-					JSONArray jsonEventsList = new JSONArray(eventsObj.get("events").toString());
-					List<Object> eventos = jsonEventsList.toList();
-					if(eventos.contains(codigo)) {
-						cantidad++;
-						break; // si el evento aparece en más de una lista para el mismo usuario lo contaría duplicado
-					}
-						
-				}
-			}
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-    	
-    	
-    	return cantidad;
+    public static int getCountUsersWithEvent(Long codigo) {
+        int cantidad = 0;
+        try {
+            String users = UserService.getAllNonAdminUsers();
+            JSONArray jsonUsers = new JSONArray(users);
+            for (int i = 0; i < jsonUsers.length(); i++) {
+                JSONObject userJSONObj = jsonUsers.getJSONObject(i);
+                JSONArray eventsListJSONObj = new JSONArray(userJSONObj.get("eventsLists").toString());
+                for (int j = 0; j < eventsListJSONObj.length(); j++) {
+                    JSONObject eventsObj = eventsListJSONObj.getJSONObject(j);
+                    JSONArray jsonEventsList = new JSONArray(eventsObj.get("events").toString());
+                    List<Object> eventos = jsonEventsList.toList();
+                    if (eventos.contains(codigo)) {
+                        cantidad++;
+                        break; // si el evento aparece en más de una lista para el mismo usuario lo contaría duplicado
+                    }
+
+                }
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return cantidad;
     }
 
 }

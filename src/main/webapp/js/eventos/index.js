@@ -66,22 +66,22 @@ function mostrarEventos() {
         asynchronous: false,
         complete: function (response) {
             var dataRecibida = $.parseJSON(response.responseText);
-            $.each(dataRecibida.events, function (key, valor) {
+            $.each(dataRecibida.events, function (_, event) {
                 var filaTr = document.createElement('tr');
                 var celdaTd = document.createElement('td');
-                celdaTd.appendChild(document.createTextNode(valor.id));
+                celdaTd.appendChild(document.createTextNode(event.id));
                 filaTr.appendChild(celdaTd);
                 //
                 celdaTd = document.createElement('td');
-                celdaTd.appendChild(document.createTextNode(valor.name.text));
+                celdaTd.appendChild(document.createTextNode(event.name.text));
                 filaTr.appendChild(celdaTd);
                 //
                 celdaTd = document.createElement('td');
-                celdaTd.appendChild(document.createTextNode(formatEventBriteDate(valor.start.local)));
+                celdaTd.appendChild(document.createTextNode(formatEventBriteDate(event.start.local)));
                 filaTr.appendChild(celdaTd);
                 //
                 celdaTd = document.createElement('td');
-                celdaTd.appendChild(document.createTextNode(formatEventBriteDate(valor.end.local)));
+                celdaTd.appendChild(document.createTextNode(formatEventBriteDate(event.end.local)));
                 filaTr.appendChild(celdaTd);
                 //
                 celdaTd = document.createElement('td');
@@ -95,8 +95,8 @@ function mostrarEventos() {
                 buttonModal.setAttribute('data-toggle', 'tooltip');
                 buttonModal.setAttribute('data-placement', 'left');
                 buttonModal.setAttribute('title', 'Agregar a una lista');
-                buttonModal.setAttribute('data-nombre', valor.name.text);
-                buttonModal.setAttribute('data-codigo', valor.id);
+                buttonModal.setAttribute('data-nombre', event.name.text);
+                buttonModal.setAttribute('data-codigo', event.id);
                 divModal.appendChild(buttonModal);
                 var icon = document.createElement('i');
                 icon.setAttribute('class', 'fas fa-file-download');

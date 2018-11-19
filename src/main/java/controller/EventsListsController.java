@@ -7,7 +7,10 @@ import model.User;
 import java.io.IOException;
 
 import java.util.Map;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -23,14 +26,12 @@ import service.UserService;
 @Path("/eventsLists")
 public class EventsListsController {
 
-    private String loggedUser="5bcbba1743b244dd134d6f45"; //TODO getUserLogged()
+    User loggedUser;
     
-    private void setUserLogged(String username) {	
-    	User user = ManagementService.getUserDAO().getUserByName(username);
-    	loggedUser = user.getId().toString();    	
+    public EventsListsController(@Context ContainerRequestContext crc){
+        this.loggedUser = UserService.currentUser(crc);
     }
-    
-    
+
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response getAllLists() throws JsonProcessingException {
@@ -41,8 +42,11 @@ public class EventsListsController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getListsFromUser(@Context UriInfo uriDetails, @Context ContainerRequestContext crc) throws JsonProcessingException {
-        User user = UserService.currentUser(crc);
-        return Response.ok(user).build();
+        String username = uriDetails.getQueryParameters().get("userId").get(0);
+//        User loggedUser = UserService.currentUser(crc);
+        System.out.println(this.loggedUser.getUserName());
+        System.out.println(this.loggedUser.getId().toHexString());
+        return Response.ok(EventsListsService.getByUserId(this.loggedUser.getId().toHexString())).build();
     }
 
     /**
@@ -56,24 +60,23 @@ public class EventsListsController {
     //public Response crearLista(String params) throws JsonProcessingException {
     public Response crearLista(@Context HttpHeaders httpHeaders, String params) throws JsonProcessingException {
         //TODO: verificar que no estamos creando una lista con el mismo nombre para el mismo usuario.
-    	System.out.println(this.getClass().getName() + ":: crearLista ...");
-    	String username = LoginService.getUserFromCookie(httpHeaders.getCookies());	
-        setUserLogged(username);
-    	
+        System.out.println(this.getClass().getName() + ":: crearLista ...");
+        String username = LoginService.getUserFromCookie(httpHeaders.getCookies());
+//        User loggedUser = UserService.currentUser(crc);
+
         System.out.println(this.getClass().getName() + ":: username = " + username);
         System.out.println(this.getClass().getName() + ":: params = " + params);
-        
-        
-    	Map<String, String> parametros = ManagementService.getPostParams(params);
-    	
+
+        Map<String, String> parametros = ManagementService.getPostParams(params);
+
         String nombreLista = parametros.get("nombreLista");
         System.out.println(this.getClass().getName() + ":: nombreLista = " + nombreLista);
-        
-        nombreLista=nombreLista.replace("+", " ");
-        
+
+        nombreLista = nombreLista.replace("+", " ");
+
         System.out.println(this.getClass().getName() + ":: nombreLista = " + nombreLista);
-        
-        String userId = this.loggedUser;
+
+        String userId = this.loggedUser.getId().toHexString();
         return Response.status(201).entity(EventsListsService.create(nombreLista, userId)).build();
     }
 
@@ -81,21 +84,21 @@ public class EventsListsController {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response addEvent(String params) throws IOException {
-    	System.out.println(this.getClass().getName() + ":: addEvent ...");
-    	Map<String, String> parametros = ManagementService.getPostParams(params);
-    	
-    	Long codigoEvento = Long.parseLong(parametros.get("codigo"));
+        System.out.println(this.getClass().getName() + ":: addEvent ...");
+        Map<String, String> parametros = ManagementService.getPostParams(params);
+
+        Long codigoEvento = Long.parseLong(parametros.get("codigo"));
         String listaId = parametros.get("lista");
         return Response.status(201).entity("{\"error\":" + !(EventsListsService.addEvent(listaId, codigoEvento)) + "}").build();
     }
-    
+
     @Path("/delete")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteList(String params) throws JsonProcessingException {
         Map<String, String> parametros = ManagementService.getPostParams(params);
         String listaId = parametros.get("listaId");
-        String userId = this.loggedUser;
+        String userId = this.loggedUser.getId().toHexString();
         return Response.status(201).entity(EventsListsService.deleteList(listaId, userId)).build();
     }
 

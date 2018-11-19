@@ -2,6 +2,7 @@ package service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
 import model.User;
 import org.bson.types.ObjectId;
 
@@ -38,7 +39,7 @@ public class UserService {
     public static String getAllUsers() throws JsonProcessingException {
         return mapper.writeValueAsString(ManagementService.getUserDAO().getAllUsers());
     }
-    
+
     public static String getAllNonAdminUsers() throws JsonProcessingException {
         return mapper.writeValueAsString(ManagementService.getUserDAO().getAllNonAdminUsers());
     }
@@ -76,31 +77,33 @@ public class UserService {
     public static User addListToUser(EventsList list, String userId) {
         User user = getUserObjectById(userId);
         List<EventsList> lists = getListsByUser(userId);
+        if (lists == null) {
+            lists = new ArrayList<>();
+        }
         lists.add(list);
         user.setEventsLists(lists);
-        ManagementService.getUserDAO().saveEventsListsToUser(new ObjectId(userId), lists);
+        ManagementService.getUserDAO().saveEventsListsToUser(user.getId(), lists);
         return user;
     }
 
-	public static boolean validateRole(Map<String, Cookie> cookies, String string) {
-		System.out.println("UserService::validateRole");
-	
-		Cookie cookieUsername = cookies.get("username");
-		String userFromCookie = cookieUsername.getValue();
-		User user = ManagementService.getUserDAO().getUserByName(userFromCookie);
-		
-		if(user.getRole().equals(string)) {
-			return true;
-		}
-	
-		return false;
-	}
+    public static boolean validateRole(Map<String, Cookie> cookies, String string) {
+        System.out.println("UserService::validateRole");
+
+        Cookie cookieUsername = cookies.get("username");
+        String userFromCookie = cookieUsername.getValue();
+        User user = ManagementService.getUserDAO().getUserByName(userFromCookie);
+
+        if (user.getRole().equals(string)) {
+            return true;
+        }
+
+        return false;
+    }
 
     public static User currentUser(ContainerRequestContext containerRequestContext) {
         User user = null;
 
-        for (Cookie c : containerRequestContext.getCookies().values())
-        {
+        for (Cookie c : containerRequestContext.getCookies().values()) {
             if (c.getName().equals("username")) {
                 user = ManagementService.getUserDAO().getUserByName(c.getValue());
             }
