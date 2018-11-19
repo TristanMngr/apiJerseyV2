@@ -60,11 +60,11 @@ public class AdminController {
 		return response;
 	}
 
-	@Path("/users/{userID}")
+	@Path("/users/{name}")
 	@GET
 	@RolesAllowed("ADMIN")
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response getUser(@PathParam("userID") String name) {
+	public Response getUser(@PathParam("name") String name) {
 		System.out.println(this.getClass().getName() + ":: AdminController getUser");
 		User user = ManagementService.getUserDAO().getUserByName(name);
 
@@ -78,11 +78,11 @@ public class AdminController {
 		//return Response.status(201).entity(user).build(); 
 	}
 
-	@Path("/users/{userID}/events")
+	@Path("/users/{name}/events")
 	@GET
 	@RolesAllowed("ADMIN")
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response getUserLists(@PathParam("userID") String name) {
+	public Response getUserLists(@PathParam("name") String name) {
 		System.out.println(this.getClass().getName() + ":: AdminController getUserLists");
 		User user = ManagementService.getUserDAO().getUserByName(name);
 
