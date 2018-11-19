@@ -1,14 +1,12 @@
 package listener;
 
 import dao.MongoDBConnection;
-import model.Alarm;
-import model.EventsList;
 import model.User;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 public class Seed {
@@ -18,6 +16,8 @@ public class Seed {
 
         MongoDBConnection conn = MongoDBConnection.getInstance();
         Datastore datastore = conn.getDatastore();
+
+        datastore.getDB().dropDatabase();
         
         String userOneId="5bcbba1743b244dd134d6f44";
         String userTwoId="5bcbba1743b244dd134d6f45";
@@ -25,16 +25,18 @@ public class Seed {
         String userFourId="5bcbba1743b244dd134d6f47";
         String userFiveId="5bcbba1743b244dd134d6f48";
 
-        User userOne = new User(new ObjectId(userOneId), "Christhian", "password");
-        User userTwo = new User(new ObjectId(userTwoId), "Guille", "password");
-        User userThree = new User(new ObjectId(userThreeId), "Francisco", "password");
-        User userFour = new User(new ObjectId(userFourId), "Juan", "password");
-        User userFive = new User(new ObjectId(userFiveId), "Tristan", "password");
+        String password = "password";
+
+        User userOne = new User(new ObjectId(userOneId), "Christhian", new String(Base64.getEncoder().encode(("Christian:" + password).getBytes())));
+        User userTwo = new User(new ObjectId(userTwoId), "Guille", new String(Base64.getEncoder().encode(("Guille:" + password).getBytes())));
+        User userThree = new User(new ObjectId(userThreeId), "Francisco", new String(Base64.getEncoder().encode(("Francisco:" + password).getBytes())));
+        User userFour = new User(new ObjectId(userFourId), "Juan", new String(Base64.getEncoder().encode(("Juan:" + password).getBytes())));
+        User userFive = new User(new ObjectId(userFiveId), "Tristan", new String(Base64.getEncoder().encode(("Tristan:" + password).getBytes())));
 
 //        Evento eventOne   = new Evento("ATLANTA'S", "5b281078cc5815bc2e5a5b2a","eventOne");
 //        Evento eventTwo   = new Evento("Georgetown Glow","5b281078cc5815bc2e5a5b2b","eventTwo");
 //        Evento eventThree = new Evento("AllStar Weekend Party", "5b281078cc5815bc2e5a5b2c","eventThree");
-        Alarm alarmOne  = new Alarm("alarmOne");
+        /*Alarm alarmOne  = new Alarm("alarmOne");
         Alarm alarmTwo  = new Alarm("alarmTwo");
         Alarm alarmTree = new Alarm("alarmTree");
 
@@ -65,7 +67,7 @@ public class Seed {
         userFour.setEventos(Arrays.asList(eventsListSix));
         userFive.setEventos(Arrays.asList(eventsListSeven, eventsListEight));
 
-        userOne.setAlarms(Arrays.asList(alarmOne, alarmTwo, alarmTree));
+        userOne.setAlarms(Arrays.asList(alarmOne, alarmTwo, alarmTree));*/
 
         List<User> users = new ArrayList<>();
         users.add(userOne);

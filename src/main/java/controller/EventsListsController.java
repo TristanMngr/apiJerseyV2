@@ -31,10 +31,6 @@ public class EventsListsController {
     public EventsListsController(@Context ContainerRequestContext crc){
         this.loggedUser = UserService.currentUser(crc);
     }
-//    private void setUserLogged(String username) {
-//        User user = ManagementService.getUserDAO().getUserByName(username);
-//        this.loggedUser = user.getId().toString();
-//    }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})

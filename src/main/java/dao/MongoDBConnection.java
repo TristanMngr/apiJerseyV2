@@ -22,7 +22,7 @@ public class MongoDBConnection {
 
     private MongoDBConnection() {}
     
-    private static boolean useLocalDB = false;
+    private static boolean useLocalDB = true;
 
     public MongoClient getMongo() throws RuntimeException {
         if (mongo == null) {
@@ -77,6 +77,9 @@ public class MongoDBConnection {
             morphia = new Morphia();
 
             System.out.println("Mapping packages for clases within %s" + BaseMongoDO.class.getName());
+
+            // to not set empty array list to null
+            morphia.getMapper().getOptions().setStoreEmpties(true);
             morphia.mapPackageFromClass(BaseMongoDO.class);
         }
 

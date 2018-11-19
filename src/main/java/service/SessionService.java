@@ -1,5 +1,6 @@
 package service;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 
@@ -65,7 +66,8 @@ public class SessionService {
 		Session session = ManagementService.getSessionListDAO().getSessionByUserWithToken(user, tokenFromCookie);
 		if(session != null)
 			found = true;
-		
+
+
 		return found;
 	}
 
