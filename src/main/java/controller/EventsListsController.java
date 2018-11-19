@@ -27,8 +27,8 @@ import service.UserService;
 public class EventsListsController {
 
     User loggedUser;
-    
-    public EventsListsController(@Context ContainerRequestContext crc){
+
+    public EventsListsController(@Context ContainerRequestContext crc) {
         this.loggedUser = UserService.currentUser(crc);
     }
 
@@ -40,11 +40,11 @@ public class EventsListsController {
 
     /**
      * busca las listas de un usuario incluyendo los eventos
-     * 
+     *
      * @param uriDetails
      * @param crc
      * @return
-     * @throws JsonProcessingException 
+     * @throws JsonProcessingException
      */
     @Path("/getFromUser")
     @GET
@@ -56,14 +56,15 @@ public class EventsListsController {
         System.out.println(this.loggedUser.getId().toHexString());
         return Response.ok(EventsListsService.getByUserId(this.loggedUser.getId().toHexString())).build();
     }
-    
+
     /**
-     * busca las listas de un usuario sin los eventos para que sea más liviana y más rápida
-     * 
+     * busca las listas de un usuario sin los eventos para que sea más liviana y
+     * más rápida
+     *
      * @param uriDetails
      * @param crc
      * @return
-     * @throws JsonProcessingException 
+     * @throws JsonProcessingException
      */
     @Path("/getCleanListsFromUser")
     @GET
@@ -127,6 +128,17 @@ public class EventsListsController {
         String listaId = parametros.get("listaId");
         String userId = this.loggedUser.getId().toHexString();
         return Response.status(201).entity(EventsListsService.deleteList(listaId, userId)).build();
+    }
+
+    @Path("/edit")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editList(String params) throws JsonProcessingException {
+        Map<String, String> parametros = ManagementService.getPostParams(params);
+        String listaId = parametros.get("listaId");
+        String nombre = parametros.get("nombreLista");
+//        System.out.println("lista: " + listaId + " - nombre: " + nombre);
+        return Response.status(201).entity(EventsListsService.editList(listaId, nombre)).build();
     }
 
 }

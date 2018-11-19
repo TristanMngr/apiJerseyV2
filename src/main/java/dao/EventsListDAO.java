@@ -71,4 +71,10 @@ public class EventsListDAO extends BasicDAO<EventsList, ObjectId> {
         UpdateOperations<EventsList> updateOps = getDatastore().createUpdateOperations(EventsList.class).set("events", events);
         return getDatastore().updateFirst(querySearch, updateOps);
     }
+
+    public UpdateResults updateName(EventsList list, String name) {
+        Query<EventsList> querySearch = getDatastore().find(EventsList.class, "_id", list.getId());
+        UpdateOperations<EventsList> updateOps = getDatastore().createUpdateOperations(EventsList.class).set("nombre", name);
+        return getDatastore().updateFirst(querySearch, updateOps);
+    }
 }

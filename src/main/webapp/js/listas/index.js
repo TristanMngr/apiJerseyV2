@@ -6,10 +6,22 @@ $(document).ready(function () {
         crearLista();
     });
 
+    $("#btnSubmitEditLista").click(function () {
+        $(this).attr('disabled', true);
+        editLista();
+    });
+
     $(document).on('click', ".btnDeleteList", function () {
         var listaId = $(this).data('hexid');
         deleteList(listaId);
     });
+
+    $(document).on('click', ".btnEditList", function () {
+        var nombre = $(this).data("nombre");
+        var listaId = $(this).data("hexid");
+        $("#editList").find(".modal-title").html("Editar los datos de la lista " + nombre);
+        $("#editList").find('input[name="listaId"]').val(listaId);
+    })
 });
 
 function appendDomLista(lista) {
@@ -42,6 +54,18 @@ function appendDomLista(lista) {
 //    icon.setAttribute('style', 'font-size: 20px;');
     buttonDelete.appendChild(icon);
     h5.appendChild(buttonDelete);
+    ////
+    var buttonEdit = document.createElement('button');
+    buttonEdit.setAttribute('class', 'btn btn-sm btn-success btnEditList float-right');
+    buttonEdit.setAttribute('data-hexid', lista.hexId);
+    buttonEdit.setAttribute('data-toggle', "modal");
+    buttonEdit.setAttribute('data-target', "#editList");
+    buttonEdit.setAttribute('data-name', lista.nombre);
+    buttonEdit.setAttribute('style', 'margin-right: 20px;');
+    var icon = document.createElement('i');
+    icon.setAttribute('class', 'fas fa-edit');
+    buttonEdit.appendChild(icon);
+    h5.appendChild(buttonEdit);
     ////
     var cardCollapse = document.createElement('div');
     cardCollapse.setAttribute('id', 'collapse_' + lista.hexId);
@@ -107,7 +131,7 @@ function getUserLists() {
 
 function crearLista() {
     $(".imgLoader").removeClass('displayNone');
-    var nombreLista = $("#nombreLista").val();
+    var nombreLista = $("#editList").find('input[name="nombreLista"]').val();
     $.ajax("/eventsLists/create", {
         type: "POST",
         data: {
@@ -119,6 +143,31 @@ function crearLista() {
             if (!dataRecibida.error) {
                 alert("Se creó correctamente la lista");
                 appendDomLista(dataRecibida.lista);
+            }
+            $("button").attr('disabled', false);
+            $(".btnDismiss").click();
+            $(".imgLoader").addClass('displayNone');
+        }
+    });
+    return false;
+}
+
+function editLista() {
+    $(".imgLoader").removeClass('displayNone');
+    var listaId = $("#editList").find('input[name="listaId"]').val();
+    var nombreLista = $("#editList").find('input[name="nombreLista"]').val();
+    $.ajax("/eventsLists/edit", {
+        type: "POST",
+        data: {
+            'listaId': listaId,
+            'nombreLista': nombreLista,
+        },
+        asynchronous: false,
+        complete: function (response) {
+            var dataRecibida = $.parseJSON(response.responseText);
+            if (!dataRecibida.error) {
+                alert("Se modificó correctamente la lista");
+                $("#heading_" + listaId).find(".btn-link").html(nombreLista);
             }
             $("button").attr('disabled', false);
             $(".btnDismiss").click();

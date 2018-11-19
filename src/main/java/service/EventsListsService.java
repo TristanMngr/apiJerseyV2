@@ -32,6 +32,20 @@ public class EventsListsService {
         return "{\"error\":0,\"lista\":" + mapper.writeValueAsString(listaCreada) + ",\"user\":" + mapper.writeValueAsString(user) + "}";
     }
 
+    public static String editList(String listaId, String nombre) throws JsonProcessingException {
+        EventsList lista = getByListaId(listaId);
+        if (lista == null) {
+            return "{\"error\":1}";
+        }
+//        System.out.println("listaId: " + listaId);
+        lista.setNombre(nombre);
+        if (ManagementService.getEventsListDAO().updateName(lista, nombre) == null) {
+            return "{\"error\":1}";
+        }
+//        user.getEventsLists().stream().forEach(list -> buildHexId(list));
+        return "{\"error\":0,\"lista\":" + mapper.writeValueAsString(lista) /*+ ",\"user\":" + mapper.writeValueAsString(user)*/ + "}";
+    }
+
     public static String getAllLists() throws JsonProcessingException {
         return mapper.writeValueAsString(ManagementService.getEventsListDAO().getAllLists());
     }
@@ -61,6 +75,7 @@ public class EventsListsService {
     }
 
     public static EventsList getByListaId(String listaId) {
+        System.out.println("listaId: " + listaId);
         return ManagementService.getEventsListDAO().getByListaId(new ObjectId(listaId));
     }
 
