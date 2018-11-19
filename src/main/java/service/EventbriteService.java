@@ -4,14 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eventbrite.EventBrite;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.client.Client;
@@ -22,8 +20,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
 import model.Alarm;
+import model.EventBriteLight;
 import model.User;
-import model.Event;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.json.JSONArray;
@@ -162,7 +160,7 @@ public class EventbriteService {
 
         for (Object event : jsonEvents) {
             EventBrite eventBrite = mapper.readValue(event.toString(), EventBrite.class);
-            Event eventFromBrite = new Event(
+            EventBriteLight eventFromBrite = new EventBriteLight(
                     eventBrite.getEventId(),
                     eventBrite.getName().getText(),
                     eventBrite.getStart().getUtc(),
@@ -174,8 +172,8 @@ public class EventbriteService {
         return eventBriteHash;
     }
 
-    public static void saveEventBriteObjectIntoAlarm(User user, Alarm alarm, Event event) {
-        List<Event> eventBriteList = alarm.getEvent();
+    public static void saveEventBriteObjectIntoAlarm(User user, Alarm alarm, EventBriteLight event) {
+        List<EventBriteLight> eventBriteList = alarm.getEvent();
 
         if (ManagementService.getAlarmDAO().eventNotPresent(user, event)) {
             eventBriteList.add(event);

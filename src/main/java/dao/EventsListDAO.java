@@ -1,12 +1,9 @@
 package dao;
 
-import eventbrite.EventBrite;
-import java.util.*;
 import java.util.List;
 
 import com.mongodb.WriteResult;
 import model.EventsList;
-import model.User;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;

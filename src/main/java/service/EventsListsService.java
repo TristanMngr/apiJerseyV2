@@ -2,15 +2,14 @@ package service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eventbrite.EventBrite;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import model.EventsList;
-import model.Session;
 import model.User;
 import org.bson.types.ObjectId;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateResults;
 import static service.EventbriteService.getJsonEventByID;
@@ -49,12 +48,17 @@ public class EventsListsService {
     }
 
     public static Boolean addEvent(String listaId, Long codigoEvento) throws IOException {
-        EventsList lista = ManagementService.getEventsListDAO().getByListaId(new ObjectId(listaId));
+        //TODO: Verificacion de errores. Sino se puede salvar la lista o el evento.
+    	
+    	EventsList lista = ManagementService.getEventsListDAO().getByListaId(new ObjectId(listaId));
 //        EventBrite evento = EventbriteService.getEventByID(codigoEvento);
         List<Long> events = lista.getEvents();
         events.add(codigoEvento);
         lista.setEvents(events);
         ManagementService.getEventsListDAO().saveEventToList(lista, events);
+        ManagementService.getEventsDAO().saveEvent(codigoEvento);
+        
+        
         return true;
     }
 
@@ -91,5 +95,32 @@ public class EventsListsService {
 		return listadoEventos.getEvents();
     	
     };
+    
+    public static int getCountUsersWithEvent(Long codigo){
+		int cantidad = 0;
+		try {
+			String users = UserService.getAllNonAdminUsers();
+			JSONArray jsonUsers = new JSONArray(users);
+			for (int i = 0; i < jsonUsers.length(); i++) {
+				JSONObject userJSONObj = jsonUsers.getJSONObject(i);
+				JSONArray eventsListJSONObj = new JSONArray(userJSONObj.get("eventsLists").toString());
+				for (int j = 0; j < eventsListJSONObj.length(); j++) {
+					JSONObject eventsObj = eventsListJSONObj.getJSONObject(j);
+					JSONArray jsonEventsList = new JSONArray(eventsObj.get("events").toString());
+					List<Object> eventos = jsonEventsList.toList();
+					if(eventos.contains(codigo)) {
+						cantidad++;
+						break; // si el evento aparece en más de una lista para el mismo usuario lo contaría duplicado
+					}
+						
+				}
+			}
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+    	
+    	
+    	return cantidad;
+    }
 
 }

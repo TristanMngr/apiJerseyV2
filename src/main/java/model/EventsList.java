@@ -1,8 +1,5 @@
 package model;
 
-import eventbrite.EventBrite;
-import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 
 import java.util.ArrayList;

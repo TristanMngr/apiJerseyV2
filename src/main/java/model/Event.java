@@ -1,61 +1,40 @@
 package model;
 
+import java.util.Date;
 
-public class Event {
-    private String id;
-    private String name;
-    private String   start;
-    private String end;
-    private String categoryId;
+import org.mongodb.morphia.annotations.Entity;
 
+@Entity("events")
+public class Event extends BaseMongoDO  {
+
+	private Long eventBriteID;
+	private Date created;
+
+    // Morphia needs a zero-arg constructor to create the class before populating its fields.
     public Event() {
+       super();
     }
 
-    public Event(String id, String name, String start, String end, String categoryId) {
-        this.id = id;
-        this.name = name;
-        this.start = start;
-        this.end = end;
-        this.categoryId = categoryId;
-    }
+    public Event(Long eventBriteID) {
+		Date now = new Date();
+		this.setEventBriteID(eventBriteID);
+		this.setCreated(now);
+	}
 
-    public String getId() {
-        return id;
-    }
+	public Long getEventBriteID() {
+		return eventBriteID;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setEventBriteID(Long eventBriteID) {
+		this.eventBriteID = eventBriteID;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public Date getCreated() {
+		return created;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setCreated(Date created) {
+		this.created = created;
+	}
 
-    public String getStart() {
-        return start;
-    }
-
-    public void setStart(String start) {
-        this.start = start;
-    }
-
-    public String getEnd() {
-        return end;
-    }
-
-    public void setEnd(String end) {
-        this.end = end;
-    }
-
-    public String getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
-    }
 }

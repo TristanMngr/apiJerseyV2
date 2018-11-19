@@ -105,4 +105,6 @@ public class User extends BaseMongoDO {
 	public void setRole(String role) {
 		this.role = role;
 	}
+
+
 }

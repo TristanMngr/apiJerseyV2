@@ -2,7 +2,6 @@ package service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import model.Session;
 import model.User;
 import org.bson.types.ObjectId;
 
@@ -38,6 +37,10 @@ public class UserService {
 
     public static String getAllUsers() throws JsonProcessingException {
         return mapper.writeValueAsString(ManagementService.getUserDAO().getAllUsers());
+    }
+    
+    public static String getAllNonAdminUsers() throws JsonProcessingException {
+        return mapper.writeValueAsString(ManagementService.getUserDAO().getAllNonAdminUsers());
     }
 
     public static User create(String data, HttpHeaders headers) {

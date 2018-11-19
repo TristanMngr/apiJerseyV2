@@ -44,7 +44,7 @@ public class UsersControllerTest extends JerseyTest  {
 	public void testGetIt() {
 				
 		Response response = target().path("users").request(MediaType.APPLICATION_JSON).get();
-		System.out.println("+" + response.toString() + "+");
+		System.out.println("++++++++++++++++" + response.toString() + "+++++++++++++++++++++++++++");
 		assertEquals(200, response.getStatus());
 	}
 	
@@ -91,9 +91,23 @@ public class UsersControllerTest extends JerseyTest  {
 		
 		assertEquals("admin", answerFromResponse.get("role").toString());
 		
-		//TODO: Test logout
-		//response  = target().path("logout").request().cookie("username", usernameCookie.getValue()).cookie("tokenG5",tokenCookie.getValue()).get();
-		//assertEquals(200, response.getStatus());
+		
+		response  = target().path("events/buscarEventos")
+							.queryParam("codigo", "17920884849")
+							.queryParam("nombre", "")
+							.queryParam("categoryId", "")
+							.queryParam("desde", "")
+							.queryParam("hasta", "")
+							.request().cookie("username", usernameCookie.getValue()).cookie("tokenG5",tokenCookie.getValue()).get();
+		
+		assertEquals(200, response.getStatus());
+				
+		response  = target().path("logout")
+							.request()
+							.cookie("username", usernameCookie.getValue())
+							.cookie("tokenG5",tokenCookie.getValue())
+							.post(Entity.entity(json.toString(),MediaType.APPLICATION_FORM_URLENCODED),Response.class);
+		assertEquals(200, response.getStatus());
 		
 		
 		// Elimine un usuario

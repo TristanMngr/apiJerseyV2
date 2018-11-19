@@ -56,12 +56,23 @@ public class EventsListsController {
     //public Response crearLista(String params) throws JsonProcessingException {
     public Response crearLista(@Context HttpHeaders httpHeaders, String params) throws JsonProcessingException {
         //TODO: verificar que no estamos creando una lista con el mismo nombre para el mismo usuario.
+    	System.out.println(this.getClass().getName() + ":: crearLista ...");
     	String username = LoginService.getUserFromCookie(httpHeaders.getCookies());	
         setUserLogged(username);
     	
+        System.out.println(this.getClass().getName() + ":: username = " + username);
+        System.out.println(this.getClass().getName() + ":: params = " + params);
+        
+        
     	Map<String, String> parametros = ManagementService.getPostParams(params);
+    	
         String nombreLista = parametros.get("nombreLista");
+        System.out.println(this.getClass().getName() + ":: nombreLista = " + nombreLista);
+        
         nombreLista=nombreLista.replace("+", " ");
+        
+        System.out.println(this.getClass().getName() + ":: nombreLista = " + nombreLista);
+        
         String userId = this.loggedUser;
         return Response.status(201).entity(EventsListsService.create(nombreLista, userId)).build();
     }
@@ -70,8 +81,10 @@ public class EventsListsController {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response addEvent(String params) throws IOException {
-        Map<String, String> parametros = ManagementService.getPostParams(params);
-        Long codigoEvento = Long.parseLong(parametros.get("codigo"));
+    	System.out.println(this.getClass().getName() + ":: addEvent ...");
+    	Map<String, String> parametros = ManagementService.getPostParams(params);
+    	
+    	Long codigoEvento = Long.parseLong(parametros.get("codigo"));
         String listaId = parametros.get("lista");
         return Response.status(201).entity("{\"error\":" + !(EventsListsService.addEvent(listaId, codigoEvento)) + "}").build();
     }

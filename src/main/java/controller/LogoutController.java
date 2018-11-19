@@ -1,9 +1,8 @@
 package controller;
 
-import java.net.URI;
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -18,10 +17,9 @@ import service.SessionService;
 public class LogoutController {
 	
 	@PermitAll
-	@GET
+	@POST
 	@Produces(MediaType.TEXT_PLAIN)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	// TODO: Esto deberia ser un POST
 	public Response logout(@Context HttpHeaders httpHeaders, String data) {
 		
 		System.out.println(this.getClass().getName() + "::logout");					
@@ -31,10 +29,9 @@ public class LogoutController {
 		System.out.println(this.getClass().getName() + ":: token = " + token);
 		
 		SessionService.deleteSession(username,token);
-		
-		Response response = Response.seeOther(URI.create("/")).build(); 
+
+		Response response = Response.ok().build();
 		return response;
-		
 
 	}
 }

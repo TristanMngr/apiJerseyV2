@@ -3,6 +3,7 @@ package dao;
 
 import model.Alarm;
 import model.Event;
+import model.EventBriteLight;
 import model.User;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
@@ -36,7 +37,7 @@ public class AlarmDAO extends BasicDAO<Alarm, ObjectId> {
         return query.asList();
     }
 
-    public boolean eventNotPresent(User user, Event event) {
+    public boolean eventNotPresent(User user, EventBriteLight event) {
         Query<Alarm> query = getDatastore().find(Alarm.class).
                 filter("userId", user.getId()).
                 filter("event.id", event.getId());

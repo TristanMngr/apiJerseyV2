@@ -12,7 +12,7 @@ public class Alarm extends BaseMongoDO {
 
     private Map<String, String> paramsEventBrite = new HashMap<>();
 
-    private List<Event> event = new ArrayList<>();
+    private List<EventBriteLight> event = new ArrayList<>();
 
     private ObjectId userId;
 
@@ -46,11 +46,11 @@ public class Alarm extends BaseMongoDO {
         this.name = name;
     }
 
-    public List<Event> getEvent() {
+    public List<EventBriteLight> getEvent() {
         return event;
     }
 
-    public void setEvent(List<Event> event) {
+    public void setEvent(List<EventBriteLight> event) {
         this.event = event;
     }
 

@@ -50,6 +50,12 @@ public class UserDAO extends BasicDAO<User, ObjectId> {
         List<User> users = query.asList();
         return users;
     }
+    
+    public List<User> getAllNonAdminUsers() {
+    	Query<User> query = getDatastore().createQuery(User.class).field("role").notEqual("ADMIN");
+        List<User> users = query.asList();
+        return users;
+    }
 
     public UpdateResults saveEventsListsToUser(ObjectId userId, List<EventsList> lists) {
         Query<User> querySearch = getDatastore().find(User.class, "id", userId);

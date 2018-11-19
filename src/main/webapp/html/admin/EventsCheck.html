@@ -1,62 +1,88 @@
 <div id="subPageContainer">
-    <h1 class="display-3 text-center">Eventos</h1>
-    <hr/>
-    <div class="col-12">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group row">
-                    <label for="codigo" class="col-md-3 col-form-label">Código</label>
-                    <div class="col-md-9">
-                        <input type="text" class="form-control" id="codigo" name="codigo" >
-                    </div>
-                </div>
-                <div class="form-group row notCodigo">
-                    <label for="nombre" class="col-md-3 col-form-label">Nombre</label>
-                    <div class="col-md-9">
-                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="">
-                    </div>
-                </div>
-                <div class="form-group row notCodigo">
-                    <label for="categorias" class="col-md-3 col-form-label">Categoría</label>
-                    <div class="col-md-9">
-                        <select class="form-control" id="categorias" name="categorias">
-                            <option value="">Todas</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group row notCodigo">
-                    <label for="desde" class="col-md-3 col-form-label">Desde</label>
-                    <div class="col-md-9">
-                        <input type="date" class="form-control" id="desde" name="desde" placeholder="">
-                    </div>
-                </div>
-                <div class="form-group row notCodigo">
-                    <label for="hasta" class="col-md-3 col-form-label">Hasta</label>
-                    <div class="col-md-9">
-                        <input type="date" class="form-control" id="hasta" name="hasta" placeholder="">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 text-center">
-                        <button type="button" id="btnSubmitBuscarEventos" class="btn btn-info">Buscar</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-8 table-responsive">
-                <table id="eventosEncontrados" class="table table-hover table-sm">
-                    <thead>
-                        <tr>
-                            <th>Username</th>
-                             </tr>
-                    </thead>
-                    <tbody>
+	<h1 class="display-3 text-center">Eventos</h1>
+	<hr />
+	<div class="col-12">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="form-group row">
+					<label for="codigo" class="col-md-3 col-form-label">Código</label>
+					<div class="col-md-9">
+						<input type="text" class="form-control" id="codigo" name="codigo">
+					</div>
+				</div>
+				<div class="form-group row notCodigo">
+					<label for="nombre" class="col-md-3 col-form-label">Nombre</label>
+					<div class="col-md-9">
+						<input type="text" class="form-control" id="nombre" name="nombre"
+							placeholder="">
+					</div>
+				</div>
+				<div class="form-group row notCodigo">
+					<label for="categorias" class="col-md-3 col-form-label">Categoría</label>
+					<div class="col-md-9">
+						<select class="form-control" id="categorias" name="categorias">
+							<option value="">Todas</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group row notCodigo">
+					<label for="desde" class="col-md-3 col-form-label">Desde</label>
+					<div class="col-md-9">
+						<input type="date" class="form-control" id="desde" name="desde"
+							placeholder="">
+					</div>
+				</div>
+				<div class="form-group row notCodigo">
+					<label for="hasta" class="col-md-3 col-form-label">Hasta</label>
+					<div class="col-md-9">
+						<input type="date" class="form-control" id="hasta" name="hasta"
+							placeholder="">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12 text-center">
+						<button type="button" id="btnSubmitBuscarEventos"
+							class="btn btn-info">Buscar</button>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-8 table-responsive">
+				<table id="eventosEncontrados" class="table table-hover table-sm">
+					<thead>
+						<tr>
+							<th>Código</th>
+							<th>Nombre</th>
+							<th>Inicio</th>
+							<th>Fin</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
 
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 
-    <script src="/js/admin/EventsCheck.js"></script>
+
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">"Body Text"</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="/js/admin/EventsCheck.js"></script>
 
 </div>

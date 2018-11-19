@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 
-import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Cookie;
 import model.Session;
 import model.User;
