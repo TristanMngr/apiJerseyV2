@@ -1,5 +1,6 @@
 package dao;
 
+import com.mongodb.WriteResult;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -51,6 +52,12 @@ public class EventsDAO extends BasicDAO<Event, ObjectId> {
 
         return 0;
 
+    }
+
+    public WriteResult deleteEventsByListaId(ObjectId listaId) {
+        Query<Event> querySearch = getDatastore().find(Event.class, "eventsList", listaId);
+        WriteResult writeResult = getDatastore().delete(querySearch);
+        return writeResult;
     }
 
 }

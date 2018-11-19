@@ -136,9 +136,11 @@ public class EventsListsController {
     public Response editList(String params) throws JsonProcessingException {
         Map<String, String> parametros = ManagementService.getPostParams(params);
         String listaId = parametros.get("listaId");
-        String nombre = parametros.get("nombreLista");
+        String nombreLista = parametros.get("nombreLista");
+        nombreLista = nombreLista.replace("+", " ");
+
 //        System.out.println("lista: " + listaId + " - nombre: " + nombre);
-        return Response.status(201).entity(EventsListsService.editList(listaId, nombre)).build();
+        return Response.status(201).entity(EventsListsService.editList(listaId, nombreLista)).build();
     }
 
 }

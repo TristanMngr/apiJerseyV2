@@ -102,9 +102,11 @@ public class EventsListsService {
         EventsList list = getByListaId(listaId);
         //eliminar la lista
         ManagementService.getEventsListDAO().deleteEventsLists(new ObjectId(listaId));
+        //elimino los eventos que tenía de las coleccion de eventos
+        ManagementService.getEventsDAO().deleteEventsByListaId(new ObjectId(listaId));
         //sacar la referencia del usuario
         UpdateResults result = ManagementService.getUserDAO().removeEventsListFromUser(new ObjectId(userId), list);
-//        result.
+
         return "{\"error\":0}";
     }
 

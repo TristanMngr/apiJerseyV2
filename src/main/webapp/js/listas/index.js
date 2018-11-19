@@ -131,7 +131,7 @@ function getUserLists() {
 
 function crearLista() {
     $(".imgLoader").removeClass('displayNone');
-    var nombreLista = $("#editList").find('input[name="nombreLista"]').val();
+    var nombreLista = $("#createList").find('input[name="nombreLista"]').val();
     $.ajax("/eventsLists/create", {
         type: "POST",
         data: {
