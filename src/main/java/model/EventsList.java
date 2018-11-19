@@ -4,6 +4,8 @@ import org.mongodb.morphia.annotations.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Reference;
 
 @Entity("eventsLists")
 public class EventsList extends BaseMongoDO {
@@ -11,23 +13,23 @@ public class EventsList extends BaseMongoDO {
     private String nombre;
 
 //    @Reference
-//    private ObjectId user;
+    private ObjectId user;
 
 //    @Reference
     private List<Long> events = new ArrayList<Long>();
     private List<String> eventsObj = new ArrayList<String>();
     private String hexId;
     
-    public EventsList(){};
+    public EventsList(){}
 
-    public EventsList(String user, String nombre) {
+    public EventsList(ObjectId userId, String nombre) {
         this.nombre = nombre;
-//        this.user = new ObjectId(user);
+        this.user = userId;
     }
 
-    public EventsList(String user, String nombre, List<Long> listEvents) {
+    public EventsList(ObjectId userId, String nombre, List<Long> listEvents) {
         this.nombre = nombre;
-//        this.user = new ObjectId(user);
+        this.user = userId;
         this.events = listEvents;
     }
 
@@ -39,14 +41,14 @@ public class EventsList extends BaseMongoDO {
         this.events = events;
     }
 
-//    public ObjectId getUserId() {
-//        return user;
-//    }
-//
-//    public void setUserId(ObjectId user) {
-//        this.user = user;
-//    }
+    public ObjectId getUser() {
+        return user;
+    }
 
+    public void setUser(ObjectId user) {
+        this.user = user;
+    }
+    
     public String getNombre() {
         return nombre;
     }
