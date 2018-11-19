@@ -22,7 +22,9 @@ public class EventsListsService {
     public static String create(String nombre, String userId) throws JsonProcessingException {
         EventsList listaCreada = new EventsList(UserService.getUserObjectById(userId).getId(), nombre);
         if (ManagementService.getEventsListDAO().create(listaCreada) != null) {
+            System.out.println("lista creada " + listaCreada.getNombre());
             listaCreada.setHexId(listaCreada.getId().toHexString());
+            System.out.println("lista creada " + listaCreada.getHexId());
         }
 
         User user = UserService.addListToUser(listaCreada, userId);
@@ -37,12 +39,24 @@ public class EventsListsService {
     public static String getByUserId(String userId) throws JsonProcessingException {
         User user = UserService.getUserObjectById(userId);
         List<EventsList> listas = user.getEventsLists();
-//        if (listas != null) {
-//            user.getEventsLists().stream().forEach(list -> list.setEventsObj(list.getEvents().stream().map(event -> getJsonEventByID(event.toString())).collect(Collectors.toList())));
-//        } else {
-//            System.out.println("NO hay listas");
-//        }
+        if (listas != null) {
+            listas.stream().forEach(list -> buildHexId(list));
+            user.getEventsLists().stream().forEach(list -> list.setEventsObj(list.getEvents().stream().map(event -> getJsonEventByID(event.toString())).collect(Collectors.toList())));
+        } else {
+            System.out.println("NO hay listas");
+        }
 
+        return mapper.writeValueAsString(user);
+    }
+
+    public static String getCleanListsByUserId(String userId) throws JsonProcessingException {
+        User user = UserService.getUserObjectById(userId);
+        List<EventsList> listas = user.getEventsLists();
+        if (listas != null) {
+            listas.stream().forEach(list -> buildHexId(list));
+        } else {
+            System.out.println("NO hay listas");
+        }
         return mapper.writeValueAsString(user);
     }
 
@@ -64,7 +78,7 @@ public class EventsListsService {
         lista.setEvents(events);
         ManagementService.getEventsListDAO().saveEventToList(lista, events);
         //TODO: agregar el evento en la lista embebida en el usuario
-        System.out.println(ManagementService.getEventsDAO().saveEvent(codigoEvento).getId().toString());
+        System.out.println(ManagementService.getEventsDAO().saveEvent(new Event(codigoEvento, lista.getId())).getId().toString());
 
         return true;
     }
@@ -79,11 +93,12 @@ public class EventsListsService {
         return "{\"error\":0}";
     }
 
-//    private static EventsList buildHexId(EventsList list) {
-//        System.out.println("build Hex Id");
-//        list.setHexId(list.getId().toHexString());
-//        return list;
-//    }
+    private static EventsList buildHexId(EventsList list) {
+        System.out.println("build Hex Id");
+        list.setHexId(list.getId().toHexString());
+        return list;
+    }
+
     public static List<Long> getListOfEventsByUserAndListName(String username, String lista) {
 
         User user = ManagementService.getUserDAO().getUserByName(username);
