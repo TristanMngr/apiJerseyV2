@@ -124,7 +124,8 @@ function getCurrentUserAlarms() {
                 // TODO add all alarm from user
 
                 var dataRecibida = $.parseJSON(response.responseText);
-
+                console.log("current");
+                console.log(dataRecibida);
                 $.each(dataRecibida, function (key, alarm) {
                     createTable(alarm.name, alarm.paramsEventBrite.categoryId);
                 })
@@ -206,6 +207,8 @@ $(document).on("click", "button.btnEvents", function () {
             } else {
                 $('table#'+ buttonName).remove();
                 var data = $.parseJSON(response.responseText);
+                console.log("click")
+                console.log(data)
                 var inputElement = $('div#event-' + buttonName);
 
                 var table = document.createElement('table');
@@ -239,26 +242,29 @@ $(document).on("click", "button.btnEvents", function () {
                 table.append(tbody);
 
                 $.each(data.events, function (key, event) {
-                    var tr = document.createElement('tr');
+                    console.log(event.events)
 
-                    var tdId = document.createElement('td');
-                    tdId.append(document.createTextNode(event.id));
+                        var tr = document.createElement('tr');
 
-                    var tdName = document.createElement('td');
-                    tdName.append(document.createTextNode(event.name));
+                        var tdId = document.createElement('td');
+                        tdId.append(document.createTextNode(event.id));
 
-                    var tdStart = document.createElement('td');
-                    tdStart.append(document.createTextNode(event.start));
+                        var tdName = document.createElement('td');
+                        tdName.append(document.createTextNode(event.name));
 
-                    var tdEnd = document.createElement('td');
-                    tdEnd.append(document.createTextNode(event.end));
+                        var tdStart = document.createElement('td');
+                        tdStart.append(document.createTextNode(event.start));
 
-                    tr.append(tdId);
-                    tr.append(tdName);
-                    tr.append(tdStart);
-                    tr.append(tdEnd);
+                        var tdEnd = document.createElement('td');
+                        tdEnd.append(document.createTextNode(event.end));
 
-                    tbody.append(tr);
+                        tr.append(tdId);
+                        tr.append(tdName);
+                        tr.append(tdStart);
+                        tr.append(tdEnd);
+
+                        tbody.append(tr);
+
                 });
 
                 inputElement.append(table);
@@ -281,8 +287,7 @@ $(document).on("click", "button.btnRemove", function () {
                 // TODO handle error
                 alert("error")
             } else {
-                console.log(buttonName)
-                $("tr#" + buttonName).remove();
+                $("tr." + buttonName).remove();
                 $("table#eventsList").remove();
             }
         }

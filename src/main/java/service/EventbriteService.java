@@ -122,13 +122,12 @@ public class EventbriteService {
         }
     }
 
-    public static HashMap<String, EventBrite> getEventsSinceLastConnexion(User user) throws IOException {
+    public static void getEventsSinceLastConnexion(User user) throws IOException {
         Calendar today = Calendar.getInstance();
         today.set(Calendar.HOUR_OF_DAY, 0);
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-        HashMap<String, EventBrite> eventBriteHash = new HashMap<>();
 
         // TODO change here the sup
         if (user.getLastLogin() == null || Utils.getDateDiff(user.getLastLogin(), today.getTime(), TimeUnit.DAYS) >= 1) {
@@ -143,18 +142,13 @@ public class EventbriteService {
                 paramsEventBrite.put("fechaHasta", "");
 
                 events += getEventsByParams(paramsEventBrite);
-                eventBriteHash = stringToEventBriteObjectHash(user, alarm, events);
+                stringToEventBriteObjectHash(user, alarm, events);
             }
         }
-
-
-        return eventBriteHash;
     }
 
 
-    public static HashMap<String, EventBrite> stringToEventBriteObjectHash(User user, Alarm alarm, String events) throws IOException {
-        HashMap<String, EventBrite> eventBriteHash = new HashMap<>();
-
+    public static void stringToEventBriteObjectHash(User user, Alarm alarm, String events) throws IOException {
         JSONObject jsonObj    = new JSONObject(events);
         JSONArray  jsonEvents = (JSONArray) jsonObj.get("events");
 
@@ -168,8 +162,6 @@ public class EventbriteService {
                     eventBrite.getCategoryId());
             saveEventBriteObjectIntoAlarm(user, alarm, eventFromBrite);
         }
-
-        return eventBriteHash;
     }
 
     public static void saveEventBriteObjectIntoAlarm(User user, Alarm alarm, EventBriteLight event) {
@@ -180,6 +172,5 @@ public class EventbriteService {
             alarm.setEvent(eventBriteList);
             ManagementService.getAlarmDAO().save(alarm);
         }
-
     }
 }
