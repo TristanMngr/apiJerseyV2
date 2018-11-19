@@ -10,3 +10,7 @@
 .displayNone{
     display: none !important;
 }
+
+span.block {
+    display: block !important;
+}

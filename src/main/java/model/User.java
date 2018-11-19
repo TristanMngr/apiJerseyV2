@@ -5,6 +5,7 @@ import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Reference;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -20,29 +21,30 @@ public class User extends BaseMongoDO {
     @Reference
     private List<EventsList> eventsLists;
 
-    @Embedded
-    private List<Alarm> alarms;
-
-    private String role;
+	private String role;
 
     // TODO change list alarm and event
     public User() {
-        this.userName = "TestName";
-        this.setAlarms(Arrays.asList(new Alarm()));
-    }
-
-    public User(String userName, String password) {
-        this.setUserName(userName);
-        this.setPassword(password);
-        this.setAlarms(Arrays.asList(new Alarm("alarm1", "101"), new Alarm("alarm2", "102")));
-        this.setEventos(eventsLists);
+        this.lastLogin = null;
+        this.eventsLists = new ArrayList<>();
         this.role = "USER";
     }
 
+    public User(String userName, String password) {
+        this.lastLogin = null;
+        this.eventsLists = new ArrayList<>();
+    	this.userName = userName;
+    	this.password = password;
+    	this.role = "USER";
+    }
+
     public User(ObjectId objectId, String userName, String password) {
+        this.lastLogin = null;
+        this.eventsLists = new ArrayList<>();
         this.userName = userName;
-        this.password = password;
+        this.setPassword(password);
         this.setId(objectId);
+        this.setRole("USER");
     }
 
 //    public User(String string) {
@@ -76,18 +78,6 @@ public class User extends BaseMongoDO {
 
     public void setEventos(List<EventsList> eventsLists) {
         this.eventsLists = eventsLists;
-    }
-
-    public List<Alarm> getAlarms() {
-        return alarms;
-    }
-
-    public void setAlarms(List<Alarm> alarms) {
-        this.alarms = alarms;
-    }
-
-    public void addAlarm(Alarm alarm) {
-        this.alarms.add(alarm);
     }
 
     public String getPassword() {

@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
 import model.Alarm;
+import model.EventBriteLight;
 import model.User;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.filter.LoggingFilter;
@@ -30,6 +31,7 @@ import org.json.JSONObject;
 public class EventbriteService {
 
     private static ObjectMapper mapper = new ObjectMapper();
+
 
     public static String searchEvents(Map<String, String> paramsEventBrite) {
         String eventosEncontrados;
@@ -69,6 +71,8 @@ public class EventbriteService {
         }
     }
 
+    /* *********************** métodos auxiliares ********************** */
+
     public static EventBrite getEventByID(Long codigoEvento) throws JsonProcessingException, IOException {
         String eventoJson = getJsonEventByID(codigoEvento.toString());
         return mapper.readValue(eventoJson, EventBrite.class);
@@ -80,8 +84,6 @@ public class EventbriteService {
         Response  response = service.queryParam("token", getAppKey()).request(MediaType.APPLICATION_JSON).get();
         return response.readEntity(String.class);
     }
-
-    /* *********************** métodos auxiliares ********************** */
 
     /**
      * formatea el json agregando: {"pagination": {"object_count": 18,
@@ -120,43 +122,64 @@ public class EventbriteService {
         }
     }
 
-    public static List<EventBrite> getEventsSinceLastConnexion(User user) throws IOException {
+    public static HashMap<String, EventBrite> getEventsSinceLastConnexion(User user) throws IOException {
         Calendar today = Calendar.getInstance();
         today.set(Calendar.HOUR_OF_DAY, 0);
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        String events = "";
-        List<EventBrite> eventBriteList = new ArrayList<>();
 
-        if (Utils.getDateDiff(user.getLastLogin(), today.getTime(), TimeUnit.DAYS) >= 1) {
-            Map<String, String> paramsEventBrite = new HashMap<>();
-            for (Alarm alarm : user.getAlarms()) {
+        HashMap<String, EventBrite> eventBriteHash = new HashMap<>();
+
+        // TODO change here the sup
+        if (user.getLastLogin() == null || Utils.getDateDiff(user.getLastLogin(), today.getTime(), TimeUnit.DAYS) >= 1) {
+
+            for (Alarm alarm : ManagementService.getAlarmDAO().getAlarmFromUser(user)) {
+                Map<String, String> paramsEventBrite = new HashMap<>();
+                String              events           = "";
                 for (String key : alarm.getParamsEventBrite().keySet()) {
                     paramsEventBrite.put(key, alarm.getParamsEventBrite().get(key));
                 }
                 paramsEventBrite.put("fechaDesde", df.format(user.getLastLogin()));
                 paramsEventBrite.put("fechaHasta", "");
+
                 events += getEventsByParams(paramsEventBrite);
-                paramsEventBrite = new HashMap<>();
-                eventBriteList = stringToEventBriteObjectList(events);
+                eventBriteHash = stringToEventBriteObjectHash(user, alarm, events);
             }
         }
 
-        return eventBriteList;
+
+        return eventBriteHash;
     }
 
-    public static List<EventBrite> stringToEventBriteObjectList(String events) throws IOException {
-        List<EventBrite> eventBriteList = new ArrayList<>();
 
-        JSONObject jsonObj = new JSONObject(events);
-        JSONArray jsonEvents = (JSONArray) jsonObj.get("events");
+    public static HashMap<String, EventBrite> stringToEventBriteObjectHash(User user, Alarm alarm, String events) throws IOException {
+        HashMap<String, EventBrite> eventBriteHash = new HashMap<>();
+
+        JSONObject jsonObj    = new JSONObject(events);
+        JSONArray  jsonEvents = (JSONArray) jsonObj.get("events");
 
         for (Object event : jsonEvents) {
             EventBrite eventBrite = mapper.readValue(event.toString(), EventBrite.class);
-            System.out.println(eventBrite.getId());
-            eventBriteList.add(eventBrite);
+            EventBriteLight eventFromBrite = new EventBriteLight(
+                    eventBrite.getEventId(),
+                    eventBrite.getName().getText(),
+                    eventBrite.getStart().getUtc(),
+                    eventBrite.getEnd().getUtc(),
+                    eventBrite.getCategoryId());
+            saveEventBriteObjectIntoAlarm(user, alarm, eventFromBrite);
         }
 
-        return eventBriteList;
+        return eventBriteHash;
+    }
+
+    public static void saveEventBriteObjectIntoAlarm(User user, Alarm alarm, EventBriteLight event) {
+        List<EventBriteLight> eventBriteList = alarm.getEvent();
+
+        if (ManagementService.getAlarmDAO().eventNotPresent(user, event)) {
+            eventBriteList.add(event);
+            alarm.setEvent(eventBriteList);
+            ManagementService.getAlarmDAO().save(alarm);
+        }
+
     }
 }

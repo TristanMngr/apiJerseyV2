@@ -92,7 +92,10 @@ public class AuthenticationFilter implements ContainerRequestFilter
         	
         	if(method.isAnnotationPresent(RolesAllowed.class)) {
         		RolesAllowed rolesAllowed = method.getAnnotation(RolesAllowed.class);
+                System.out.println("rolled allowed");
+                System.out.println(rolesAllowed);
         		String roleAllowed = rolesAllowed.value()[0];
+
         		if(!UserService.validateRole(requestContext.getCookies(), roleAllowed))
         		{
         			System.out.println(this.getClass().getName() + ":: User has not the necessary roles");

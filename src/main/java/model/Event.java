@@ -54,4 +54,6 @@ public class Event extends BaseMongoDO {
         this.eventsList = _eventsList;
     }
 
+  
+
 }

@@ -31,7 +31,7 @@ public class EventsListsController {
     public EventsListsController(@Context ContainerRequestContext crc){
         this.loggedUser = UserService.currentUser(crc);
     }
-    
+
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response getAllLists() throws JsonProcessingException {

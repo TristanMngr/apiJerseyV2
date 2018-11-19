@@ -1,5 +1,6 @@
 package dao;
 
+import eventbrite.EventBrite;
 import model.User;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
@@ -26,8 +27,17 @@ public class UserDAO extends BasicDAO<User, ObjectId> {
 
     public User getUserByName(String userName) {
     	System.out.println(this.getClass().getName() + ":: getUserByName");
-        Query<User> query = getDatastore().find(User.class, "userName", userName);
+        Query<User> query = getDatastore().find(User.class).
+                field("userName").exists().
+                field("userName").hasThisOne(userName);
+
+        /*for (User user : query.asList()) {
+            System.out.println(user.getUserName());
+        }*/
+
         List<User> listado = query.asList();
+
+
         
         if (listado != null && !listado.isEmpty()) {
         	return listado.get(0);
@@ -59,6 +69,10 @@ public class UserDAO extends BasicDAO<User, ObjectId> {
         return getDatastore().update(querySearch, updateOps);
     }
 
+    /*public UpdateResults updateAlarms(ObjectId userId, List<EventBrite> eventBriteList) {
+        Query<User> querySearch = getDatastore().find(User.class, "id", userId);
+        UpdateOperations<User> updateOps = getDatastore().createUpdateOperations(User.class).set("alarms.", eventBriteList);
+    }*/
 
 	public void updateLastLogin(String username) {
 		System.out.println(this.getClass().getName() + "::updateLastLogin");

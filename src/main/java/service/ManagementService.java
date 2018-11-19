@@ -1,6 +1,7 @@
 package service;
 
 import dao.*;
+import eventbrite.EventBrite;
 
 import java.util.Arrays;
 import java.util.HashMap;
