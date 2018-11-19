@@ -38,6 +38,14 @@ public class EventsListsController {
         return Response.status(201).entity(EventsListsService.getAllLists()).build();
     }
 
+    /**
+     * busca las listas de un usuario incluyendo los eventos
+     * 
+     * @param uriDetails
+     * @param crc
+     * @return
+     * @throws JsonProcessingException 
+     */
     @Path("/getFromUser")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -47,6 +55,25 @@ public class EventsListsController {
         System.out.println(this.loggedUser.getUserName());
         System.out.println(this.loggedUser.getId().toHexString());
         return Response.ok(EventsListsService.getByUserId(this.loggedUser.getId().toHexString())).build();
+    }
+    
+    /**
+     * busca las listas de un usuario sin los eventos para que sea más liviana y más rápida
+     * 
+     * @param uriDetails
+     * @param crc
+     * @return
+     * @throws JsonProcessingException 
+     */
+    @Path("/getCleanListsFromUser")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCleanListsFromUser(@Context UriInfo uriDetails, @Context ContainerRequestContext crc) throws JsonProcessingException {
+        String username = uriDetails.getQueryParameters().get("userId").get(0);
+//        User loggedUser = UserService.currentUser(crc);
+        System.out.println(this.loggedUser.getUserName());
+        System.out.println(this.loggedUser.getId().toHexString());
+        return Response.ok(EventsListsService.getCleanListsByUserId(this.loggedUser.getId().toHexString())).build();
     }
 
     /**

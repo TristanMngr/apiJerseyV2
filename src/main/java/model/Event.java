@@ -1,40 +1,59 @@
 package model;
 
 import java.util.Date;
+import org.bson.types.ObjectId;
 
 import org.mongodb.morphia.annotations.Entity;
 
 @Entity("events")
-public class Event extends BaseMongoDO  {
+public class Event extends BaseMongoDO {
 
-	private Long eventBriteID;
-	private Date created;
+    private Long eventBriteID;
+    private Date created;
+    private ObjectId eventsList;
 
     // Morphia needs a zero-arg constructor to create the class before populating its fields.
     public Event() {
-       super();
+        super();
     }
 
     public Event(Long eventBriteID) {
-		Date now = new Date();
-		this.setEventBriteID(eventBriteID);
-		this.setCreated(now);
-	}
+        Date now = new Date();
+        this.setEventBriteID(eventBriteID);
+        this.setCreated(now);
+    }
 
-	public Long getEventBriteID() {
-		return eventBriteID;
-	}
+    public Event(Long eventBriteID, ObjectId _eventsList) {
+        Date now = new Date();
+        this.setEventBriteID(eventBriteID);
+        this.setCreated(now);
+        this.eventsList = _eventsList;
+    }
 
-	public void setEventBriteID(Long eventBriteID) {
-		this.eventBriteID = eventBriteID;
-	}
+    public Long getEventBriteID() {
+        return eventBriteID;
+    }
 
-	public Date getCreated() {
-		return created;
-	}
+    public void setEventBriteID(Long eventBriteID) {
+        this.eventBriteID = eventBriteID;
+    }
 
-	public void setCreated(Date created) {
-		this.created = created;
-	}
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public ObjectId getEventsList() {
+        return eventsList;
+    }
+
+    public void setEventsList(ObjectId _eventsList) {
+        this.eventsList = _eventsList;
+    }
+
+  
 
 }

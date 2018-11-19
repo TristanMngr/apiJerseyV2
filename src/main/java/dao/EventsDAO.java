@@ -18,14 +18,14 @@ public class EventsDAO extends BasicDAO<Event, ObjectId> {
         super(ds);
     }
 
-    public Key<Event> saveEvent(Long codigoEvento) {
-        Query<Event> query = getDatastore().createQuery(Event.class).field("eventBriteID").equal(codigoEvento);
-        List<Event> listado = query.asList();
-        if (listado != null && !listado.isEmpty()) {
-            return null;
-        }
+    public Key<Event> saveEvent(Event event) {
+//        Query<Event> query = getDatastore().createQuery(Event.class).field("eventBriteID").equal(event.getEventBriteID());
+//        List<Event> listado = query.asList();
+//        if (listado != null && !listado.isEmpty()) {
+//            return null;
+//        }
 
-        return getDatastore().save(new Event(codigoEvento));
+        return getDatastore().save(event);
     }
 
     public int getEventsCount(int days) {

@@ -159,7 +159,7 @@ function getCookie(cname) {
 function armarSelectListasEventos() {
     $(".imgLoader").removeClass('displayNone');
     var username = getCookie("username");     
-    $.ajax("/eventsLists/getFromUser", {
+    $.ajax("/eventsLists/getCleanListsFromUser", {
         type: "GET",
         data: {
         	userId: username, //TODO getUserLogged()
