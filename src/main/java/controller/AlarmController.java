@@ -28,7 +28,7 @@ public class AlarmController{
     @Produces(MediaType.APPLICATION_JSON)
     public Response crearLista(@FormParam("name") String name, @FormParam("categoryId") String categoryId, @Context ContainerRequestContext crc) throws JsonProcessingException {
         User user = UserService.currentUser(crc);
-        
+
         return Response.status(201).entity(AlarmService.createAlarm(user, name, categoryId)).build();
     }
 
@@ -56,7 +56,7 @@ public class AlarmController{
     public Response crearLista(@Context ContainerRequestContext crc) throws IOException {
         User user = UserService.currentUser(crc);
 
-        getEventsSinceLastConnexion(user);
+        EventbriteService.getEventsSinceLastConnexion(user);
 
         return Response.ok(new JSONObject("{\"error\":\"0\"}"), MediaType.APPLICATION_JSON).build();
     }
