@@ -131,7 +131,7 @@ public class EventbriteService {
         HashMap<String, EventBrite> eventBriteHash = new HashMap<>();
 
         // TODO change here the sup
-        if (user.getLastLogin() == null || Utils.getDateDiff(user.getLastLogin(), today.getTime(), TimeUnit.DAYS) >= 0) {
+        if (user.getLastLogin() == null || Utils.getDateDiff(user.getLastLogin(), today.getTime(), TimeUnit.DAYS) >= 1) {
 
             for (Alarm alarm : ManagementService.getAlarmDAO().getAlarmFromUser(user)) {
                 Map<String, String> paramsEventBrite = new HashMap<>();
