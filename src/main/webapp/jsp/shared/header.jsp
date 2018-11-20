@@ -25,57 +25,59 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     </head>
     <%--         <h1>${it.hello} ${it.world}</h1> --%>
-    
+
     <script>
 
-    	function logout() {
-			alert("See you soon");
-    		$.ajax({
-	        	url: "/logout", 
-	            type: "POST",
-	            asynchronous: false,
-	            complete: function (response) {
-	            	location.href = "/";
-	            	window.location.reload();
-	            }
-	        });
-        };
-    	
+        function logout() {
+            alert("See you soon");
+            $.ajax({
+                url: "/logout",
+                type: "POST",
+                asynchronous: false,
+                complete: function (response) {
+                    location.href = "/";
+                    window.location.reload();
+                }
+            });
+        }
+        ;
 
-	    function hideOptions(option) {
-	        if ( option == 1 ) {
-	        	$("#dropdownAdmin").addClass('displayNone');
-			}
 
-	        if ( option == 2 ) {
-	        	$("#dropdownEventos").addClass('displayNone');
-	        	$("#dropdownTelegram").addClass('displayNone');
-			}
-	       
-	        return false;
-	    };
+        function hideOptions(option) {
+            if (option == 1) {
+                $("#dropdownEventos").removeClass('displayNone');
+                $("#dropdownTelegram").removeClass('displayNone');
+            }
 
-    	$(document).ready(function () {
-			var isUserRole = false;
-   			
-	    	$.ajax({
-	        	url: "/admin", 
-	            type: "GET",
-	            asynchronous: false,
-	            complete: function (response) {
-					if(isUserRole)
-		            	hideOptions(1);
-					else
-						hideOptions(2);	
-	                return;
-	            },
-		    	error: function (req, status, error) {
-		    		isUserRole = true;
-	            	return;
-	            }
-	        });
-	  });
-    	
+            if (option == 2) {
+                $("#dropdownAdmin").removeClass('displayNone');
+            }
+
+            return false;
+        }
+        ;
+
+        $(document).ready(function () {
+            var isUserRole = false;
+
+            $.ajax({
+                url: "/admin",
+                type: "GET",
+                asynchronous: false,
+                complete: function (response) {
+                    if (isUserRole)
+                        hideOptions(1);
+                    else
+                        hideOptions(2);
+                    return;
+                },
+                error: function (req, status, error) {
+                    isUserRole = true;
+                    return;
+                }
+            });
+        });
+
     </script>
     <%
         String ServerName = request.getServerName();
@@ -104,7 +106,7 @@
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="dropdownEventos" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Eventos</a>
+                        <a class="nav-link dropdown-toggle displayNone" href="#" id="dropdownEventos"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Eventos</a>
                         <div class="dropdown-menu" aria-labelledby="dropdownEventos">
                             <a class="dropdown-item linkReload" data-loadhtml="eventos/index.html" href="#">Eventos Disponibles</a>
                             <a class="dropdown-item linkReload" data-loadhtml="listas/index.html" href="#">Listas</a>
@@ -112,7 +114,7 @@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="dropdownAdmin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administrador</a>
+                        <a class="nav-link dropdown-toggle displayNone" href="#" id="dropdownAdmin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administrador</a>
                         <div class="dropdown-menu" aria-labelledby="dropdownAdmin">
                             <a class="dropdown-item linkReload" data-loadhtml="admin/index.html" href="#">Check Usuario</a>
                             <a class="dropdown-item linkReload" data-loadhtml="admin/CompareList.html" href="#">Comparar Listas</a>
@@ -128,7 +130,7 @@
                         <a class="nav-link btnMenuPrincipal" href="/../jsp/alarm/index.jsp">Alarms</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="dropdownTelegram" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Telegram</a>
+                        <a class="nav-link dropdown-toggle displayNone" href="#" id="dropdownTelegram" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Telegram</a>
                         <div class="dropdown-menu" aria-labelledby="dropdownTelegram">
                             <a class="dropdown-item btnMenuPrincipal" href="/telegram">Página Principal</a>
                         </div>

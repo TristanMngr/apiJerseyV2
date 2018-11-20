@@ -1,46 +1,54 @@
 $(document).ready(function () {
-	armarListaUsuarios();
-	hideForm();
-	
-    $('select#usuarios1').keyup(function () {
-    	showEventsForm();
+    alert("ss66");
+    armarListaUsuarios();
+//    hideForm();
+
+    $('select.usuarios').change(function () {
+        showEventsForm($(this).data('nroselect'));
     });
-    
-    $('select#usuarios1').click(function () {
-    	showEventsForm();
+
+    $('select.listas').change(function () {
+        showSubmitButton();
     });
-    
-    $('select#usuarios2').keyup(function () {
-    	showEventsForm();
-    });
-       
-    $('select#usuarios2').click(function () {
-    	showEventsForm();
-    });
-    
+
     $("#btnSubmitBuscarEventos").click(function () {
-    	compareList();
+        compareList();
     });
 
 });
 
+function showSubmitButton() {
+    var listasElegidas = 1;
+    $.each($("select.listas"), function () {
+        if ($(this).val() == "") {
+            listasElegidas = 0;
+            return false;
+        }
+    });
+
+    if (listasElegidas)
+        $('button#btnSubmitBuscarEventos').removeClass("displayNone");
+    else
+        $('button#btnSubmitBuscarEventos').addClass("displayNone");
+}
+
 function compareList() {
-	
+
     $(".imgLoader").removeClass('displayNone');
     var cuerpoTabla = $('table#eventosEncontrados').find('tbody');
     cuerpoTabla.html('');
-	
-	usuario1 = $('#usuarios1 :selected').text();
-	lista1 = $('#listas1 :selected').text();
-	usuario2 = $('#usuarios2 :selected').text();
-	lista2 = $('#listas2 :selected').text();
-	$.ajax("/admin/compare?user1=" + usuario1 + "&list1=" + lista1 + "&user2=" + usuario2 + "&list2=" + lista2, {
+
+    var usuario1 = $('#usuarios1 :selected').text();
+    var lista1 = $('#listas1 :selected').text();
+    var usuario2 = $('#usuarios2 :selected').text();
+    var lista2 = $('#listas2 :selected').text();
+    $.ajax("/admin/compare?user1=" + usuario1 + "&list1=" + lista1 + "&user2=" + usuario2 + "&list2=" + lista2, {
         type: "GET",
         asynchronous: false,
         complete: function (response) {
-        	var dataRecibida = $.parseJSON(response.responseText);
-        	$.each(dataRecibida, function (key, valor) {
-        		var filaTr = document.createElement('tr');
+            var dataRecibida = $.parseJSON(response.responseText);
+            $.each(dataRecibida, function (key, valor) {
+                var filaTr = document.createElement('tr');
                 var celdaTd = document.createElement('td');
                 celdaTd.appendChild(document.createTextNode(valor.id));
                 filaTr.appendChild(celdaTd);
@@ -60,33 +68,31 @@ function compareList() {
                 cuerpoTabla.append(filaTr);
             });
             $(".imgLoader").addClass('displayNone');
-        	
+
         }
     });
-};
+}
 
-function armarListaAlarmas(usuario, lista) {
-	if(usuario == "")
-		return;
-	
-	$.ajax("/admin/users/" + usuario + "/events", {
+
+function armarSelectListas(usuario, lista) {
+    if (usuario == "")
+        return;
+
+    $('select#listas' + lista).html('<option value=""></option>');
+    $.ajax("/admin/users/" + usuario + "/events", {
         type: "GET",
         asynchronous: false,
         complete: function (response) {
-        	var dataRecibida = $.parseJSON(response.responseText);
-            $.each (dataRecibida, function (index) {
+            var dataRecibida = $.parseJSON(response.responseText);
+            $.each(dataRecibida, function (index) {
                 var linea = '<option value="' + index + '" >' + dataRecibida[index].nombre + '</option>';
-                if (lista == 1)
-                	$('select#listas1').append(linea);
-                
-                if (lista == 2)
-                	$('select#listas2').append(linea);
-
+                $('select#listas' + lista).append(linea);
             });
         }
     });
     return false;
-};
+}
+;
 
 function armarListaUsuarios() {
     $.ajax("/admin/users", {
@@ -94,57 +100,33 @@ function armarListaUsuarios() {
         asynchronous: false,
         complete: function (response) {
             var dataRecibida = $.parseJSON(response.responseText);
-            $.each (dataRecibida.users, function (index) {
+            $.each(dataRecibida.users, function (index) {
                 var linea = '<option value="' + index + '" >' + dataRecibida.users[index] + '</option>';
-                $('select#usuarios1').append(linea);
-                $('select#usuarios2').append(linea);
+                $.each($("select.usuarios"), function () {
+                    $(this).append(linea);
+                });
             });
         }
     });
     return false;
-};
+}
 
-function hideForm() {
-	$('div.listas1').addClass("displayNone");
-	$('div.listas2').addClass("displayNone");
-	$('button#btnSubmitBuscarEventos').addClass("displayNone");
-};
 
-function showEventsForm() {
-	var flag = 0;
-	var usuario = "";
-	if ($("select#usuarios1").val() != ""){
-		console.log("Showing");
-		$('div.listas1').removeClass("displayNone");
-		usuario = $('#usuarios1 :selected').text();
-		flag = flag + 1;
-	}
-    else {
-    	console.log("Hiding");
-    	$('div.listas1').addClass("displayNone");
+function showEventsForm(listaUsuarios) {
+    var usuario = "";
+    if ($("select#usuarios" + listaUsuarios).val() != "") {
+        console.log("Showing");
+        $('div.listas' + listaUsuarios).removeClass("displayNone");
+        usuario = $('#usuarios' + listaUsuarios + ' :selected').text();
+        armarSelectListas(usuario, listaUsuarios);
+    } else {
+        console.log("Hiding");
+        $('div.listas' + listaUsuarios).addClass("displayNone");
     }
-	
-	if ($("select#usuarios2").val() != ""){
-		$('div.listas2').removeClass("displayNone");
-		usuario = $('#usuarios2 :selected').text();
-		flag = flag + 1;
-	}
-    else {
-    	$('div.listas2').addClass("displayNone");
-    }
-    
-	if(flag == 2){
-		$('button#btnSubmitBuscarEventos').removeClass("displayNone");
-		armarListaAlarmas(usuario,2);
-	}
-	else
-	{
-		$('button#btnSubmitBuscarEventos').addClass("displayNone");
-		armarListaAlarmas(usuario,1);
-	}
-	
+
     return false;
-};
+}
+;
 
 function formatEventBriteDate(date) {
     var options = {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'};

@@ -7,56 +7,62 @@
                 <div class="form-group row">
                     <label for="usuarios" class="col-md-3 col-form-label">Usuario 1</label>
                     <div class="col-md-9">
-                        <select class="form-control" id="usuarios1" name="usuarios">
+                        <select class="form-control usuarios" id="usuarios1" data-nroselect="1" name="usuarios1">
                             <option value=""></option>
                         </select>
                     </div>
                 </div>
-				<div class="form-group row listas1">
+                <div class="form-group row listas1 displayNone">
                     <label for="listas" class="col-md-3 col-form-label">Listas Usuario 1</label>
                     <div class="col-md-9">
-                        <select class="form-control" id="listas1" name="listas">
+                        <select class="form-control listas" id="listas1" name="listas1">
                             <option value=""></option>
                         </select>
                     </div>
                 </div>
-				<div class="form-group row">
+                <div class="form-group row">
                     <label for="usuarios" class="col-md-3 col-form-label">Usuario 2</label>
                     <div class="col-md-9">
-                        <select class="form-control" id="usuarios2" name="usuarios">
+                        <select class="form-control usuarios" id="usuarios2" data-nroselect="2" name="usuarios2">
                             <option value=""></option>
                         </select>
                     </div>
                 </div>
-                <div class="form-group row listas2">
+                <div class="form-group row listas2 displayNone">
                     <label for="listas" class="col-md-3 col-form-label">Listas Usuario 2</label>
                     <div class="col-md-9">
-                        <select class="form-control" id="listas2" name="listas">
+                        <select class="form-control listas" id="listas2" name="listas2">
                             <option value=""></option>
                         </select>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12 text-center ">
-                        <button type="button" id="btnSubmitBuscarEventos" class="btn btn-info">Buscar</button>
+                        <button type="button" id="btnSubmitBuscarEventos" class="btn btn-info displayNone">Buscar</button>
                     </div>
                 </div>
             </div>
-            <div class="col-md-8 table-responsive">
-                <table id="eventosEncontrados" class="table table-hover table-sm">
-                    <thead>
-                        <tr>
-                            <th>Código</th>
-                            <th>Nombre</th>
-                            <th>Inicio</th>
-                            <th>Fin</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-12">
+                        <h4 class="text-center">Eventos repetidos en ambas listas</h4>
+                    </div>
+                    <div class="col-12 table-responsive">
+                        <table id="eventosEncontrados" class="table table-hover table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Nombre</th>
+                                    <th>Inicio</th>
+                                    <th>Fin</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                    </tbody>
-                </table>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
