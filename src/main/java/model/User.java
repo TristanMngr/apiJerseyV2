@@ -17,6 +17,7 @@ public class User extends BaseMongoDO {
     private Integer userId;
     private String password;
     private Date lastLogin;
+    private Date lastFetchEventBrite;
 
     @Reference
     private List<EventsList> eventsLists;
@@ -102,5 +103,13 @@ public class User extends BaseMongoDO {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Date getLastFetchEventBrite() {
+        return lastFetchEventBrite;
+    }
+
+    public void setLastFetchEventBrite(Date lastFetchEventBrite) {
+        this.lastFetchEventBrite = lastFetchEventBrite;
     }
 }

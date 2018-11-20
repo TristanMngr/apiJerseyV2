@@ -124,9 +124,6 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link btnMenuPrincipal" href="/users">Usuarios</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link btnMenuPrincipal" href="/../jsp/alarm/index.jsp">Alarms</a>
                     </li>
                     <li class="nav-item dropdown">

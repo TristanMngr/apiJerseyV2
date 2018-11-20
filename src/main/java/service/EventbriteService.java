@@ -130,7 +130,9 @@ public class EventbriteService {
 
 
         // TODO change here the sup
-        if (user.getLastLogin() == null || Utils.getDateDiff(user.getLastLogin(), today.getTime(), TimeUnit.DAYS) >= 1) {
+        if (user.getLastFetchEventBrite() == null || Utils.getDateDiff(user.getLastFetchEventBrite(), today.getTime(), TimeUnit.DAYS) >= 1) {
+            user.setLastFetchEventBrite(today.getTime());
+            ManagementService.getUserDAO().save(user);
 
             for (Alarm alarm : ManagementService.getAlarmDAO().getAlarmFromUser(user)) {
                 Map<String, String> paramsEventBrite = new HashMap<>();
@@ -144,6 +146,7 @@ public class EventbriteService {
                 events += getEventsByParams(paramsEventBrite);
                 stringToEventBriteObjectHash(user, alarm, events);
             }
+
         }
     }
 

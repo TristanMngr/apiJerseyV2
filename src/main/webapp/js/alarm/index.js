@@ -194,9 +194,6 @@ function createTable(alarmName, alarmCategory) {
 
 $(document).on("click", "button.btnEvents", function () {
     var buttonName = $(this).attr('id').split('-').pop();
-    console.log(buttonName);
-
-
     $.ajax("/alarms/" + buttonName, {
         type: "GET",
         asynchronous: false,
@@ -207,8 +204,6 @@ $(document).on("click", "button.btnEvents", function () {
             } else {
                 $('table#'+ buttonName).remove();
                 var data = $.parseJSON(response.responseText);
-                console.log("click")
-                console.log(data)
                 var inputElement = $('div#event-' + buttonName);
 
                 var table = document.createElement('table');
@@ -242,7 +237,6 @@ $(document).on("click", "button.btnEvents", function () {
                 table.append(tbody);
 
                 $.each(data.events, function (key, event) {
-                    console.log(event.events)
 
                         var tr = document.createElement('tr');
 
