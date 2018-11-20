@@ -28,6 +28,11 @@ Setear la variable de entorno  **EVENTBRITE_KEY**
 
 ![](https://image.ibb.co/jc5W3e/jetty_run_2.jpg)
 
+
+## Test Coverage using Jacoco Plug In
+
+![](https://image.ibb.co/keFOc0/jacoco-20181120.png)
+
 ## Heroku UAT Version
 
 [Login Page](https://apieventos-g5.herokuapp.com/ "link title")
