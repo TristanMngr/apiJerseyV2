@@ -89,7 +89,7 @@ function mostrarEventos() {
 				buttonModal.setAttribute('title', 'Count Users');
 				divModal.appendChild(buttonModal);
 				var icon = document.createElement('i');
-				icon.setAttribute('class', 'fas fa-file-download');
+				icon.setAttribute('class', 'fas fa-users');
 				icon.setAttribute('style', 'font-size: 20px;');
 				buttonModal.appendChild(icon);
 				filaTr.appendChild(celdaTd);
