@@ -54,42 +54,25 @@ public class AdminControllerTest extends JerseyTest {
 	public void testAdminLogin() {
 		ManagementService.createDAOs();
 		
-		JSONObject json = new JSONObject();
-		json.put("username", "admin");
-		Response response  = target().path("login").request().header("Authorization", "Basic YWRtaW46MTIzNDU2YUE=")
-				.post(Entity.entity(json.toString(),MediaType.APPLICATION_FORM_URLENCODED),Response.class);
-
-		assertEquals(200, response.getStatus());
-			
-		Map<String, NewCookie> cookies = response.getCookies();
-		NewCookie tokenAdminCookie = cookies.get("tokenG5");
-		NewCookie usernameAdminCookie = cookies.get("username");
-		
-		assertEquals(usernameAdminCookie.getValue(), "admin");
-		
-		response  = target().path("admin").request().cookie("username", usernameAdminCookie.getValue()).cookie("tokenG5",tokenAdminCookie.getValue()).get();
-
-		assertEquals(200, response.getStatus());
-		
 		long size = ManagementService.getUserDAO().count();
 
 		// Crear un usuario
 		JSONObject jsonUser = new JSONObject();
-		json.put("username", "MyUser"); // MySecret
+		jsonUser.put("username", "MyUser"); // MySecret
 		System.out.println(jsonUser.toString());
-		response = target().path("users").request(MediaType.TEXT_PLAIN).header("Authorization", "Basic TXlVc2VyOk15U2VjcmV0")
-													.post(Entity.entity(json.toString(),MediaType.APPLICATION_FORM_URLENCODED),Response.class);
+		Response response = target().path("users").request(MediaType.TEXT_PLAIN).header("Authorization", "Basic TXlVc2VyOk15U2VjcmV0")
+													.post(Entity.entity(jsonUser.toString(),MediaType.APPLICATION_FORM_URLENCODED),Response.class);
 
 		assertEquals(201, response.getStatus());
 		assertEquals(size+1, ManagementService.getUserDAO().count());
 
 		// login usuario
 		response  = target().path("login").request().header("Authorization", "Basic TXlVc2VyOk15U2VjcmV0")
-				.post(Entity.entity(json.toString(),MediaType.APPLICATION_FORM_URLENCODED),Response.class);
+				.post(Entity.entity(jsonUser.toString(),MediaType.APPLICATION_FORM_URLENCODED),Response.class);
 
 		assertEquals(200, response.getStatus());
 		
-		cookies = response.getCookies();
+		Map<String, NewCookie> cookies = response.getCookies();
 		NewCookie tokenCookie = cookies.get("tokenG5");
 		NewCookie usernameCookie = cookies.get("username");
 		
@@ -174,6 +157,17 @@ public class AdminControllerTest extends JerseyTest {
 		assertEquals(200, response.getStatus());
 		assertEquals(2, answer.get("cantListas"));
 		assertEquals("MyUser", answer.get("username"));
+		
+		//logout
+		JSONObject json = new JSONObject();
+		json.put("username", "MyUser");
+		
+		response  = target().path("logout")
+				.request()
+				.cookie("username", usernameCookie.getValue())
+				.cookie("tokenG5",tokenCookie.getValue())
+				.post(Entity.entity(json.toString(),MediaType.APPLICATION_FORM_URLENCODED),Response.class);
+		assertEquals(200, response.getStatus());
 				
 		// Elimine un usuario
 		Query<User> query = ManagementService.getUserDAO().getDatastore().find(User.class, "userName", "MyUser");

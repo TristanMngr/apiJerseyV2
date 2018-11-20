@@ -45,7 +45,7 @@ public class AdminController {
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getUsers() {
-
+		System.out.println(this.getClass().getName() + ":: AdminController getUsers");
 		List<User> listado = ManagementService.getUserDAO().getAllNonAdminUsers();
 
 		JSONObject obj = new JSONObject();

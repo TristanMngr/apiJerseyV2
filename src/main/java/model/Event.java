@@ -27,7 +27,7 @@ public class Event extends BaseMongoDO {
         Date now = new Date();
         this.setEventBriteID(eventBriteID);
         this.setCreated(now);
-        this.eventsList = _eventsList;
+        this.setEventsList(_eventsList);
     }
 
     public Long getEventBriteID() {

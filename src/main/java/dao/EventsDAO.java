@@ -20,8 +20,8 @@ public class EventsDAO extends BasicDAO<Event, ObjectId> {
     }
 
     public Key<Event> saveEvent(Event event) {
-//        Query<Event> query = getDatastore().createQuery(Event.class).field("eventBriteID").equal(event.getEventBriteID());
-//        List<Event> listado = query.asList();
+//       Query<Event> query = getDatastore().createQuery(Event.class).field("eventBriteID").equal(event.getEventBriteID());
+//       List<Event> listado = query.asList();
 //        if (listado != null && !listado.isEmpty()) {
 //            return null;
 //        }
