@@ -2,10 +2,12 @@ package controller;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 
@@ -19,6 +21,7 @@ import org.mongodb.morphia.query.Query;
 import dao.MongoDBConnection;
 import model.User;
 import service.ManagementService;
+import service.SessionService;
 
 import javax.ws.rs.core.Response;
 
@@ -44,7 +47,6 @@ public class UsersControllerTest extends JerseyTest  {
 	public void testGetIt() {
 				
 		Response response = target().path("users").request(MediaType.APPLICATION_JSON).get();
-		System.out.println("++++++++++++++++" + response.toString() + "+++++++++++++++++++++++++++");
 		assertEquals(200, response.getStatus());
 	}
 	
@@ -77,10 +79,19 @@ public class UsersControllerTest extends JerseyTest  {
 				.post(Entity.entity(json.toString(),MediaType.APPLICATION_FORM_URLENCODED),Response.class);
 
 		assertEquals(200, response.getStatus());
-		
+				
 		Map<String, NewCookie> cookies = response.getCookies();
 		NewCookie tokenCookie = cookies.get("tokenG5");
 		NewCookie usernameCookie = cookies.get("username");
+		
+		Map<String, Cookie> normalCookies = new HashMap<String, Cookie>();
+		
+		for(String key : cookies.keySet())
+		{
+			normalCookies.put(key, cookies.get(key).toCookie());
+		}
+		
+		assertEquals(true,SessionService.validateSession(normalCookies));
 		
 		assertEquals(usernameCookie.getValue(), "MyApp");
 		response  = target().path("admin").request().cookie("username", usernameCookie.getValue()).cookie("tokenG5",tokenCookie.getValue()).get();	
@@ -101,6 +112,18 @@ public class UsersControllerTest extends JerseyTest  {
 							.request().cookie("username", usernameCookie.getValue()).cookie("tokenG5",tokenCookie.getValue()).get();
 		
 		assertEquals(200, response.getStatus());
+		
+		response  = target().path("admin/events/search")
+				.queryParam("since", "-1")
+				.request().cookie("username", usernameCookie.getValue()).cookie("tokenG5",tokenCookie.getValue()).get();
+
+		assertEquals(200, response.getStatus());
+
+		response  = target().path("admin/users/administrador_x")
+				.queryParam("since", "-1")
+				.request().cookie("username", usernameCookie.getValue()).cookie("tokenG5",tokenCookie.getValue()).get();
+
+		assertEquals(204, response.getStatus());
 				
 		response  = target().path("logout")
 							.request()

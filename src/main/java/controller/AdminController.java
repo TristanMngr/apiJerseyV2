@@ -13,6 +13,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -68,6 +70,11 @@ public class AdminController {
 		System.out.println(this.getClass().getName() + ":: AdminController getUser");
 		User user = ManagementService.getUserDAO().getUserByName(name);
 
+		if(user == null) {
+			Response response = Response.status(Status.NO_CONTENT).build();
+			return response;
+		}
+		
 		JSONObject obj = new JSONObject();
 		obj.put("username", user.getUserName());
 		obj.put("cantListas", user.getEventsLists().size());

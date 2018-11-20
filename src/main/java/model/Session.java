@@ -19,32 +19,25 @@ public class Session extends BaseMongoDO {
     public Session() {
        super();
     }
-    
-    
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-
+       
 	public Session(User user2, String token2, Date lastLogin2) {
-		this.user = user2;
-		this.token = token2;
-		this.lastLogin = lastLogin2;
+		this.setUser(user2);
+		this.setToken(token2);
+		this.setLastLogin(lastLogin2);
 	}
 
 	public String getToken() {
 		return token;
 	}
+	
 	public void setToken(String token) {
 		this.token = token;
 	}
+	
 	public Date getLastLogin() {
 		return lastLogin;
 	}
+	
 	public void setLastLogin(Date lastLogin) {
 		this.lastLogin = lastLogin;
 	}
@@ -57,4 +50,11 @@ public class Session extends BaseMongoDO {
 		this.sessionID = sessionID;
 	}
 	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
 }

@@ -99,27 +99,97 @@ public class AdminControllerTest extends JerseyTest {
 				.request()
 				.cookie("username", usernameCookie.getValue())
 				.cookie("tokenG5",tokenCookie.getValue())
-				.post(Entity.entity("nombreLista=listaTest",MediaType.APPLICATION_FORM_URLENCODED),Response.class);	
+				.post(Entity.entity("nombreLista=listaTest1",MediaType.APPLICATION_FORM_URLENCODED),Response.class);	
 	
 		assertEquals(201, response.getStatus());
 		//String answer = response.readEntity(String.class);
 		JSONObject answer = new JSONObject(response.readEntity(String.class).toString());
 		JSONObject jsonList = new JSONObject(answer.get("lista").toString());
 		
-		ObjectId objId = new ObjectId(jsonList.get("hexId").toString());
+		ObjectId objIdLista1 = new ObjectId(jsonList.get("hexId").toString());
 		
+		// Creo otra lista
+		
+		response  = target().path("eventsLists/create")
+				.request()
+				.cookie("username", usernameCookie.getValue())
+				.cookie("tokenG5",tokenCookie.getValue())
+				.post(Entity.entity("nombreLista=listaTest2",MediaType.APPLICATION_FORM_URLENCODED),Response.class);	
+	
+		assertEquals(201, response.getStatus());
+		//String answer = response.readEntity(String.class);
+		answer = new JSONObject(response.readEntity(String.class).toString());
+		jsonList = new JSONObject(answer.get("lista").toString());
+		
+		ObjectId objIdLista2 = new ObjectId(jsonList.get("hexId").toString());
+		
+		
+		// Agrego un evento a Lista1
+		
+		response  = target().path("eventsLists/addEvent")
+				.request()
+				.cookie("username", usernameCookie.getValue())
+				.cookie("tokenG5",tokenCookie.getValue())
+				.post(Entity.entity("codigo=52660070689&lista="+objIdLista1.toString(),MediaType.APPLICATION_FORM_URLENCODED),Response.class);	
+		
+		assertEquals(201, response.getStatus());
+		
+		// Agrego un evento a Lista2
+		
+		response  = target().path("eventsLists/addEvent")
+				.request()
+				.cookie("username", usernameCookie.getValue())
+				.cookie("tokenG5",tokenCookie.getValue())
+				.post(Entity.entity("codigo=52660070689&lista="+objIdLista2.toString(),MediaType.APPLICATION_FORM_URLENCODED),Response.class);	
+		
+		assertEquals(201, response.getStatus());
+		
+		
+		// Comparo Listados
+		
+		response  = target().path("admin/compare")
+				.queryParam("user1", usernameCookie.getValue())
+				.queryParam("list1", "listaTest1")
+				.queryParam("user2", usernameCookie.getValue())
+				.queryParam("list2", "listaTest2")
+				.request().cookie("username", usernameCookie.getValue()).cookie("tokenG5",tokenCookie.getValue()).get();
+
+		assertEquals(200, response.getStatus());
+		
+		// Verifico cuantos usuarios tienen cargado ese elemento
+		
+		response  = target().path("admin/events/52660070689")
+				.request().cookie("username", usernameCookie.getValue()).cookie("tokenG5",tokenCookie.getValue()).get();
+		
+		assertEquals(200, response.getStatus());
+		assertEquals("1", response.readEntity(String.class));
+		
+		// Verifico cuantas listas tiene el usuario
+		
+		response  = target().path("admin/users/MyUser")
+				.request().cookie("username", usernameCookie.getValue()).cookie("tokenG5",tokenCookie.getValue()).get();
+
+		answer = new JSONObject(response.readEntity(String.class).toString());
+		
+		assertEquals(200, response.getStatus());
+		assertEquals(2, answer.get("cantListas"));
+		assertEquals("MyUser", answer.get("username"));
+				
 		// Elimine un usuario
 		Query<User> query = ManagementService.getUserDAO().getDatastore().find(User.class, "userName", "MyUser");
 		ManagementService.getUserDAO().getDatastore().delete(query);
 		
 		assertEquals(size, ManagementService.getUserDAO().count());
 		
-		// TODO: Eliminar la lista no funciona.
+		// Eliminar la Lista 1
 		
-		// Eliminar la Lista
+		Query<EventsList> query1 = ManagementService.getEventsListDAO().getDatastore().find(EventsList.class, "id", new ObjectId(objIdLista1.toString()));
+		ManagementService.getEventsListDAO().getDatastore().delete(query1);
 		
-		Query<EventsList> query1 = ManagementService.getEventsListDAO().getDatastore().find(EventsList.class, "_id", objId.toString());
-		ManagementService.getUserDAO().getDatastore().delete(query1);
+		// Eliminar la Lista 2
+		
+		Query<EventsList> query2 = ManagementService.getEventsListDAO().getDatastore().find(EventsList.class, "id", new ObjectId(objIdLista2.toString()));
+		ManagementService.getEventsListDAO().getDatastore().delete(query2);
 		
 	}
 }

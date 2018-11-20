@@ -15,25 +15,12 @@ import java.util.Base64;
 
 public class EncryptionServices {
 	
-	public static void main(String[] args)
-	{
-	     
-	    String originalString = "n2ch01otcr2dsb2p8vta9hn09h";
-
-	    String encryptedString = encrypt(originalString) ;
-	    String decryptedString = decrypt(encryptedString) ;
-	     
-	    System.out.println(originalString);
-	    System.out.println(encryptedString);
-	    System.out.println(decryptedString);
-	}
 
 	private static SecretKeySpec getSecretKey() {
 		byte[] key;
 		SecretKeySpec secretKey = null;
 		
 		String myKey = System.getenv("EVENTBRITE_KEY");
-		//String myKey = "TACS20182CGRUPO5";
 		
 		MessageDigest sha = null;
         try {
