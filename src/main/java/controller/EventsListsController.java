@@ -16,6 +16,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import service.EventsListsService;
@@ -87,14 +88,13 @@ public class EventsListsController {
     @Produces(MediaType.APPLICATION_JSON)
     //public Response crearLista(String params) throws JsonProcessingException {
     public Response crearLista(@Context HttpHeaders httpHeaders, String params) throws JsonProcessingException {
-        //TODO: verificar que no estamos creando una lista con el mismo nombre para el mismo usuario.
         System.out.println(this.getClass().getName() + ":: crearLista ...");
         String username = LoginService.getUserFromCookie(httpHeaders.getCookies());
 //        User loggedUser = UserService.currentUser(crc);
 
         System.out.println(this.getClass().getName() + ":: username = " + username);
         System.out.println(this.getClass().getName() + ":: params = " + params);
-
+               
         Map<String, String> parametros = ManagementService.getPostParams(params);
 
         String nombreLista = parametros.get("nombreLista");
@@ -104,6 +104,9 @@ public class EventsListsController {
 
         System.out.println(this.getClass().getName() + ":: nombreLista = " + nombreLista);
 
+        if(UserService.checkIfListExists(username, nombreLista))
+        	return Response.status(Status.NO_CONTENT).build();
+        
         String userId = this.loggedUser.getId().toHexString();
         return Response.status(201).entity(EventsListsService.create(nombreLista, userId)).build();
     }

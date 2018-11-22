@@ -14,6 +14,7 @@ import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 import model.EventsList;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class UserService {
@@ -111,4 +112,29 @@ public class UserService {
         System.out.println(user.getUserName());
         return user;
     }
+
+	public static String getEventsListByUsername(String username) {
+		
+
+		return username;
+	}
+
+	public static boolean checkIfListExists(String username, String nombreLista) {
+
+		User user = ManagementService.getUserDAO().getUserByName(username);
+        if (user == null) {
+            return false;
+        }
+        
+        List<EventsList> list = user.getEventsLists();
+        JSONArray array = new JSONArray(list);
+        for (int j = 0; j < array.length(); j++) {
+        	JSONObject json = (JSONObject) array.get(j);
+        	if(json.get("nombre").equals(nombreLista))
+        		return true;
+        }
+		
+		
+		return false;
+	}
 }

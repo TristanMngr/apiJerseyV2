@@ -12,12 +12,15 @@ import org.glassfish.jersey.test.JerseyTest;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import service.AuthenticationFilter;
+
 public class LoginControllerTest extends JerseyTest {
 
 	@Override
 	protected Application configure() {
 		ResourceConfig config = new ResourceConfig();
 		config.packages("controller");
+		config.register(AuthenticationFilter.class);
 		return config;
 	}
 

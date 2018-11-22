@@ -139,11 +139,18 @@ function crearLista() {
         },
         asynchronous: false,
         complete: function (response) {
-            var dataRecibida = $.parseJSON(response.responseText);
-            if (!dataRecibida.error) {
-                alert("Se creó correctamente la lista");
-                appendDomLista(dataRecibida.lista);
+        	
+        	if(response.status == 204)
+            	alert("Ya existe una lista con ese nombre");
+            else
+            {
+            	var dataRecibida = $.parseJSON(response.responseText);
+                if (!dataRecibida.error) {
+                    alert("Se creó correctamente la lista");
+                    appendDomLista(dataRecibida.lista);
+                }
             }
+        	
             $("button").attr('disabled', false);
             $(".btnDismiss").click();
             $(".imgLoader").addClass('displayNone');

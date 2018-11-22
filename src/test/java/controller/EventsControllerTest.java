@@ -10,12 +10,15 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
 
+import service.AuthenticationFilter;
+
 public class EventsControllerTest extends JerseyTest {
 	
 	@Override
 	protected Application configure() {
 		ResourceConfig config = new ResourceConfig();
 		config.packages("controller");
+		config.register(AuthenticationFilter.class);
 		
 		return config;
 	}
