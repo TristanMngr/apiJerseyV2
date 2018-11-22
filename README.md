@@ -31,7 +31,7 @@ Setear la variable de entorno  **EVENTBRITE_KEY**
 
 ## Test Coverage using Jacoco Plug In
 
-![](https://image.ibb.co/keFOc0/jacoco-20181120.png)
+![](https://image.ibb.co/eBDOhA/jacoco-20181122.png)
 
 ## Heroku UAT Version
 
