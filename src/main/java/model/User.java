@@ -41,14 +41,14 @@ public class User extends BaseMongoDO {
     	setNuevasAlarmas(new ArrayList<>());
     }
 
-//    public User(ObjectId objectId, String userName, String password) {
-//        this.lastLogin = null;
-//        this.eventsLists = new ArrayList<>();
-//        this.userName = userName;
-//        this.setPassword(password);
-//        this.setId(objectId);
-//        this.setRole("USER");
-//    }
+    public User(ObjectId objectId, String userName, String password) {
+        this.lastLogin = null;
+        this.eventsLists = new ArrayList<>();
+        this.userName = userName;
+        this.setPassword(password);
+        this.setId(objectId);
+        this.setRole("USER");
+    }
 
 //    public User(String string) {
 //        this.userName = string;
