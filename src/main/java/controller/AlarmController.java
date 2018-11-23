@@ -1,9 +1,9 @@
 package controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.gson.JsonObject;
+
+import model.NewAlarm;
 import model.User;
-import org.bson.types.ObjectId;
 import org.json.JSONObject;
 import service.AlarmService;
 import service.EventbriteService;
@@ -15,10 +15,7 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import java.io.IOException;
-
-import static service.EventbriteService.getEventsSinceLastConnexion;
 
 @Path("/alarms")
 public class AlarmController{
@@ -59,6 +56,25 @@ public class AlarmController{
         EventbriteService.getEventsSinceLastConnexion(user);
 
         return Response.ok(new JSONObject("{\"error\":\"0\"}"), MediaType.APPLICATION_JSON).build();
+    }
+    
+    
+    @Path("/createAlarm")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+	public Response createAlarm(@CookieParam("username") String username, String data) {
+    	System.out.println(this.getClass().getName() + ":: createAlarm ...");
+    	    	
+    	JSONObject json = new JSONObject(data);    	
+    	NewAlarm alarm = new NewAlarm(	json.get("name").toString(), 
+    									json.get("codigo").toString(), 
+    									json.get("nombre").toString(), 
+    									json.get("categoryId").toString(), 
+    									null, null);
+    	
+    	ManagementService.getUserDAO().saveAlarm(username, alarm);
+    	
+        return Response.ok().build();
     }
 
 

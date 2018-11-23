@@ -10,6 +10,8 @@ import org.mongodb.morphia.query.Query;
 import java.util.Date;
 import java.util.List;
 import model.EventsList;
+import model.NewAlarm;
+
 import org.mongodb.morphia.query.UpdateOperations;
 import org.mongodb.morphia.query.UpdateResults;
 
@@ -80,5 +82,20 @@ public class UserDAO extends BasicDAO<User, ObjectId> {
 		UpdateOperations<User> updateOps = getDatastore().createUpdateOperations(User.class).set("lastLogin", new Date());
 		getDatastore().update(query, updateOps);
 		return;
+	}
+
+	public void saveAlarm(String username, NewAlarm alarm) {
+		// TODO: check that we are not saving the same alarm's name twice.
+		
+		Query<User> query = getDatastore().createQuery(User.class).field("userName").equal(username);
+        List<User> users = query.asList();
+		User actualUser = users.get(0);
+		List<NewAlarm> alarmas = actualUser.getNuevasAlarmas();
+		alarmas.add(alarm);
+		
+		UpdateOperations<User> updateOps = getDatastore().createUpdateOperations(User.class).set("nuevasAlarmas", alarmas);
+		getDatastore().update(query, updateOps);
+		return;
+		
 	}
 }

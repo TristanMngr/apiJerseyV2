@@ -18,6 +18,7 @@ public class User extends BaseMongoDO {
     private String password;
     private Date lastLogin;
     private Date lastFetchEventBrite;
+    private List<NewAlarm> nuevasAlarmas;
 
     @Reference
     private List<EventsList> eventsLists;
@@ -32,27 +33,29 @@ public class User extends BaseMongoDO {
     }
 
     public User(String userName, String password) {
-        this.lastLogin = null;
-        this.eventsLists = new ArrayList<>();
-    	this.userName = userName;
-    	this.password = password;
-    	this.role = "USER";
+        setLastLogin(null);
+    	setEventsLists(new ArrayList<>());
+    	setUserName(userName);
+    	setPassword(password);
+    	setRole("USER");
+    	setNuevasAlarmas(new ArrayList<>());
     }
 
-    public User(ObjectId objectId, String userName, String password) {
-        this.lastLogin = null;
-        this.eventsLists = new ArrayList<>();
-        this.userName = userName;
-        this.setPassword(password);
-        this.setId(objectId);
-        this.setRole("USER");
-    }
+//    public User(ObjectId objectId, String userName, String password) {
+//        this.lastLogin = null;
+//        this.eventsLists = new ArrayList<>();
+//        this.userName = userName;
+//        this.setPassword(password);
+//        this.setId(objectId);
+//        this.setRole("USER");
+//    }
 
 //    public User(String string) {
 //        this.userName = string;
 //        this.setAlarms(Arrays.asList(new Alarm(), new Alarm()));
 //        this.setPassword("password");
 //    }
+    
     public Integer getUserId() {
         return userId;
     }
@@ -112,4 +115,12 @@ public class User extends BaseMongoDO {
     public void setLastFetchEventBrite(Date lastFetchEventBrite) {
         this.lastFetchEventBrite = lastFetchEventBrite;
     }
+
+	public List<NewAlarm> getNuevasAlarmas() {
+		return nuevasAlarmas;
+	}
+
+	public void setNuevasAlarmas(List<NewAlarm> nuevasAlarmas) {
+		this.nuevasAlarmas = nuevasAlarmas;
+	}
 }

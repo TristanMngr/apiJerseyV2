@@ -6,9 +6,14 @@ $(document).ready(function () {
     $('input#codigo').keyup(function () {
         keyUpInputCodigo();
     });
+    
+    $('input#codigo').click(function () {
+        keyUpInputCodigo();
+    });
 
     $("#btnSubmitBuscarEventos").click(function () {
         mostrarEventos();
+        
     });
 
     $("#btnCrearLista").click(function () {
@@ -107,6 +112,8 @@ function mostrarEventos() {
                 cuerpoTabla.append(filaTr);
             });
             $(".imgLoader").addClass('displayNone');
+            // Show Button Add Alarm
+            $("#btnSubmitCrearAlarmas").show();
         }
     });
     return false;

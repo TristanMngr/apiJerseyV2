@@ -39,6 +39,7 @@
                 <div class="row">
                     <div class="col-12 text-center">
                         <button type="button" id="btnSubmitBuscarEventos" class="btn btn-info">Buscar</button>
+                        <button type="button" id="btnSubmitCrearAlarmas" data-toggle="modal" data-target="#createAlarm" class="btn btn-info">Agregar Alarma</button>
                     </div>
                 </div>
             </div>
@@ -111,7 +112,32 @@
             </div>
         </div>
     </div>
+    
+	<div class="modal fade" id="createAlarm" tabindex="-2" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Crear Alarma</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="col-12">
+                        <div class="form-group row">
+                            <label for="lista" class="col-md-3 col-form-label">Nombre</label>
+                            <div class="col-md-9 input-group mb-3">
+                                <input class="form-control" name="nombreAlarma" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="btnSubmitCreateAlarm">Guardar</button>
+                    <button type="button" class="btn btn-danger btnDismiss" data-dismiss="modal" >Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="/js/eventos/index.js"></script>
+    <script src="/js/eventos/alarm.js"></script>
 
 </div>
